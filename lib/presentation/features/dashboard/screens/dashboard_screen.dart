@@ -10,6 +10,7 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final spacing = context.spacing;
+    final textTheme = context.textTheme;
 
     return AppScaffold(
       title: AppStrings.appName,
@@ -17,12 +18,12 @@ class DashboardScreen extends StatelessWidget {
         children: [
           Text(
             'Dashboard foundation',
-            style: Theme.of(context).textTheme.headlineMedium,
+            style: textTheme.headlineMedium,
           ),
           SizedBox(height: spacing.md),
           Text(
             'Architecture scaffold is ready for app, core, presentation, data, domain, and l10n.',
-            style: Theme.of(context).textTheme.bodyLarge,
+            style: textTheme.bodyLarge,
           ),
           SizedBox(height: spacing.xl),
           Card(
@@ -33,7 +34,7 @@ class DashboardScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Runtime snapshot',
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: textTheme.titleLarge,
                   ),
                   SizedBox(height: spacing.md),
                   Text('Screen class: ${context.screenClass.label}'),

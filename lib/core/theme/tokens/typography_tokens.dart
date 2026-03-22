@@ -17,12 +17,6 @@ abstract final class AppTypographyTokens {
   static const double labelLarge = 14;
   static const double labelMedium = 12;
 
-  static const double display = displayLarge;
-  static const double headline = headlineMedium;
-  static const double title = titleLarge;
-  static const double body = bodyLarge;
-  static const double label = labelLarge;
-
   static const double displayHeight = 1.06;
   static const double headlineHeight = 1.15;
   static const double titleHeight = 1.2;

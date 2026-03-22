@@ -24,7 +24,8 @@ abstract final class MemoraInputTheme {
       contentPadding: EdgeInsets.symmetric(
         horizontal: dims.spacing.md,
         vertical:
-            (components.componentSize.inputHeight - AppTypographyTokens.body) /
+            (components.componentSize.inputHeight -
+                AppTypographyTokens.bodyLarge) /
             2,
       ),
       border: border,
@@ -45,7 +46,7 @@ abstract final class MemoraInputTheme {
         ),
       ),
       hintStyle: TextStyle(
-        fontSize: AppTypographyTokens.body,
+        fontSize: AppTypographyTokens.bodyLarge,
         color: colorScheme.onSurfaceVariant,
       ),
     );

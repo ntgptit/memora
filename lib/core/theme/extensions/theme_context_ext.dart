@@ -12,14 +12,18 @@ import 'package:memora/core/theme/responsive/adaptive_spacing.dart';
 import 'package:memora/core/theme/responsive/responsive_theme_factory.dart';
 
 extension ThemeContextExt on BuildContext {
+  ThemeData get theme => Theme.of(this);
+  ColorScheme get colorScheme => theme.colorScheme;
+  TextTheme get textTheme => theme.textTheme;
+
   DimensionThemeExt get dims {
-    final dimensions = Theme.of(this).extension<DimensionThemeExt>();
+    final dimensions = theme.extension<DimensionThemeExt>();
     if (dimensions != null) {
       return dimensions;
     }
     return ResponsiveThemeFactory.create(
       screenInfo: screenInfo,
-      brightness: Theme.of(this).brightness,
+      brightness: theme.brightness,
     ).dimensions;
   }
 
@@ -28,30 +32,30 @@ extension ThemeContextExt on BuildContext {
   AdaptiveLayout get layout => dims.layout;
 
   ComponentThemeExt get componentTheme {
-    final components = Theme.of(this).extension<ComponentThemeExt>();
+    final components = theme.extension<ComponentThemeExt>();
     if (components != null) {
       return components;
     }
     return ResponsiveThemeFactory.create(
       screenInfo: screenInfo,
-      brightness: Theme.of(this).brightness,
+      brightness: theme.brightness,
     ).components;
   }
 
   TextThemeExt get appTextTheme {
-    final text = Theme.of(this).extension<TextThemeExt>();
+    final text = theme.extension<TextThemeExt>();
     if (text != null) {
       return text;
     }
     return ResponsiveThemeFactory.create(
       screenInfo: screenInfo,
-      brightness: Theme.of(this).brightness,
+      brightness: theme.brightness,
     ).text;
   }
 
   ColorSchemeExt get appColors {
-    return Theme.of(this).extension<ColorSchemeExt>() ??
-        ColorSchemeExt.fromBrightness(Theme.of(this).brightness);
+    return theme.extension<ColorSchemeExt>() ??
+        ColorSchemeExt.fromBrightness(theme.brightness);
   }
 
   AdaptiveIconSize get iconSize => componentTheme.iconSize;

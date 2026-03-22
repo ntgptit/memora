@@ -24,7 +24,7 @@ abstract final class MemoraButtonThemes {
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
-            fontSize: AppTypographyTokens.label,
+            fontSize: AppTypographyTokens.labelLarge,
             fontWeight: AppTypographyTokens.semibold,
           ),
         ),
@@ -55,7 +55,7 @@ abstract final class MemoraButtonThemes {
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
-            fontSize: AppTypographyTokens.label,
+            fontSize: AppTypographyTokens.labelLarge,
             fontWeight: AppTypographyTokens.medium,
           ),
         ),
@@ -74,7 +74,7 @@ abstract final class MemoraButtonThemes {
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(
-            fontSize: AppTypographyTokens.label,
+            fontSize: AppTypographyTokens.labelLarge,
             fontWeight: AppTypographyTokens.medium,
           ),
         ),
