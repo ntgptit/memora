@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:memora/presentation/shared/primitives/buttons/app_button.dart';
 
 class AppTextButton extends AppButton {

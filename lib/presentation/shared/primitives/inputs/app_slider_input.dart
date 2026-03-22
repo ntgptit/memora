@@ -85,6 +85,8 @@ class AppSliderInput extends StatelessWidget {
 
   String _displayValue(double value) {
     return valueFormatter?.call(value) ??
-        (divisions == null ? value.toStringAsFixed(1) : value.round().toString());
+        (divisions == null
+            ? value.toStringAsFixed(1)
+            : value.round().toString());
   }
 }

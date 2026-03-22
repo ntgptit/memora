@@ -63,7 +63,8 @@ class _AppDateFieldState extends State<AppDateField> {
   @override
   void didUpdateWidget(covariant AppDateField oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.value != widget.value || oldWidget.dateFormat != widget.dateFormat) {
+    if (oldWidget.value != widget.value ||
+        oldWidget.dateFormat != widget.dateFormat) {
       _syncControllerText();
     }
   }

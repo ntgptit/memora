@@ -61,9 +61,7 @@ class AppNumberField extends StatelessWidget {
         signed: allowSigned,
       ),
       textInputAction: TextInputAction.done,
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(_allowedPattern()),
-      ],
+      inputFormatters: [FilteringTextInputFormatter.allow(_allowedPattern())],
       onChanged: (value) {
         onChanged?.call(value);
         onNumberChanged?.call(double.tryParse(value));
