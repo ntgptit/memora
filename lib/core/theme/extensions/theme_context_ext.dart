@@ -9,6 +9,7 @@ import 'package:memora/core/theme/responsive/adaptive_component_size.dart';
 import 'package:memora/core/theme/responsive/adaptive_icon_size.dart';
 import 'package:memora/core/theme/responsive/adaptive_radius.dart';
 import 'package:memora/core/theme/responsive/adaptive_spacing.dart';
+import 'package:memora/core/theme/responsive/adaptive_typography.dart';
 import 'package:memora/core/theme/responsive/responsive_theme_factory.dart';
 
 extension ThemeContextExt on BuildContext {
@@ -21,44 +22,30 @@ extension ThemeContextExt on BuildContext {
     if (dimensions != null) {
       return dimensions;
     }
-    return ResponsiveThemeFactory.create(
-      screenInfo: screenInfo,
-      brightness: theme.brightness,
-    ).dimensions;
+    return ResponsiveThemeFactory.create(screenClass);
   }
 
   AdaptiveSpacing get spacing => dims.spacing;
   AdaptiveRadius get radius => dims.radius;
+  AdaptiveTypography get typography => dims.typography;
   AdaptiveLayout get layout => dims.layout;
 
   ComponentThemeExt get componentTheme {
-    final components = theme.extension<ComponentThemeExt>();
-    if (components != null) {
-      return components;
-    }
-    return ResponsiveThemeFactory.create(
-      screenInfo: screenInfo,
-      brightness: theme.brightness,
-    ).components;
+    return theme.extension<ComponentThemeExt>() ??
+        ResponsiveThemeFactory.components(screenClass);
   }
 
   TextThemeExt get appTextTheme {
-    final text = theme.extension<TextThemeExt>();
-    if (text != null) {
-      return text;
-    }
-    return ResponsiveThemeFactory.create(
-      screenInfo: screenInfo,
-      brightness: theme.brightness,
-    ).text;
+    return theme.extension<TextThemeExt>() ??
+        ResponsiveThemeFactory.text(screenClass);
   }
 
   ColorSchemeExt get appColors {
     return theme.extension<ColorSchemeExt>() ??
-        ColorSchemeExt.fromBrightness(theme.brightness);
+        ResponsiveThemeFactory.colors(theme.brightness);
   }
 
-  AdaptiveIconSize get iconSize => componentTheme.iconSize;
-  AdaptiveComponentSize get componentSize => componentTheme.componentSize;
+  AdaptiveIconSize get iconSize => dims.iconSize;
+  AdaptiveComponentSize get componentSize => dims.componentSize;
   AdaptiveComponentSize get component => componentSize;
 }

@@ -9,7 +9,7 @@ class MaintenanceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const AppScaffold(
       title: AppStrings.maintenanceTitle,
-      body: Center(child: Text('The system is temporarily unavailable.')),
+      body: Center(child: Text(AppStrings.maintenanceMessage)),
     );
   }
 }

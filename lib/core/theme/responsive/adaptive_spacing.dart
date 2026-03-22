@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:memora/core/theme/responsive/responsive_scale.dart';
-import 'package:memora/core/theme/responsive/screen_info.dart';
+import 'package:memora/core/theme/responsive/screen_class.dart';
 import 'package:memora/core/theme/tokens/spacing_tokens.dart';
 
 @immutable
@@ -19,74 +19,21 @@ class AdaptiveSpacing {
     required this.gridGap,
   });
 
-  factory AdaptiveSpacing.resolve(ScreenInfo screenInfo) {
+  factory AdaptiveSpacing.fromScreen(ScreenClass screenClass) {
+    final scale = ResponsiveScale.spacing(screenClass);
+
     return AdaptiveSpacing(
-      xxs: ResponsiveScale.spacing(
-        base: AppSpacingTokens.xxs,
-        screenInfo: screenInfo,
-        min: 4,
-        max: 6,
-      ),
-      xs: ResponsiveScale.spacing(
-        base: AppSpacingTokens.xs,
-        screenInfo: screenInfo,
-        min: 8,
-        max: 12,
-      ),
-      sm: ResponsiveScale.spacing(
-        base: AppSpacingTokens.sm,
-        screenInfo: screenInfo,
-        min: 12,
-        max: 16,
-      ),
-      md: ResponsiveScale.spacing(
-        base: AppSpacingTokens.md,
-        screenInfo: screenInfo,
-        min: 16,
-        max: 24,
-      ),
-      lg: ResponsiveScale.spacing(
-        base: AppSpacingTokens.lg,
-        screenInfo: screenInfo,
-        min: 24,
-        max: 32,
-      ),
-      xl: ResponsiveScale.spacing(
-        base: AppSpacingTokens.xl,
-        screenInfo: screenInfo,
-        min: 32,
-        max: 48,
-      ),
-      xxl: ResponsiveScale.spacing(
-        base: AppSpacingTokens.xxl,
-        screenInfo: screenInfo,
-        min: 48,
-        max: 72,
-      ),
-      xxxl: ResponsiveScale.spacing(
-        base: AppSpacingTokens.xxxl,
-        screenInfo: screenInfo,
-        min: 64,
-        max: 96,
-      ),
-      section: ResponsiveScale.spacing(
-        base: AppSpacingTokens.section,
-        screenInfo: screenInfo,
-        min: 24,
-        max: 40,
-      ),
-      gutter: ResponsiveScale.spacing(
-        base: AppSpacingTokens.gutter,
-        screenInfo: screenInfo,
-        min: 20,
-        max: 40,
-      ),
-      gridGap: ResponsiveScale.spacing(
-        base: AppSpacingTokens.gridGap,
-        screenInfo: screenInfo,
-        min: 16,
-        max: 28,
-      ),
+      xxs: AppSpacingTokens.xxs * scale,
+      xs: AppSpacingTokens.xs * scale,
+      sm: AppSpacingTokens.sm * scale,
+      md: AppSpacingTokens.md * scale,
+      lg: AppSpacingTokens.lg * scale,
+      xl: AppSpacingTokens.xl * scale,
+      xxl: AppSpacingTokens.xxl * scale,
+      xxxl: AppSpacingTokens.xxxl * scale,
+      section: AppSpacingTokens.section * scale,
+      gutter: AppSpacingTokens.gutter * scale,
+      gridGap: AppSpacingTokens.gridGap * scale,
     );
   }
 

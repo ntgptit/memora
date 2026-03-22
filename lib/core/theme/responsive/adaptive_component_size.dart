@@ -1,12 +1,13 @@
 import 'package:flutter/foundation.dart';
-import 'package:memora/core/theme/responsive/responsive_scale.dart';
-import 'package:memora/core/theme/responsive/screen_info.dart';
+import 'package:memora/core/theme/responsive/screen_class.dart';
 import 'package:memora/core/theme/tokens/size_tokens.dart';
 
 @immutable
 class AdaptiveComponentSize {
   const AdaptiveComponentSize({
     required this.buttonHeight,
+    required this.bottomBarHeight,
+    required this.cardPadding,
     required this.inputHeight,
     required this.chipHeight,
     required this.dialogPadding,
@@ -16,60 +17,62 @@ class AdaptiveComponentSize {
     required this.cardMinHeight,
   });
 
-  factory AdaptiveComponentSize.resolve(ScreenInfo screenInfo) {
-    return AdaptiveComponentSize(
-      buttonHeight: ResponsiveScale.component(
-        base: AppSizeTokens.regularButtonHeight,
-        screenInfo: screenInfo,
-        min: AppSizeTokens.compactButtonHeight,
-        max: AppSizeTokens.comfortableButtonHeight,
+  factory AdaptiveComponentSize.fromScreen(ScreenClass screenClass) {
+    return switch (screenClass) {
+      ScreenClass.compact => const AdaptiveComponentSize(
+        buttonHeight: AppSizeTokens.compactButtonHeight,
+        bottomBarHeight: AppSizeTokens.compactBottomBarHeight,
+        cardPadding: AppSizeTokens.cardPadding,
+        inputHeight: AppSizeTokens.compactInputHeight,
+        chipHeight: AppSizeTokens.chipHeight,
+        dialogPadding: AppSizeTokens.dialogPadding,
+        toolbarHeight: AppSizeTokens.compactToolbarHeight,
+        fabSize: AppSizeTokens.fabSize,
+        navigationRailWidth: 72,
+        cardMinHeight: AppSizeTokens.cardMinHeight,
       ),
-      inputHeight: ResponsiveScale.component(
-        base: AppSizeTokens.regularInputHeight,
-        screenInfo: screenInfo,
-        min: AppSizeTokens.compactInputHeight,
-        max: 56,
+      ScreenClass.medium => const AdaptiveComponentSize(
+        buttonHeight: AppSizeTokens.regularButtonHeight,
+        bottomBarHeight: AppSizeTokens.regularBottomBarHeight,
+        cardPadding: AppSizeTokens.cardPadding,
+        inputHeight: AppSizeTokens.regularInputHeight,
+        chipHeight: AppSizeTokens.chipHeight,
+        dialogPadding: AppSizeTokens.dialogPadding,
+        toolbarHeight: AppSizeTokens.compactToolbarHeight,
+        fabSize: AppSizeTokens.fabSize,
+        navigationRailWidth: AppSizeTokens.navigationRailWidth,
+        cardMinHeight: AppSizeTokens.cardMinHeight,
       ),
-      chipHeight: ResponsiveScale.component(
-        base: AppSizeTokens.chipHeight,
-        screenInfo: screenInfo,
-        min: 32,
-        max: 38,
+      ScreenClass.expanded => const AdaptiveComponentSize(
+        buttonHeight: AppSizeTokens.comfortableButtonHeight,
+        bottomBarHeight: AppSizeTokens.comfortableBottomBarHeight,
+        cardPadding: 20,
+        inputHeight: 56,
+        chipHeight: 36,
+        dialogPadding: 32,
+        toolbarHeight: AppSizeTokens.regularToolbarHeight,
+        fabSize: 60,
+        navigationRailWidth: 88,
+        cardMinHeight: 136,
       ),
-      dialogPadding: ResponsiveScale.spacing(
-        base: AppSizeTokens.dialogPadding,
-        screenInfo: screenInfo,
-        min: 24,
-        max: 40,
+      ScreenClass.large => const AdaptiveComponentSize(
+        buttonHeight: AppSizeTokens.comfortableButtonHeight,
+        bottomBarHeight: AppSizeTokens.comfortableBottomBarHeight,
+        cardPadding: 24,
+        inputHeight: 56,
+        chipHeight: 38,
+        dialogPadding: 40,
+        toolbarHeight: AppSizeTokens.regularToolbarHeight,
+        fabSize: 64,
+        navigationRailWidth: 96,
+        cardMinHeight: 156,
       ),
-      toolbarHeight: ResponsiveScale.component(
-        base: AppSizeTokens.regularToolbarHeight,
-        screenInfo: screenInfo,
-        min: AppSizeTokens.compactToolbarHeight,
-        max: 72,
-      ),
-      fabSize: ResponsiveScale.component(
-        base: AppSizeTokens.fabSize,
-        screenInfo: screenInfo,
-        min: 56,
-        max: 64,
-      ),
-      navigationRailWidth: ResponsiveScale.component(
-        base: AppSizeTokens.navigationRailWidth,
-        screenInfo: screenInfo,
-        min: 72,
-        max: 96,
-      ),
-      cardMinHeight: ResponsiveScale.component(
-        base: AppSizeTokens.cardMinHeight,
-        screenInfo: screenInfo,
-        min: 120,
-        max: 156,
-      ),
-    );
+    };
   }
 
   final double buttonHeight;
+  final double bottomBarHeight;
+  final double cardPadding;
   final double inputHeight;
   final double chipHeight;
   final double dialogPadding;

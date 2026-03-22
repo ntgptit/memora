@@ -4,13 +4,15 @@ import 'package:memora/core/theme/responsive/screen_class.dart';
 @immutable
 class ScreenInfo {
   const ScreenInfo({
-    required this.size,
+    required this.width,
+    required this.height,
     required this.orientation,
     required this.screenClass,
   });
 
   const ScreenInfo.fallback()
-    : size = const Size(390, 844),
+    : width = 390,
+      height = 844,
       orientation = Orientation.portrait,
       screenClass = ScreenClass.compact;
 
@@ -29,22 +31,20 @@ class ScreenInfo {
             : Orientation.portrait);
 
     return ScreenInfo(
-      size: size,
+      width: size.width,
+      height: size.height,
       orientation: resolvedOrientation,
       screenClass: ScreenClass.fromWidth(size.width),
     );
   }
 
-  final Size size;
+  final double width;
+  final double height;
   final Orientation orientation;
   final ScreenClass screenClass;
 
-  double get width => size.width;
-  double get height => size.height;
-  double get shortestSide => width < height ? width : height;
-  double get longestSide => width > height ? width : height;
-  double get aspectRatio => height == 0 ? 1 : width / height;
-  bool get isLandscape => orientation == Orientation.landscape;
-  bool get isPortrait => orientation == Orientation.portrait;
-  bool get isTabletLike => shortestSide >= 600;
+  bool get isCompact => screenClass == ScreenClass.compact;
+  bool get isMedium => screenClass == ScreenClass.medium;
+  bool get isExpanded => screenClass == ScreenClass.expanded;
+  bool get isLarge => screenClass == ScreenClass.large;
 }

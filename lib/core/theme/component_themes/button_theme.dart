@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:memora/core/theme/extensions/component_theme_ext.dart';
 import 'package:memora/core/theme/extensions/dimension_theme_ext.dart';
 import 'package:memora/core/theme/tokens/typography_tokens.dart';
 
@@ -7,12 +6,11 @@ abstract final class MemoraButtonThemes {
   static FilledButtonThemeData filled(
     ColorScheme colorScheme,
     DimensionThemeExt dims,
-    ComponentThemeExt components,
   ) {
     return FilledButtonThemeData(
       style: ButtonStyle(
         minimumSize: WidgetStatePropertyAll(
-          Size.fromHeight(components.componentSize.buttonHeight),
+          Size.fromHeight(dims.componentSize.buttonHeight),
         ),
         padding: WidgetStatePropertyAll(
           EdgeInsets.symmetric(horizontal: dims.spacing.lg),
@@ -35,12 +33,11 @@ abstract final class MemoraButtonThemes {
   static OutlinedButtonThemeData outlined(
     ColorScheme colorScheme,
     DimensionThemeExt dims,
-    ComponentThemeExt components,
   ) {
     return OutlinedButtonThemeData(
       style: ButtonStyle(
         minimumSize: WidgetStatePropertyAll(
-          Size.fromHeight(components.componentSize.buttonHeight),
+          Size.fromHeight(dims.componentSize.buttonHeight),
         ),
         padding: WidgetStatePropertyAll(
           EdgeInsets.symmetric(horizontal: dims.spacing.lg),

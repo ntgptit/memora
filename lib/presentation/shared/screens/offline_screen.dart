@@ -10,7 +10,7 @@ class OfflineScreen extends StatelessWidget {
     return const AppScaffold(
       title: AppStrings.offlineTitle,
       body: Center(
-        child: Text('Check your internet connection and try again.'),
+        child: Text(AppStrings.offlineMessage),
       ),
     );
   }

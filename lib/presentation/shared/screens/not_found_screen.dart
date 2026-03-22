@@ -9,7 +9,7 @@ class NotFoundScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const AppScaffold(
       title: AppStrings.notFoundTitle,
-      body: Center(child: Text('The requested page does not exist.')),
+      body: Center(child: Text(AppStrings.notFoundMessage)),
     );
   }
 }

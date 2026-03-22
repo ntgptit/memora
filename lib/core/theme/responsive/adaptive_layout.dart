@@ -19,9 +19,7 @@ class AdaptiveLayout {
     required this.resultDialogMaxWidth,
   });
 
-  factory AdaptiveLayout.resolve(ScreenInfo screenInfo) {
-    final screenClass = screenInfo.screenClass;
-
+  factory AdaptiveLayout.fromScreen(ScreenClass screenClass) {
     return switch (screenClass) {
       ScreenClass.compact => const AdaptiveLayout(
         pageHorizontalPadding: 20,
@@ -80,6 +78,10 @@ class AdaptiveLayout {
         resultDialogMaxWidth: 620,
       ),
     };
+  }
+
+  factory AdaptiveLayout.resolve(ScreenInfo screenInfo) {
+    return AdaptiveLayout.fromScreen(screenInfo.screenClass);
   }
 
   final double pageHorizontalPadding;

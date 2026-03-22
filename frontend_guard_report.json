@@ -1,8 +1,36 @@
 {
   "summary": {
+    "guards": 5,
     "total": 0,
     "errors": 0,
     "warnings": 0
   },
+  "guards": [
+    {
+      "id": "riverpod-annotation",
+      "file": "tool/frontend_guard/guards/riverpod_annotation.py",
+      "description": "Riverpod annotation, generated part, and notifier contract."
+    },
+    {
+      "id": "ui-logic-separation",
+      "file": "tool/frontend_guard/guards/ui_logic_separation.py",
+      "description": "Render-only UI boundaries for screens, widgets, and shared UI."
+    },
+    {
+      "id": "navigation",
+      "file": "tool/frontend_guard/guards/navigation.py",
+      "description": "go_router contract and navigation API boundaries."
+    },
+    {
+      "id": "l10n-usage",
+      "file": "tool/frontend_guard/guards/l10n_usage.py",
+      "description": "No hardcoded user-facing literals in main/presentation UI."
+    },
+    {
+      "id": "feature-surface",
+      "file": "tool/frontend_guard/guards/feature_surface.py",
+      "description": "Feature screens must rely on theme surface/background tokens."
+    }
+  ],
   "violations": []
 }

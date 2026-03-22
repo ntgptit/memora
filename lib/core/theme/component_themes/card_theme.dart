@@ -7,7 +7,9 @@ abstract final class MemoraCardTheme {
     return CardThemeData(
       elevation: AppElevationTokens.level0,
       margin: EdgeInsets.zero,
+      clipBehavior: Clip.antiAlias,
       color: colorScheme.surfaceContainerLow,
+      shadowColor: colorScheme.shadow,
       surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(dims.radius.lg),

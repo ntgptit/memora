@@ -42,14 +42,8 @@ abstract final class AppTheme {
             visualDensity: VisualDensity.standard,
           );
     final colorScheme = AppColorScheme.build(brightness);
-    final bundle = ResponsiveThemeFactory.create(
-      screenInfo: screenInfo,
-      brightness: brightness,
-    );
-    final dimensions = bundle.dimensions;
-    final components = bundle.components;
-    final text = bundle.text;
-    final textTheme = AppTextTheme.build(colorScheme, text.typography);
+    final dimensions = ResponsiveThemeFactory.create(screenInfo.screenClass);
+    final textTheme = AppTextTheme.build(colorScheme, dimensions.typography);
 
     return baseTheme.copyWith(
       brightness: brightness,
@@ -59,27 +53,23 @@ abstract final class AppTheme {
       appBarTheme: MemoraAppBarTheme.build(
         colorScheme: colorScheme,
         dims: dimensions,
-        text: text,
       ),
       filledButtonTheme: MemoraButtonThemes.filled(
         colorScheme,
         dimensions,
-        components,
       ),
       outlinedButtonTheme: MemoraButtonThemes.outlined(
         colorScheme,
         dimensions,
-        components,
       ),
       textButtonTheme: MemoraButtonThemes.text(colorScheme, dimensions),
       inputDecorationTheme: MemoraInputTheme.build(
         colorScheme,
         dimensions,
-        components,
       ),
       cardTheme: MemoraCardTheme.build(colorScheme, dimensions),
-      dialogTheme: MemoraDialogTheme.build(colorScheme, dimensions, components),
-      chipTheme: MemoraChipTheme.build(colorScheme, dimensions, components),
+      dialogTheme: MemoraDialogTheme.build(colorScheme, dimensions),
+      chipTheme: MemoraChipTheme.build(colorScheme, dimensions),
       dividerTheme: MemoraDividerTheme.build(colorScheme),
       checkboxTheme: MemoraCheckboxTheme.build(colorScheme),
       radioTheme: MemoraRadioTheme.build(colorScheme),
@@ -87,7 +77,10 @@ abstract final class AppTheme {
       sliderTheme: MemoraSliderTheme.build(colorScheme),
       progressIndicatorTheme: MemoraProgressIndicatorTheme.build(colorScheme),
       bottomSheetTheme: MemoraBottomSheetTheme.build(colorScheme, dimensions),
-      extensions: bundle.asList(),
+      extensions: ResponsiveThemeFactory.extensions(
+        screenClass: screenInfo.screenClass,
+        brightness: brightness,
+      ),
     );
   }
 }
