@@ -17,10 +17,20 @@ from frontend_guard.common import (
     write_report,
 )
 from frontend_guard.guards import (
+    accessibility,
+    code_quality,
+    common_widget_boundaries,
+    component_theme,
     feature_surface,
     l10n_usage,
     navigation,
+    opacity_contract,
     riverpod_annotation,
+    riverpod_layout_state,
+    spacing_ownership,
+    state_management,
+    ui_constants,
+    ui_design,
     ui_logic_separation,
 )
 
@@ -57,6 +67,66 @@ def _build_tasks() -> list[GuardTask]:
             description=feature_surface.DESCRIPTION,
             run=feature_surface.run,
         ),
+        GuardTask(
+            id=state_management.GUARD_ID,
+            file_name=state_management.FILE_NAME,
+            description=state_management.DESCRIPTION,
+            run=state_management.run,
+        ),
+        GuardTask(
+            id=riverpod_layout_state.GUARD_ID,
+            file_name=riverpod_layout_state.FILE_NAME,
+            description=riverpod_layout_state.DESCRIPTION,
+            run=riverpod_layout_state.run,
+        ),
+        GuardTask(
+            id=common_widget_boundaries.GUARD_ID,
+            file_name=common_widget_boundaries.FILE_NAME,
+            description=common_widget_boundaries.DESCRIPTION,
+            run=common_widget_boundaries.run,
+        ),
+        GuardTask(
+            id=component_theme.GUARD_ID,
+            file_name=component_theme.FILE_NAME,
+            description=component_theme.DESCRIPTION,
+            run=component_theme.run,
+        ),
+        GuardTask(
+            id=ui_constants.GUARD_ID,
+            file_name=ui_constants.FILE_NAME,
+            description=ui_constants.DESCRIPTION,
+            run=ui_constants.run,
+        ),
+        GuardTask(
+            id=spacing_ownership.GUARD_ID,
+            file_name=spacing_ownership.FILE_NAME,
+            description=spacing_ownership.DESCRIPTION,
+            run=spacing_ownership.run,
+        ),
+        GuardTask(
+            id=ui_design.GUARD_ID,
+            file_name=ui_design.FILE_NAME,
+            description=ui_design.DESCRIPTION,
+            run=ui_design.run,
+        ),
+        GuardTask(
+            id=code_quality.GUARD_ID,
+            file_name=code_quality.FILE_NAME,
+            description=code_quality.DESCRIPTION,
+            run=code_quality.run,
+        ),
+        GuardTask(
+            id=accessibility.GUARD_ID,
+            file_name=accessibility.FILE_NAME,
+            description=accessibility.DESCRIPTION,
+            run=accessibility.run,
+        ),
+        GuardTask(
+            id=opacity_contract.GUARD_ID,
+            file_name=opacity_contract.FILE_NAME,
+            description=opacity_contract.DESCRIPTION,
+            run=opacity_contract.run,
+        ),
     ]
 
 
@@ -79,10 +149,44 @@ def _group_aliases() -> dict[str, set[str]]:
             l10n_usage.GUARD_ID,
             feature_surface.GUARD_ID,
         },
-        "state": {riverpod_annotation.GUARD_ID},
-        "ui": {ui_logic_separation.GUARD_ID, feature_surface.GUARD_ID},
+        "class2": {
+            state_management.GUARD_ID,
+            riverpod_layout_state.GUARD_ID,
+            common_widget_boundaries.GUARD_ID,
+            component_theme.GUARD_ID,
+            ui_constants.GUARD_ID,
+        },
+        "class3": {
+            spacing_ownership.GUARD_ID,
+            ui_design.GUARD_ID,
+            code_quality.GUARD_ID,
+            accessibility.GUARD_ID,
+            opacity_contract.GUARD_ID,
+        },
+        "state": {
+            riverpod_annotation.GUARD_ID,
+            state_management.GUARD_ID,
+            riverpod_layout_state.GUARD_ID,
+        },
+        "ui": {
+            ui_logic_separation.GUARD_ID,
+            feature_surface.GUARD_ID,
+            common_widget_boundaries.GUARD_ID,
+            ui_design.GUARD_ID,
+        },
         "navigation": {navigation.GUARD_ID},
         "l10n": {l10n_usage.GUARD_ID},
+        "theme": {
+            feature_surface.GUARD_ID,
+            component_theme.GUARD_ID,
+            ui_constants.GUARD_ID,
+            opacity_contract.GUARD_ID,
+        },
+        "quality": {
+            code_quality.GUARD_ID,
+            accessibility.GUARD_ID,
+            spacing_ownership.GUARD_ID,
+        },
     }
 
 

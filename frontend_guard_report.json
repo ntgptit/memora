@@ -1,6 +1,6 @@
 {
   "summary": {
-    "guards": 5,
+    "guards": 15,
     "total": 0,
     "errors": 0,
     "warnings": 0
@@ -30,6 +30,56 @@
       "id": "feature-surface",
       "file": "tool/frontend_guard/guards/feature_surface.py",
       "description": "Feature screens must rely on theme surface/background tokens."
+    },
+    {
+      "id": "state-management",
+      "file": "tool/frontend_guard/guards/state_management.py",
+      "description": "State ownership rules for providers, DI, and shared controllers."
+    },
+    {
+      "id": "riverpod-layout-state",
+      "file": "tool/frontend_guard/guards/riverpod_layout_state.py",
+      "description": "Shared render layers stay provider-agnostic and receive state from above."
+    },
+    {
+      "id": "common-widget-boundaries",
+      "file": "tool/frontend_guard/guards/common_widget_boundaries.py",
+      "description": "Shared widget layers follow Memora primitive/composite/layout/screen boundaries."
+    },
+    {
+      "id": "component-theme",
+      "file": "tool/frontend_guard/guards/component_theme.py",
+      "description": "Feature UI and shared shells consume the centralized theme foundation."
+    },
+    {
+      "id": "ui-constants",
+      "file": "tool/frontend_guard/guards/ui_constants.py",
+      "description": "Feature UI and shared shells must not inline raw UI constants that belong in core config or theme tokens."
+    },
+    {
+      "id": "spacing-ownership",
+      "file": "tool/frontend_guard/guards/spacing_ownership.py",
+      "description": "Feature UI and shared shells consume spacing through context tokens instead of raw numeric spacing."
+    },
+    {
+      "id": "ui-design",
+      "file": "tool/frontend_guard/guards/ui_design.py",
+      "description": "Feature UI should consume shared design-system widgets instead of raw Material counterparts."
+    },
+    {
+      "id": "code-quality",
+      "file": "tool/frontend_guard/guards/code_quality.py",
+      "description": "Basic code quality guard for presentation and theme layers."
+    },
+    {
+      "id": "accessibility",
+      "file": "tool/frontend_guard/guards/accessibility.py",
+      "description": "Accessibility baseline for tappable controls in presentation layers."
+    },
+    {
+      "id": "opacity-contract",
+      "file": "tool/frontend_guard/guards/opacity_contract.py",
+      "description": "Alpha values must flow through opacity tokens."
     }
   ],
   "violations": []

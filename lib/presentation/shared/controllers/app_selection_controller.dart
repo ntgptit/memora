@@ -16,9 +16,8 @@ class AppSelectionController<T> {
   bool isSelected(T value) => _selected.contains(value);
 
   void toggle(T value) {
-    if (_selected.contains(value)) {
-      _selected.remove(value);
-    } else {
+    final removed = _selected.remove(value);
+    if (!removed) {
       _selected.add(value);
     }
     _notify();

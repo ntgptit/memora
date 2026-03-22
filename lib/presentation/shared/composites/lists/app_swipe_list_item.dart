@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
+import 'package:memora/core/theme/tokens/opacity_tokens.dart';
 import 'package:memora/presentation/shared/primitives/displays/app_icon.dart';
 
 class AppSwipeListItem extends StatelessWidget {
@@ -44,7 +45,9 @@ class AppSwipeListItem extends StatelessWidget {
   Widget _buildBackground(BuildContext context, {required Alignment alignment}) {
     return Container(
       alignment: alignment,
-      color: context.colorScheme.error.withValues(alpha: 0.12),
+      color: context.colorScheme.error.withValues(
+        alpha: AppOpacityTokens.subtle,
+      ),
       padding: EdgeInsets.symmetric(horizontal: context.spacing.md),
       child: AppIcon(
         Icons.delete_rounded,

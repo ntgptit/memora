@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/enums/snackbar_type.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
+import 'package:memora/core/theme/tokens/opacity_tokens.dart';
 
 class AppSnackbar extends StatelessWidget {
   const AppSnackbar({
@@ -61,7 +62,9 @@ class AppSnackbar extends StatelessWidget {
                   Text(
                     message,
                     style: context.textTheme.bodyMedium?.copyWith(
-                      color: tone.foreground.withValues(alpha: 0.92),
+                      color: tone.foreground.withValues(
+                        alpha: AppOpacityTokens.strong,
+                      ),
                     ),
                   ),
                 ],
@@ -86,22 +89,30 @@ class AppSnackbar extends StatelessWidget {
       SnackbarType.success => _Tone(
         background: context.appColors.successContainer,
         foreground: context.appColors.onSuccessContainer,
-        border: context.appColors.success.withValues(alpha: 0.24),
+        border: context.appColors.success.withValues(
+          alpha: AppOpacityTokens.outline,
+        ),
       ),
       SnackbarType.error => _Tone(
         background: context.colorScheme.errorContainer,
         foreground: context.colorScheme.onErrorContainer,
-        border: context.colorScheme.error.withValues(alpha: 0.24),
+        border: context.colorScheme.error.withValues(
+          alpha: AppOpacityTokens.outline,
+        ),
       ),
       SnackbarType.info => _Tone(
         background: context.appColors.infoContainer,
         foreground: context.appColors.onInfoContainer,
-        border: context.appColors.info.withValues(alpha: 0.24),
+        border: context.appColors.info.withValues(
+          alpha: AppOpacityTokens.outline,
+        ),
       ),
       SnackbarType.warning => _Tone(
         background: context.appColors.warningContainer,
         foreground: context.appColors.onWarningContainer,
-        border: context.appColors.warning.withValues(alpha: 0.24),
+        border: context.appColors.warning.withValues(
+          alpha: AppOpacityTokens.outline,
+        ),
       ),
     };
   }

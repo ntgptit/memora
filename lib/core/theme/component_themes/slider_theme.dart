@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memora/core/theme/tokens/opacity_tokens.dart';
 
 abstract final class MemoraSliderTheme {
   static SliderThemeData build(ColorScheme colorScheme) {
@@ -6,7 +7,9 @@ abstract final class MemoraSliderTheme {
       activeTrackColor: colorScheme.primary,
       inactiveTrackColor: colorScheme.surfaceContainerHighest,
       thumbColor: colorScheme.primary,
-      overlayColor: colorScheme.primary.withValues(alpha: 0.12),
+      overlayColor: colorScheme.primary.withValues(
+        alpha: AppOpacityTokens.subtle,
+      ),
     );
   }
 }

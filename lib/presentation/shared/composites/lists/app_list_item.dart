@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
+import 'package:memora/core/theme/tokens/opacity_tokens.dart';
 import 'package:memora/presentation/shared/primitives/displays/app_surface.dart';
 
 class AppListItem extends StatelessWidget {
@@ -42,7 +43,9 @@ class AppListItem extends StatelessWidget {
     return AppSurface(
       color: backgroundColor ??
           (selected
-              ? context.colorScheme.secondaryContainer.withValues(alpha: 0.35)
+              ? context.colorScheme.secondaryContainer.withValues(
+                  alpha: AppOpacityTokens.selected,
+                )
               : context.colorScheme.surface),
       surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(
