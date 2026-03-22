@@ -1,6 +1,37 @@
 import 'package:flutter/foundation.dart';
 import 'package:memora/core/config/app_strings.dart';
 
+const _appFlavorEnv = String.fromEnvironment(
+  'APP_FLAVOR',
+  defaultValue: 'development',
+);
+const _appNameEnv = String.fromEnvironment('APP_NAME', defaultValue: '');
+const _apiBaseUrlEnv = String.fromEnvironment('API_BASE_URL', defaultValue: '');
+const _enableNetworkLogsEnv = String.fromEnvironment(
+  'ENABLE_NETWORK_LOGS',
+  defaultValue: '',
+);
+const _enableProviderLogsEnv = String.fromEnvironment(
+  'ENABLE_PROVIDER_LOGS',
+  defaultValue: '',
+);
+const _enableRouterLogsEnv = String.fromEnvironment(
+  'ENABLE_ROUTER_LOGS',
+  defaultValue: '',
+);
+const _showEnvBannerEnv = String.fromEnvironment(
+  'SHOW_ENV_BANNER',
+  defaultValue: '',
+);
+const _showPerformanceOverlayEnv = String.fromEnvironment(
+  'SHOW_PERFORMANCE_OVERLAY',
+  defaultValue: '',
+);
+const _showDebugBannerEnv = String.fromEnvironment(
+  'SHOW_DEBUG_BANNER',
+  defaultValue: '',
+);
+
 enum AppFlavor {
   development('development'),
   staging('staging'),
@@ -44,34 +75,33 @@ class EnvConfig {
   });
 
   factory EnvConfig.fromEnvironment() {
-    const rawFlavor = String.fromEnvironment(
-      'APP_FLAVOR',
-      defaultValue: 'development',
-    );
-    final flavor = AppFlavor.fromValue(rawFlavor);
+    final flavor = AppFlavor.fromValue(_appFlavorEnv);
 
     return EnvConfig(
-      appName: _readString('APP_NAME', fallback: AppStrings.appName),
+      appName: _resolveString(_appNameEnv, fallback: AppStrings.appName),
       flavor: flavor,
       baseUrl: _readBaseUrl(),
-      enableNetworkLogs: _readBool(
-        'ENABLE_NETWORK_LOGS',
+      enableNetworkLogs: _resolveBool(
+        _enableNetworkLogsEnv,
         fallback: kDebugMode || flavor != AppFlavor.production,
       ),
-      enableProviderLogs: _readBool(
-        'ENABLE_PROVIDER_LOGS',
+      enableProviderLogs: _resolveBool(
+        _enableProviderLogsEnv,
         fallback: kDebugMode,
       ),
-      enableRouterLogs: _readBool('ENABLE_ROUTER_LOGS', fallback: kDebugMode),
-      showEnvironmentBanner: _readBool(
-        'SHOW_ENV_BANNER',
+      enableRouterLogs: _resolveBool(
+        _enableRouterLogsEnv,
+        fallback: kDebugMode,
+      ),
+      showEnvironmentBanner: _resolveBool(
+        _showEnvBannerEnv,
         fallback: flavor != AppFlavor.production,
       ),
-      showPerformanceOverlay: _readBool(
-        'SHOW_PERFORMANCE_OVERLAY',
+      showPerformanceOverlay: _resolveBool(
+        _showPerformanceOverlayEnv,
         fallback: false,
       ),
-      showDebugBanner: _readBool('SHOW_DEBUG_BANNER', fallback: false),
+      showDebugBanner: _resolveBool(_showDebugBannerEnv, fallback: false),
     );
   }
 
@@ -108,8 +138,8 @@ class EnvConfig {
   }
 }
 
-String _readString(String key, {required String fallback}) {
-  final value = String.fromEnvironment(key, defaultValue: fallback).trim();
+String _resolveString(String rawValue, {required String fallback}) {
+  final value = rawValue.trim();
   if (value.isEmpty) {
     return fallback;
   }
@@ -117,11 +147,8 @@ String _readString(String key, {required String fallback}) {
   return value;
 }
 
-bool _readBool(String key, {required bool fallback}) {
-  final raw = String.fromEnvironment(
-    key,
-    defaultValue: '',
-  ).trim().toLowerCase();
+bool _resolveBool(String rawValue, {required bool fallback}) {
+  final raw = rawValue.trim().toLowerCase();
   switch (raw) {
     case 'true':
     case '1':
@@ -141,7 +168,10 @@ bool _readBool(String key, {required bool fallback}) {
 }
 
 String _readBaseUrl() {
-  final value = _readString('API_BASE_URL', fallback: 'http://localhost:8080');
+  final value = _resolveString(
+    _apiBaseUrlEnv,
+    fallback: 'http://localhost:8080',
+  );
   final uri = Uri.tryParse(value);
 
   if (uri == null || !uri.hasScheme || uri.host.isEmpty) {

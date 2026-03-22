@@ -11,6 +11,57 @@ abstract final class AppStrings {
   static const dashboardRuntimeSnapshotTitle = 'Runtime snapshot';
   static const dashboardScreenClassLabel = 'Screen class';
   static const dashboardContentMaxWidthLabel = 'Content max width';
+  static const dashboardHeadlineSubtitle =
+      'Stay on pace with today\'s study plan and clear the next useful review block.';
+  static const dashboardSummaryTitle = 'Today\'s overview';
+  static const dashboardSummarySubtitle =
+      'A quick read on workload, cadence, and study momentum.';
+  static const dashboardSummaryDueDecksLabel = 'Due decks';
+  static const dashboardSummaryDueCardsLabel = 'Cards today';
+  static const dashboardSummaryReviewedLabel = 'Reviewed';
+  static const dashboardSummaryFocusTimeLabel = 'Focus time';
+  static const dashboardStreakTitle = 'Study streak';
+  static const dashboardStreakSubtitle =
+      'Consistency compounds when you keep short sessions moving.';
+  static const dashboardDailyGoalLabel = 'Daily goal';
+  static const dashboardQuickActionsTitle = 'Quick actions';
+  static const dashboardQuickActionsSubtitle =
+      'Jump straight into the next useful move.';
+  static const dashboardDueDecksTitle = 'Due decks';
+  static const dashboardDueDecksSubtitle =
+      'Start with the decks carrying the heaviest review debt.';
+  static const dashboardRefreshTooltip = 'Refresh dashboard';
+  static const dashboardStartActionLabel = 'Start';
+  static const dashboardOpenActionLabel = 'Open';
+  static const dashboardLaterActionLabel = 'Later';
+  static const dashboardReviewActionTitle = 'Start review';
+  static const dashboardReviewActionSubtitle =
+      'Focus on the decks with the highest due volume first.';
+  static const dashboardCreateDeckActionTitle = 'Create deck';
+  static const dashboardCreateDeckActionSubtitle =
+      'Capture a new topic while the idea is still fresh.';
+  static const dashboardImportCardsActionTitle = 'Import cards';
+  static const dashboardImportCardsActionSubtitle =
+      'Bring in prepared content and queue it for practice.';
+  static const dashboardReviewFocusLabel = 'Review sprint';
+  static const dashboardCaptureFocusLabel = 'Capture mode';
+  static const dashboardImportFocusLabel = 'Import queue';
+  static const dashboardCompleteFocusLabel = 'Inbox clear';
+  static const dashboardLaterFocusLabel = 'Later queue';
+  static const dashboardNoDueDecksSubtitle =
+      'You have cleared every due deck in the current queue.';
+  static const dashboardQuickActionsEmptyTitle = 'No quick actions right now';
+  static const dashboardQuickActionsEmptySubtitle =
+      'The current queue is stable, so you can stay with the active study flow.';
+  static const dashboardTravelDeckTitle = 'Travel phrases';
+  static const dashboardMedicalDeckTitle = 'Medical terminology';
+  static const dashboardVerbsDeckTitle = 'Korean verbs';
+  static const dashboardLanguageLabFolder = 'Language Lab';
+  static const dashboardExamPrepFolder = 'Exam Prep';
+  static const dashboardDailyPracticeFolder = 'Daily Practice';
+  static const dashboardRecallModeLabel = 'Recall';
+  static const dashboardReviewModeLabel = 'Review';
+  static const dashboardSpeedModeLabel = 'Speed drill';
   static const offlineTitle = 'You are offline';
   static const offlineMessage = 'Check your internet connection and try again.';
   static const offlineRetryLabel = 'Retry';
@@ -46,5 +97,61 @@ abstract final class AppStrings {
 
   static String dashboardContentMaxWidthMessage(String contentMaxWidth) {
     return '$dashboardContentMaxWidthLabel: $contentMaxWidth';
+  }
+
+  static String dashboardFocusChipLabel(String focusLabel) {
+    return 'Focus: $focusLabel';
+  }
+
+  static String dashboardDueDeckChipLabel(String dueDeckCount) {
+    return '$dueDeckCount decks due';
+  }
+
+  static String dashboardDueCardChipLabel(String dueCardCount) {
+    return '$dueCardCount cards today';
+  }
+
+  static String dashboardDueDeckValue(String dueDeckCount) {
+    return '$dueDeckCount decks';
+  }
+
+  static String dashboardDueCardValue(String dueCardCount) {
+    return '$dueCardCount cards';
+  }
+
+  static String dashboardReviewedValue(String reviewedCount) {
+    return '$reviewedCount cards';
+  }
+
+  static String dashboardStudyMinutesValue(String minutes) {
+    return '$minutes min';
+  }
+
+  static String dashboardStreakValue(String days) {
+    return '$days days';
+  }
+
+  static String dashboardGoalProgressMessage(String reviewed, String goal) {
+    return '$reviewed / $goal cards reviewed today';
+  }
+
+  static String dashboardGoalRemainingMessage(String remaining) {
+    return '$remaining cards left to hit today\'s goal';
+  }
+
+  static String dashboardDeckMeta(String folderName, String modeLabel) {
+    return '$folderName • $modeLabel';
+  }
+
+  static String dashboardDeckStatusMessage(
+    String folderName,
+    String modeLabel,
+    String mastery,
+  ) {
+    return '$folderName • $modeLabel • $mastery% mastered';
+  }
+
+  static String dashboardDueCountLabel(String dueCount) {
+    return '$dueCount due';
   }
 }

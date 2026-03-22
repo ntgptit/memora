@@ -44,6 +44,9 @@ class _AppView extends ConsumerWidget {
       debugShowCheckedModeBanner: envConfig.showDebugBanner,
       title: envConfig.appName,
       scaffoldMessengerKey: scaffoldMessengerKey,
+      scrollBehavior: const MaterialScrollBehavior().copyWith(
+        scrollbars: false,
+      ),
       routerConfig: router,
       restorationScopeId: AppConstants.appRestorationScopeId,
       locale: locale,
