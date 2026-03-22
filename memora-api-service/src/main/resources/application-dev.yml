@@ -1,0 +1,30 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: ${MEMORA_DB_URL:jdbc:postgresql://localhost:5432/memora}
+    username: ${MEMORA_DB_USERNAME:memora}
+    password: ${MEMORA_DB_PASSWORD:memora_dev}
+  docker:
+    compose:
+      enabled: ${MEMORA_DOCKER_COMPOSE_ENABLED:true}
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+app:
+  cors:
+    allowed-origin-patterns:
+      - http://localhost:*
+      - http://127.0.0.1:*
+  security:
+    public-paths:
+      - /actuator/health
+      - /actuator/info
+      - /v3/api-docs/**
+      - /swagger-ui/**
+      - /swagger-ui.html

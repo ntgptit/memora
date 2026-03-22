@@ -1,0 +1,17 @@
+spring:
+  config:
+    activate:
+      on-profile: prd
+  datasource:
+    url: ${MEMORA_DB_URL}
+    username: ${MEMORA_DB_USERNAME}
+    password: ${MEMORA_DB_PASSWORD}
+  docker:
+    compose:
+      enabled: false
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

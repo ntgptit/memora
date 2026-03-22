@@ -1,0 +1,53 @@
+import 'package:flutter/material.dart';
+import 'package:memora/core/theme/extensions/component_theme_ext.dart';
+import 'package:memora/core/theme/extensions/dimension_theme_ext.dart';
+import 'package:memora/core/theme/tokens/border_tokens.dart';
+import 'package:memora/core/theme/tokens/typography_tokens.dart';
+
+abstract final class MemoraInputTheme {
+  static InputDecorationTheme build(
+    ColorScheme colorScheme,
+    DimensionThemeExt dims,
+    ComponentThemeExt components,
+  ) {
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(dims.radius.md),
+      borderSide: BorderSide(
+        color: colorScheme.outlineVariant,
+        width: AppBorderTokens.thin,
+      ),
+    );
+
+    return InputDecorationTheme(
+      filled: true,
+      fillColor: colorScheme.surfaceContainerLowest,
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: dims.spacing.md,
+        vertical:
+            (components.componentSize.inputHeight - AppTypographyTokens.body) /
+            2,
+      ),
+      border: border,
+      enabledBorder: border,
+      focusedBorder: border.copyWith(
+        borderSide: BorderSide(
+          color: colorScheme.primary,
+          width: AppBorderTokens.regular,
+        ),
+      ),
+      errorBorder: border.copyWith(
+        borderSide: BorderSide(color: colorScheme.error),
+      ),
+      focusedErrorBorder: border.copyWith(
+        borderSide: BorderSide(
+          color: colorScheme.error,
+          width: AppBorderTokens.regular,
+        ),
+      ),
+      hintStyle: TextStyle(
+        fontSize: AppTypographyTokens.body,
+        color: colorScheme.onSurfaceVariant,
+      ),
+    );
+  }
+}

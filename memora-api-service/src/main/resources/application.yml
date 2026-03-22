@@ -1,0 +1,70 @@
+spring:
+  profiles:
+    default: dev
+  application:
+    name: memora-api-service
+  messages:
+    basename: messages
+    encoding: UTF-8
+    fallback-to-system-locale: false
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        default_schema: memora
+        jdbc:
+          time_zone: UTC
+  flyway:
+    create-schemas: true
+    default-schema: memora
+    schemas: memora
+    validate-migration-naming: true
+    clean-disabled: true
+  thymeleaf:
+    check-template-location: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+
+app:
+  i18n:
+    default-locale: en
+    supported-locales:
+      - en
+      - vi
+  cors:
+    allowed-origins: []
+    allowed-origin-patterns: []
+    allowed-methods:
+      - GET
+      - POST
+      - PUT
+      - PATCH
+      - DELETE
+      - OPTIONS
+    allowed-headers:
+      - Authorization
+      - Content-Type
+      - Accept
+      - Origin
+      - X-Requested-With
+    exposed-headers:
+      - Location
+    allow-credentials: true
+    max-age-seconds: 3600
+  security:
+    public-paths:
+      - /api/v1/**
+      - /actuator/health
+      - /actuator/info
+  docs:
+    title: Memora API Service
+    description: REST API for Memora study, flashcard, and SRS workflows.
+    version: v1

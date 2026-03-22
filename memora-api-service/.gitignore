@@ -1,5 +1,7 @@
 HELP.md
 target/
+backend_guard_report.json
+__pycache__/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
