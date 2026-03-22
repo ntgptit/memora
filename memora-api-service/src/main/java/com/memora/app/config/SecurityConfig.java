@@ -5,6 +5,8 @@ import java.util.List;
 import com.memora.app.properties.CorsProperties;
 import com.memora.app.properties.SecurityProperties;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,10 +43,10 @@ public class SecurityConfig {
                 authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
 
                 final List<String> publicPaths = securityProperties.publicPaths().stream()
-                    .filter(path -> path != null && !path.isBlank())
+                    .filter(StringUtils::isNotBlank)
                     .toList();
 
-                if (!publicPaths.isEmpty()) {
+                if (CollectionUtils.isNotEmpty(publicPaths)) {
                     authorize.requestMatchers(publicPaths.toArray(String[]::new)).permitAll();
                 }
 

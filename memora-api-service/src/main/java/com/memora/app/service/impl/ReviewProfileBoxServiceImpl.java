@@ -40,28 +40,35 @@ public class ReviewProfileBoxServiceImpl implements ReviewProfileBoxService {
         entity.setIntervalSeconds(request.intervalSeconds());
         entity.setIncorrectBoxNumber(request.incorrectBoxNumber());
         entity.setCorrectBoxNumber(request.correctBoxNumber());
+        // Return the persisted review profile box rule.
         return ReviewProfileBoxMapper.toDto(reviewProfileBoxRepository.save(entity));
     }
 
     @Override
     @Transactional(readOnly = true)
     public ReviewProfileBoxDto getReviewProfileBox(final Long reviewProfileBoxId) {
+        // Return the requested review profile box rule.
         return ReviewProfileBoxMapper.toDto(getReviewProfileBoxEntity(reviewProfileBoxId));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ReviewProfileBoxDto> getReviewProfileBoxes(final Long reviewProfileId) {
+        // Narrow the query when the caller requests boxes for one review profile.
         if (reviewProfileId != null) {
+            // Return box rules that belong to the requested profile.
             return reviewProfileBoxRepository.findAllByReviewProfileIdOrderByBoxNumberAsc(
                     ServiceValidationUtils.requirePositiveId(reviewProfileId, ApiMessageKey.REVIEW_PROFILE_ID_POSITIVE)
                 )
+                // Convert persisted box rules into DTOs for the API layer.
                 .stream()
                 .map(ReviewProfileBoxMapper::toDto)
                 .toList();
         }
 
+        // Return every box rule when no review profile filter is provided.
         return reviewProfileBoxRepository.findAllByOrderByIdAsc()
+            // Convert persisted box rules into DTOs for the API layer.
             .stream()
             .map(ReviewProfileBoxMapper::toDto)
             .toList();
@@ -82,6 +89,7 @@ public class ReviewProfileBoxServiceImpl implements ReviewProfileBoxService {
         entity.setIntervalSeconds(request.intervalSeconds());
         entity.setIncorrectBoxNumber(request.incorrectBoxNumber());
         entity.setCorrectBoxNumber(request.correctBoxNumber());
+        // Return the updated review profile box rule.
         return ReviewProfileBoxMapper.toDto(reviewProfileBoxRepository.save(entity));
     }
 
@@ -98,6 +106,7 @@ public class ReviewProfileBoxServiceImpl implements ReviewProfileBoxService {
             reviewProfileBoxId,
             ApiMessageKey.REVIEW_PROFILE_BOX_ID_POSITIVE
         );
+        // Return the persisted box rule or fail when it does not exist.
         return reviewProfileBoxRepository.findById(validatedId)
             .orElseThrow(() -> new ResourceNotFoundException(ApiMessageKey.REVIEW_PROFILE_BOX_NOT_FOUND, validatedId));
     }
@@ -110,9 +119,12 @@ public class ReviewProfileBoxServiceImpl implements ReviewProfileBoxService {
         final ReviewProfileEntity reviewProfile = reviewProfileRepository.findById(validatedId)
             .orElseThrow(() -> new ResourceNotFoundException(ApiMessageKey.REVIEW_PROFILE_NOT_FOUND, validatedId));
 
+        // Prevent edits to system-managed default profiles.
         if (reviewProfile.isSystemProfile()) {
+            // Stop mutations on shared system profile rules.
             throw new ConflictException(ApiMessageKey.REVIEW_PROFILE_BOX_SYSTEM_LOCKED);
         }
+        // Return the mutable custom review profile.
         return reviewProfile;
     }
 
@@ -129,7 +141,9 @@ public class ReviewProfileBoxServiceImpl implements ReviewProfileBoxService {
                 reviewProfileBoxId
             );
 
+        // Reject duplicate box numbers inside the same review profile.
         if (alreadyExists) {
+            // Stop the write when the profile already defines this box number.
             throw new ConflictException(ApiMessageKey.REVIEW_PROFILE_BOX_NUMBER_EXISTS);
         }
     }

@@ -6,6 +6,32 @@ abstract final class Logger {
       return;
     }
 
-    debugPrint('[Memora] $message');
+    _log('DEBUG', message);
+  }
+
+  static void info(String message) {
+    _log('INFO', message);
+  }
+
+  static void warning(String message) {
+    _log('WARN', message);
+  }
+
+  static void error(String message, {Object? error, StackTrace? stackTrace}) {
+    final buffer = StringBuffer(message);
+
+    if (error != null) {
+      buffer.write(' | error: $error');
+    }
+    if (stackTrace != null && kDebugMode) {
+      buffer.write('\n$stackTrace');
+    }
+
+    _log('ERROR', buffer.toString());
+  }
+
+  static void _log(String level, String message) {
+    final timestamp = DateTime.now().toIso8601String();
+    debugPrint('[$timestamp][$level][Memora] $message');
   }
 }

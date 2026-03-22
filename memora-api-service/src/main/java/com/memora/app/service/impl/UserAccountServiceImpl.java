@@ -56,25 +56,32 @@ public class UserAccountServiceImpl implements UserAccountService {
         entity.setEmail(email);
         entity.setPasswordHash(passwordEncoder.encode(password));
         entity.setAccountStatus(resolveAccountStatus(request.accountStatus()));
+        // Return the persisted user account without exposing the password hash.
         return UserAccountMapper.toDto(userAccountRepository.save(entity));
     }
 
     @Override
     @Transactional(readOnly = true)
     public UserAccountDto getUserAccount(final Long userAccountId) {
+        // Return the requested active user account.
         return UserAccountMapper.toDto(getActiveUserAccount(userAccountId));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<UserAccountDto> getUserAccounts(final AccountStatus accountStatus) {
+        // Return every active account when the caller does not filter by status.
         if (accountStatus == null) {
+            // Return all active accounts.
             return userAccountRepository.findAllByDeletedAtIsNullOrderByIdAsc()
+                // Convert persisted account rows into DTOs for the API layer.
                 .stream()
                 .map(UserAccountMapper::toDto)
                 .toList();
         }
+        // Return only active accounts in the requested status.
         return userAccountRepository.findAllByAccountStatusAndDeletedAtIsNullOrderByIdAsc(accountStatus)
+            // Convert persisted account rows into DTOs for the API layer.
             .stream()
             .map(UserAccountMapper::toDto)
             .toList();
@@ -97,6 +104,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         entity.setEmail(email);
         entity.setAccountStatus(request.accountStatus());
 
+        // Re-hash the password only when the caller provides a replacement.
         if (request.password() != null) {
             final String password = ServiceValidationUtils.normalizeRequiredText(
                 request.password(),
@@ -105,6 +113,7 @@ public class UserAccountServiceImpl implements UserAccountService {
             entity.setPasswordHash(passwordEncoder.encode(password));
         }
 
+        // Return the updated user account snapshot.
         return UserAccountMapper.toDto(userAccountRepository.save(entity));
     }
 
@@ -113,11 +122,15 @@ public class UserAccountServiceImpl implements UserAccountService {
     public void deleteUserAccount(final Long userAccountId) {
         final UserAccountEntity entity = getActiveUserAccount(userAccountId);
 
+        // Block deletion while the user still owns active folders.
         if (!folderRepository.findAllByUserIdAndDeletedAtIsNullOrderByIdAsc(entity.getId()).isEmpty()) {
+            // Reject deletion when active folders still reference the user.
             throw new ConflictException(ApiMessageKey.USER_ACCOUNT_DELETE_HAS_ACTIVE_FOLDERS);
         }
 
+        // Block deletion while the user still owns custom review profiles.
         if (!reviewProfileRepository.findAllByOwnerUserIdOrderByIdAsc(entity.getId()).isEmpty()) {
+            // Reject deletion when custom review profiles still reference the user.
             throw new ConflictException(ApiMessageKey.USER_ACCOUNT_DELETE_HAS_CUSTOM_REVIEW_PROFILES);
         }
 
@@ -130,6 +143,7 @@ public class UserAccountServiceImpl implements UserAccountService {
             userAccountId,
             ApiMessageKey.USER_ACCOUNT_ID_POSITIVE
         );
+        // Return the active user account or fail when the row is missing or soft-deleted.
         return userAccountRepository.findByIdAndDeletedAtIsNull(validatedId)
             .orElseThrow(() -> new ResourceNotFoundException(ApiMessageKey.USER_ACCOUNT_NOT_FOUND, validatedId));
     }
@@ -139,7 +153,9 @@ public class UserAccountServiceImpl implements UserAccountService {
             ? userAccountRepository.existsByUsernameIgnoreCaseAndDeletedAtIsNull(username)
             : userAccountRepository.existsByUsernameIgnoreCaseAndDeletedAtIsNullAndIdNot(username, userAccountId);
 
+        // Reject duplicate usernames among active accounts.
         if (alreadyExists) {
+            // Stop the write when another account already uses the same username.
             throw new ConflictException(ApiMessageKey.USERNAME_EXISTS);
         }
     }
@@ -149,12 +165,15 @@ public class UserAccountServiceImpl implements UserAccountService {
             ? userAccountRepository.existsByEmailIgnoreCaseAndDeletedAtIsNull(email)
             : userAccountRepository.existsByEmailIgnoreCaseAndDeletedAtIsNullAndIdNot(email, userAccountId);
 
+        // Reject duplicate emails among active accounts.
         if (alreadyExists) {
+            // Stop the write when another account already uses the same email.
             throw new ConflictException(ApiMessageKey.EMAIL_EXISTS);
         }
     }
 
     private String normalizeEmail(final String email) {
+        // Return a normalized email value that is stable for uniqueness checks.
         return StringUtils.lowerCase(
             ServiceValidationUtils.normalizeRequiredText(email, ApiMessageKey.EMAIL_REQUIRED),
             Locale.ROOT
@@ -162,9 +181,12 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     private AccountStatus resolveAccountStatus(final AccountStatus accountStatus) {
+        // Default missing status values to the onboarding state.
         if (accountStatus == null) {
+            // Return the initial status for newly created accounts.
             return AccountStatus.PENDING;
         }
+        // Return the caller-provided status unchanged.
         return accountStatus;
     }
 }

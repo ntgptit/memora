@@ -41,28 +41,35 @@ public class FlashcardLanguageServiceImpl implements FlashcardLanguageService {
         entity.setSide(request.side());
         entity.setLanguageCode(normalizeLanguageCode(request.languageCode()));
         entity.setPronunciation(ServiceValidationUtils.normalizeOptionalText(request.pronunciation()));
+        // Return the persisted flashcard language metadata.
         return FlashcardLanguageMapper.toDto(flashcardLanguageRepository.save(entity));
     }
 
     @Override
     @Transactional(readOnly = true)
     public FlashcardLanguageDto getFlashcardLanguage(final Long flashcardLanguageId) {
+        // Return the requested flashcard language row.
         return FlashcardLanguageMapper.toDto(getFlashcardLanguageEntity(flashcardLanguageId));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<FlashcardLanguageDto> getFlashcardLanguages(final Long flashcardId) {
+        // Narrow the query when the caller requests languages for one flashcard.
         if (flashcardId != null) {
+            // Return languages that belong to the requested flashcard.
             return flashcardLanguageRepository.findAllByFlashcardIdOrderByIdAsc(
                     ServiceValidationUtils.requirePositiveId(flashcardId, ApiMessageKey.FLASHCARD_ID_POSITIVE)
                 )
+                // Convert persisted language rows into DTOs for the API layer.
                 .stream()
                 .map(FlashcardLanguageMapper::toDto)
                 .toList();
         }
 
+        // Return every flashcard language row when no filter is provided.
         return flashcardLanguageRepository.findAllByOrderByIdAsc()
+            // Convert persisted language rows into DTOs for the API layer.
             .stream()
             .map(FlashcardLanguageMapper::toDto)
             .toList();
@@ -82,6 +89,7 @@ public class FlashcardLanguageServiceImpl implements FlashcardLanguageService {
         entity.setSide(request.side());
         entity.setLanguageCode(normalizeLanguageCode(request.languageCode()));
         entity.setPronunciation(ServiceValidationUtils.normalizeOptionalText(request.pronunciation()));
+        // Return the updated flashcard language metadata.
         return FlashcardLanguageMapper.toDto(flashcardLanguageRepository.save(entity));
     }
 
@@ -97,6 +105,7 @@ public class FlashcardLanguageServiceImpl implements FlashcardLanguageService {
             flashcardId,
             ApiMessageKey.FLASHCARD_ID_POSITIVE
         );
+        // Return the active flashcard that owns the language row.
         return flashcardRepository.findByIdAndDeletedAtIsNull(validatedId)
             .orElseThrow(() -> new ResourceNotFoundException(ApiMessageKey.FLASHCARD_NOT_FOUND, validatedId));
     }
@@ -106,6 +115,7 @@ public class FlashcardLanguageServiceImpl implements FlashcardLanguageService {
             flashcardLanguageId,
             ApiMessageKey.FLASHCARD_LANGUAGE_ID_POSITIVE
         );
+        // Return the persisted flashcard language row or fail when it is missing.
         return flashcardLanguageRepository.findById(validatedId)
             .orElseThrow(() -> new ResourceNotFoundException(ApiMessageKey.FLASHCARD_LANGUAGE_NOT_FOUND, validatedId));
     }
@@ -119,12 +129,15 @@ public class FlashcardLanguageServiceImpl implements FlashcardLanguageService {
             ? flashcardLanguageRepository.existsByFlashcardIdAndSide(flashcardId, side)
             : flashcardLanguageRepository.existsByFlashcardIdAndSideAndIdNot(flashcardId, side, flashcardLanguageId);
 
+        // Reject duplicate language metadata for the same flashcard side.
         if (alreadyExists) {
+            // Stop the write when the side already has a language row.
             throw new ConflictException(ApiMessageKey.FLASHCARD_LANGUAGE_SIDE_EXISTS);
         }
     }
 
     private String normalizeLanguageCode(final String languageCode) {
+        // Return a normalized language code that is stable for lookups and uniqueness checks.
         return StringUtils.lowerCase(
             ServiceValidationUtils.normalizeRequiredText(languageCode, ApiMessageKey.LANGUAGE_CODE_REQUIRED),
             Locale.ROOT

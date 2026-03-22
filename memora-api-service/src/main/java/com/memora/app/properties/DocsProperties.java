@@ -1,5 +1,6 @@
 package com.memora.app.properties;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "app.docs")
@@ -16,6 +17,6 @@ public record DocsProperties(
     }
 
     private static String normalize(final String value, final String fallback) {
-        return value == null || value.isBlank() ? fallback : value;
+        return StringUtils.isBlank(value) ? fallback : value;
     }
 }

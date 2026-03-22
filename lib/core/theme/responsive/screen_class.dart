@@ -11,15 +11,38 @@ enum ScreenClass {
   final String label;
 
   static ScreenClass fromWidth(double width) {
-    if (width <= AppBreakpoints.compactMaxWidth) {
+    if (AppBreakpoints.isCompact(width)) {
       return ScreenClass.compact;
     }
-    if (width <= AppBreakpoints.mediumMaxWidth) {
+    if (AppBreakpoints.isMedium(width)) {
       return ScreenClass.medium;
     }
-    if (width <= AppBreakpoints.expandedMaxWidth) {
+    if (AppBreakpoints.isExpanded(width)) {
       return ScreenClass.expanded;
     }
     return ScreenClass.large;
+  }
+
+  bool get isCompact => this == ScreenClass.compact;
+
+  bool get isMedium => this == ScreenClass.medium;
+
+  bool get isExpanded => this == ScreenClass.expanded;
+
+  bool get isLarge => this == ScreenClass.large;
+
+  bool get canUseSplitView => isExpanded || isLarge;
+
+  int get recommendedColumns {
+    switch (this) {
+      case ScreenClass.compact:
+        return 1;
+      case ScreenClass.medium:
+        return 2;
+      case ScreenClass.expanded:
+        return 3;
+      case ScreenClass.large:
+        return 4;
+    }
   }
 }

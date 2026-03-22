@@ -41,5 +41,10 @@ class ScreenInfo {
 
   double get width => size.width;
   double get height => size.height;
+  double get shortestSide => width < height ? width : height;
+  double get longestSide => width > height ? width : height;
+  double get aspectRatio => height == 0 ? 1 : width / height;
   bool get isLandscape => orientation == Orientation.landscape;
+  bool get isPortrait => orientation == Orientation.portrait;
+  bool get isTabletLike => shortestSide >= 600;
 }

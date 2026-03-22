@@ -3,6 +3,6 @@ import 'package:memora/app/app.dart';
 import 'package:memora/app/app_initializer.dart';
 
 Future<void> main() async {
-  await AppInitializer.ensureInitialized();
-  runApp(const App());
+  final container = await AppInitializer.ensureInitialized();
+  runApp(App(container: container));
 }

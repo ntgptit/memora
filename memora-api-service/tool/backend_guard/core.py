@@ -39,11 +39,27 @@ RULE_ENTITY_ENUM_STRING = "ENTITY_ENUMERATED_STRING"
 RULE_SOFT_DELETE_NO_HARD_DELETE = "SOFT_DELETE_NO_HARD_DELETE_CALL"
 RULE_VALIDATION_MESSAGE_CONSTANT = "DTO_VALIDATION_MESSAGES_USE_CONSTANTS"
 RULE_INLINE_EXCEPTION_MESSAGE = "NO_INLINE_EXCEPTION_MESSAGE"
+RULE_NO_ELSE = "NO_ELSE_ALLOWED"
+RULE_NESTED_FOR_STREAM = "NESTED_FOR_SHOULD_USE_STREAM_INNER_LOOP"
+RULE_LOMBOK_REQUIRED_ARGS_CONSTRUCTOR = "LOMBOK_REQUIRED_ARGS_CONSTRUCTOR_FOR_SPRING_BEAN"
+RULE_LOMBOK_ENTITY_GETTER_SETTER = "LOMBOK_ENTITY_GETTER_SETTER_REQUIRED"
+RULE_LOMBOK_BUILDER_PREFERRED = "LOMBOK_BUILDER_PREFERRED_FOR_DTO_CLASS"
+RULE_SHARED_MAPPED_SUPERCLASS = "ENTITY_SHARED_FIELDS_MAPPED_SUPERCLASS"
+RULE_AUDIT_ENTITY_SEPARATE_CLASS = "AUDIT_FIELDS_ENTITY_MUST_USE_SEPARATE_BASE_CLASS"
+RULE_AUDIT_DTO_SEPARATE_CLASS = "AUDIT_FIELDS_DTO_MUST_USE_SEPARATE_MODEL"
+RULE_EXCEPTION_SERIAL_VERSION_UID = "EXCEPTION_MUST_DECLARE_SERIAL_VERSION_UID"
 RULE_IF_REQUIRES_COMMENT = "IF_STATEMENT_REQUIRES_PRECEDING_COMMENT"
 RULE_THROW_REQUIRES_COMMENT = "THROW_STATEMENT_REQUIRES_PRECEDING_COMMENT"
 RULE_FOR_REQUIRES_COMMENT = "FOR_STATEMENT_REQUIRES_PRECEDING_COMMENT"
 RULE_STREAM_REQUIRES_COMMENT = "STREAM_CALL_REQUIRES_PRECEDING_COMMENT"
 RULE_RETURN_REQUIRES_COMMENT = "RETURN_STATEMENT_REQUIRES_PRECEDING_COMMENT"
+RULE_EXCEPTION_MESSAGE_I18N = "EXCEPTION_MESSAGE_MUST_USE_I18N_KEY"
+RULE_MESSAGE_KEYS_BUNDLE = "ERROR_MESSAGE_KEYS_MUST_EXIST_IN_MESSAGE_BUNDLES"
+RULE_VI_MESSAGES_ACCENTED = "VI_MESSAGES_MUST_BE_VIETNAMESE_ACCENTED"
+RULE_NO_DIRECT_TRIM = "NO_DIRECT_TRIM_USE_STRINGUTILS"
+RULE_NO_DIRECT_BLANK_CHECK = "NO_DIRECT_BLANK_CHECK_USE_STRINGUTILS"
+RULE_NO_DIRECT_STRING_PREDICATE = "NO_DIRECT_STRING_PREDICATE_USE_STRINGUTILS"
+RULE_NO_DIRECT_COLLECTION_EMPTY_CHECK = "NO_DIRECT_COLLECTION_EMPTY_CHECK_USE_COLLECTIONUTILS"
 
 SEVERITY_ERROR = "ERROR"
 SEVERITY_WARNING = "WARN"
@@ -51,6 +67,11 @@ SEVERITY_WARNING = "WARN"
 CLASS_MAX_LINES = 300
 REPORT_FILE = "backend_guard_report.json"
 JAVA_EXTENSION = ".java"
+I18N_ALLOW_TECHNICAL_LITERAL_MARKER = "backend-guard: allow-technical-literal"
+MESSAGE_BUNDLE_FILES = (
+    "src/main/resources/messages.properties",
+    "src/main/resources/messages_vi.properties",
+)
 
 ENTITY_CLASS_PATTERN = re.compile(r"@\s*Entity\b")
 ID_ANNOTATION_PATTERN = re.compile(r"@\s*Id\b")
@@ -91,6 +112,37 @@ ENTITY_RESPONSE_PATTERN = re.compile(r"\bResponseEntity<\s*\w+Entity\s*>")
 DIRECT_ENTITY_RETURN_PATTERN = re.compile(r"\bpublic\s+(\w+Entity)\s+\w+\s*\(")
 HARD_DELETE_CALL_PATTERN = re.compile(r"\.\s*delete(ById|All|AllById)?\s*\(")
 AUDIT_FIELD_PATTERN = re.compile(r"\b(createdAt|updatedAt)\b")
+SHARED_FIELD_DECLARATION_PATTERN = re.compile(r"\b(id|createdAt|updatedAt|deletedAt|version)\b")
+AUDIT_FIELD_DECLARATION_PATTERN = re.compile(r"\b(createdAt|updatedAt|deletedAt)\b")
+SPRING_BEAN_PATTERN = re.compile(r"@\s*(Service|Component|RestController|Controller|Configuration|RestControllerAdvice)\b")
+REQUIRED_ARGS_CONSTRUCTOR_PATTERN = re.compile(r"@\s*RequiredArgsConstructor\b")
+FINAL_FIELD_PATTERN = re.compile(r"^\s*private\s+final\s+[\w<>, ?\[\]]+\s+\w+\s*;")
+LOMBOK_GETTER_OR_SETTER_PATTERN = re.compile(r"@\s*(Getter|Setter)\b")
+MANUAL_GETTER_OR_SETTER_PATTERN = re.compile(r"^\s*public\s+[\w<>, ?\[\]]+\s+(get|set|is)[A-Z]\w*\s*\(")
+LOMBOK_BUILDER_PATTERN = re.compile(r"@\s*Builder\b")
+RECORD_PATTERN = re.compile(r"\brecord\s+[A-Z]\w*\s*\(")
+PRIVATE_FIELD_PATTERN = re.compile(r"^\s*private\s+[\w<>, ?\[\]]+\s+\w+\s*;")
+ELSE_PATTERN = re.compile(r"\belse\b")
+MAPPED_SUPERCLASS_PATTERN = re.compile(r"@\s*MappedSuperclass\b")
+EXCEPTION_CLASS_PATTERN = re.compile(r"\bclass\s+([A-Z]\w*Exception)\s+extends\s+[\w.]*Exception\b")
+SERIAL_VERSION_UID_PATTERN = re.compile(r"private\s+static\s+final\s+long\s+serialVersionUID\s*=\s*[-]?\d+L\s*;")
+VIETNAMESE_ACCENTED_CHAR_PATTERN = re.compile(r"[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ]")
+THROW_NEW_EXCEPTION_LITERAL_PATTERN = re.compile(r'throw\s+new\s+[A-Za-z_][A-Za-z0-9_]*Exception\s*\([^)]*"([^"]+)"')
+RESPONSE_STATUS_EXCEPTION_LITERAL_PATTERN = re.compile(r'new\s+ResponseStatusException\s*\([^)]*"([^"]+)"')
+MESSAGE_SOURCE_LITERAL_PATTERN = re.compile(r'messageSource\s*\.\s*getMessage\s*\(\s*"([^"]+)"')
+MESSAGE_KEY_CONSTANT_PATTERN = re.compile(r'public\s+static\s+final\s+String\s+[A-Z0-9_]+\s*=\s*"([^"]+)";')
+DIRECT_TRIM_PATTERN = re.compile(r"\.\s*trim\s*\(")
+DIRECT_IS_BLANK_PATTERN = re.compile(r"\.\s*isBlank\s*\(")
+NULL_OR_BLANK_PATTERN = re.compile(r"\b([A-Za-z_][A-Za-z0-9_]*)\s*==\s*null\s*\|\|\s*!?\s*\1\s*\.\s*isBlank\s*\(")
+DIRECT_STARTS_WITH_PATTERN = re.compile(r"\.\s*startsWith\s*\(")
+DIRECT_ENDS_WITH_PATTERN = re.compile(r"\.\s*endsWith\s*\(")
+DIRECT_EQUALS_IGNORE_CASE_PATTERN = re.compile(r"\.\s*equalsIgnoreCase\s*\(")
+NULL_OR_EMPTY_SAME_VAR_PATTERN = re.compile(r"\b([A-Za-z_][A-Za-z0-9_]*)\s*==\s*null\s*\|\|\s*\1\s*\.\s*isEmpty\s*\(")
+NOT_NULL_AND_NOT_EMPTY_SAME_VAR_PATTERN = re.compile(
+    r"\b([A-Za-z_][A-Za-z0-9_]*)\s*!=\s*null\s*&&\s*!\s*\1\s*\.\s*isEmpty\s*\("
+)
+DIRECT_IS_EMPTY_CALL_PATTERN = re.compile(r"\b([A-Za-z_][A-Za-z0-9_]*)\s*\.\s*isEmpty\s*\(")
+COLLECTION_DECLARATION_PATTERN_TEMPLATE = r"\b(?:List|Set|Collection|Iterable|ArrayList|LinkedList|HashSet|LinkedHashSet)\s*<[^;=()]+>\s+{name}\b"
 LOWERCASE_SQL_KEYWORD_PATTERNS = [
     re.compile(r"\bselect\b"),
     re.compile(r"\bfrom\b"),
@@ -412,6 +464,485 @@ class PrecedingCommentRule(Rule):
                     file=file_ctx.rel_path,
                     line=index,
                     reason=self._reason,
+                    snippet=raw.strip(),
+                )
+            )
+        return violations
+
+
+class NoElseRule(Rule):
+    name = RULE_NO_ELSE
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        violations: list[Violation] = []
+        for index, raw in enumerate(file_ctx.lines, start=1):
+            line = _strip_line_comment(raw).strip()
+            if line == "":
+                continue
+            if ELSE_PATTERN.search(line) is None:
+                continue
+            violations.append(
+                Violation(
+                    rule=self.name,
+                    severity=SEVERITY_ERROR,
+                    file=file_ctx.rel_path,
+                    line=index,
+                    reason="else/else-if is forbidden. Use guard clauses and early return.",
+                    snippet=raw.strip(),
+                )
+            )
+        return violations
+
+
+class NestedForShouldUseStreamRule(Rule):
+    name = RULE_NESTED_FOR_STREAM
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        violations: list[Violation] = []
+        lines = file_ctx.lines
+        for index, raw in enumerate(lines, start=1):
+            if FOR_PATTERN.search(raw) is None:
+                continue
+            outer_indent = _indent_level(raw)
+            window = _next_non_blank_lines(lines, index, 30)
+            for line_no, candidate in window:
+                if line_no <= index:
+                    continue
+                if FOR_PATTERN.search(candidate) is None:
+                    continue
+                inner_indent = _indent_level(candidate)
+                if inner_indent <= outer_indent:
+                    continue
+                violations.append(
+                    Violation(
+                        rule=self.name,
+                        severity=SEVERITY_ERROR,
+                        file=file_ctx.rel_path,
+                        line=line_no,
+                        reason="Nested for-loop detected; prefer Stream for inner iteration to reduce nesting.",
+                        snippet=candidate.strip(),
+                    )
+                )
+                break
+        return violations
+
+
+class LombokRequiredArgsConstructorRule(Rule):
+    name = RULE_LOMBOK_REQUIRED_ARGS_CONSTRUCTOR
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        if SPRING_BEAN_PATTERN.search(file_ctx.text) is None:
+            return []
+        final_fields = [raw for raw in file_ctx.lines if FINAL_FIELD_PATTERN.search(raw) is not None]
+        if len(final_fields) == 0:
+            return []
+        if REQUIRED_ARGS_CONSTRUCTOR_PATTERN.search(file_ctx.text) is not None:
+            return []
+        class_name = _detect_primary_class_name(file_ctx.lines)
+        has_constructor = False
+        if class_name != "":
+            constructor_regex = re.compile(rf"^\s*public\s+{re.escape(class_name)}\s*\(")
+            has_constructor = any(constructor_regex.search(raw) is not None for raw in file_ctx.lines)
+        if has_constructor:
+            return [
+                Violation(
+                    rule=self.name,
+                    severity=SEVERITY_ERROR,
+                    file=file_ctx.rel_path,
+                    line=1,
+                    reason="Spring bean uses constructor injection; prefer @RequiredArgsConstructor to reduce boilerplate.",
+                    snippet=file_ctx.rel_path,
+                )
+            ]
+        return [
+            Violation(
+                rule=self.name,
+                severity=SEVERITY_ERROR,
+                file=file_ctx.rel_path,
+                line=1,
+                reason="Spring bean with final dependencies should use @RequiredArgsConstructor.",
+                snippet=file_ctx.rel_path,
+            )
+        ]
+
+
+class LombokEntityGetterSetterRule(Rule):
+    name = RULE_LOMBOK_ENTITY_GETTER_SETTER
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        if ENTITY_CLASS_PATTERN.search(file_ctx.text) is None:
+            return []
+        if LOMBOK_GETTER_OR_SETTER_PATTERN.search(file_ctx.text) is not None:
+            return []
+        manual_methods = [raw for raw in file_ctx.lines if MANUAL_GETTER_OR_SETTER_PATTERN.search(raw) is not None]
+        if len(manual_methods) < 4:
+            return []
+        return [
+            Violation(
+                rule=self.name,
+                severity=SEVERITY_ERROR,
+                file=file_ctx.rel_path,
+                line=1,
+                reason="Entity has many manual getters/setters; prefer Lombok @Getter/@Setter.",
+                snippet=file_ctx.rel_path,
+            )
+        ]
+
+
+class LombokBuilderPreferredRule(Rule):
+    name = RULE_LOMBOK_BUILDER_PREFERRED
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        if "/dto/" not in file_ctx.rel_path:
+            return []
+        if RECORD_PATTERN.search(file_ctx.text) is not None:
+            return []
+        if " class " not in f" {file_ctx.text} ":
+            return []
+        if LOMBOK_BUILDER_PATTERN.search(file_ctx.text) is not None:
+            return []
+        field_count = sum(1 for raw in file_ctx.lines if PRIVATE_FIELD_PATTERN.search(raw) is not None)
+        if field_count < 3:
+            return []
+        return [
+            Violation(
+                rule=self.name,
+                severity=SEVERITY_ERROR,
+                file=file_ctx.rel_path,
+                line=1,
+                reason="DTO class has multiple fields; prefer Lombok @Builder for object construction.",
+                snippet=file_ctx.rel_path,
+            )
+        ]
+
+
+class SharedMappedSuperclassRule(Rule):
+    name = RULE_SHARED_MAPPED_SUPERCLASS
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        if "/entity/" not in file_ctx.rel_path:
+            return []
+        shared_field_lines = _find_shared_field_lines(file_ctx.lines)
+        if len(shared_field_lines) < 2:
+            return []
+        if MAPPED_SUPERCLASS_PATTERN.search(file_ctx.text) is not None:
+            return []
+        line_number, raw = shared_field_lines[0]
+        return [
+            Violation(
+                rule=self.name,
+                severity=SEVERITY_ERROR,
+                file=file_ctx.rel_path,
+                line=line_number,
+                reason="Shared entity fields must live in a @MappedSuperclass base class.",
+                snippet=raw.strip(),
+            )
+        ]
+
+
+class AuditEntitySeparateClassRule(Rule):
+    name = RULE_AUDIT_ENTITY_SEPARATE_CLASS
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        if ENTITY_CLASS_PATTERN.search(file_ctx.text) is None:
+            return []
+        if MAPPED_SUPERCLASS_PATTERN.search(file_ctx.text) is not None:
+            return []
+        extends_name = _extended_class_name(file_ctx.text) or ""
+        if "Audit" in extends_name:
+            return []
+        audit_field_lines = _find_audit_field_lines(file_ctx.lines)
+        if len(audit_field_lines) == 0:
+            return []
+        return [
+            Violation(
+                rule=self.name,
+                severity=SEVERITY_ERROR,
+                file=file_ctx.rel_path,
+                line=audit_field_lines[0][0],
+                reason="Entity must place audit fields in a separate base class (MappedSuperclass).",
+                snippet=audit_field_lines[0][1].strip(),
+            )
+        ]
+
+
+class AuditDtoSeparateClassRule(Rule):
+    name = RULE_AUDIT_DTO_SEPARATE_CLASS
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        if "/dto/" not in file_ctx.rel_path:
+            return []
+        if RECORD_PATTERN.search(file_ctx.text) is not None:
+            return []
+        if "Audit" in file_ctx.rel_path:
+            return []
+        audit_field_lines = _find_audit_field_lines(file_ctx.lines)
+        if len(audit_field_lines) == 0:
+            return []
+        return [
+            Violation(
+                rule=self.name,
+                severity=SEVERITY_ERROR,
+                file=file_ctx.rel_path,
+                line=audit_field_lines[0][0],
+                reason="DTO must use a separate audit model instead of inline audit fields.",
+                snippet=audit_field_lines[0][1].strip(),
+            )
+        ]
+
+
+class ExceptionSerialVersionUidRule(Rule):
+    name = RULE_EXCEPTION_SERIAL_VERSION_UID
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        if "/exception/" not in file_ctx.rel_path:
+            return []
+        if EXCEPTION_CLASS_PATTERN.search(file_ctx.text) is None:
+            return []
+        if SERIAL_VERSION_UID_PATTERN.search(file_ctx.text) is not None:
+            return []
+        line = _first_line_regex(file_ctx.lines, r"\bclass\s+[A-Z]\w*Exception\b")
+        return [
+            Violation(
+                rule=self.name,
+                severity=SEVERITY_ERROR,
+                file=file_ctx.rel_path,
+                line=line if line > 0 else 1,
+                reason="Exception class must declare static final long serialVersionUID.",
+                snippet=file_ctx.lines[line - 1].strip() if line > 0 else file_ctx.rel_path,
+            )
+        ]
+
+
+class ExceptionMessageI18nRule(Rule):
+    name = RULE_EXCEPTION_MESSAGE_I18N
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        if not file_ctx.rel_path.startswith("src/main/java/"):
+            return []
+        if not any(
+            token in file_ctx.rel_path
+            for token in ("/controller/", "/service/", "/util/", "/mode/", "/security/", "/exception/")
+        ):
+            return []
+        violations: list[Violation] = []
+        for index, raw in enumerate(file_ctx.lines, start=1):
+            if I18N_ALLOW_TECHNICAL_LITERAL_MARKER in raw:
+                continue
+            if _has_comment_marker_above(file_ctx.lines, index, I18N_ALLOW_TECHNICAL_LITERAL_MARKER, 2):
+                continue
+            stripped = _strip_line_comment(raw).strip()
+            if stripped == "":
+                continue
+            literal = _find_exception_literal(stripped)
+            if literal is None:
+                continue
+            if _looks_like_message_key(literal):
+                continue
+            violations.append(
+                Violation(
+                    rule=self.name,
+                    severity=SEVERITY_ERROR,
+                    file=file_ctx.rel_path,
+                    line=index,
+                    reason="Exception or message-source path must use i18n message keys instead of hardcoded user-facing text.",
+                    snippet=raw.strip(),
+                )
+            )
+        return violations
+
+
+class NoDirectTrimRule(Rule):
+    name = RULE_NO_DIRECT_TRIM
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        violations: list[Violation] = []
+        for index, raw in enumerate(file_ctx.lines, start=1):
+            line = _strip_line_comment(raw).strip()
+            if line == "":
+                continue
+            if "StringUtils.trim(" in line:
+                continue
+            if DIRECT_TRIM_PATTERN.search(line) is None:
+                continue
+            violations.append(
+                Violation(
+                    rule=self.name,
+                    severity=SEVERITY_ERROR,
+                    file=file_ctx.rel_path,
+                    line=index,
+                    reason="Direct .trim() is forbidden. Use StringUtils from Apache Commons Lang3.",
+                    snippet=raw.strip(),
+                )
+            )
+        return violations
+
+
+class NoDirectBlankCheckRule(Rule):
+    name = RULE_NO_DIRECT_BLANK_CHECK
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        violations: list[Violation] = []
+        for index, raw in enumerate(file_ctx.lines, start=1):
+            line = _strip_line_comment(raw).strip()
+            if line == "":
+                continue
+            if "StringUtils.isBlank(" in line or "StringUtils.isNotBlank(" in line:
+                continue
+            if NULL_OR_BLANK_PATTERN.search(line) is not None:
+                violations.append(
+                    Violation(
+                        rule=self.name,
+                        severity=SEVERITY_ERROR,
+                        file=file_ctx.rel_path,
+                        line=index,
+                        reason="Direct null/blank check is forbidden. Use StringUtils.isBlank/isNotBlank.",
+                        snippet=raw.strip(),
+                    )
+                )
+                continue
+            if DIRECT_IS_BLANK_PATTERN.search(line) is None:
+                continue
+            violations.append(
+                Violation(
+                    rule=self.name,
+                    severity=SEVERITY_ERROR,
+                    file=file_ctx.rel_path,
+                    line=index,
+                    reason="Direct .isBlank() is forbidden. Use StringUtils.isBlank/isNotBlank.",
+                    snippet=raw.strip(),
+                )
+            )
+        return violations
+
+
+class NoDirectStringPredicateRule(Rule):
+    name = RULE_NO_DIRECT_STRING_PREDICATE
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        violations: list[Violation] = []
+        for index, raw in enumerate(file_ctx.lines, start=1):
+            line = _strip_line_comment(raw).strip()
+            if line == "":
+                continue
+            if (
+                "StringUtils.isEmpty(" in line
+                or "StringUtils.isNotEmpty(" in line
+                or "StringUtils.startsWith(" in line
+                or "StringUtils.endsWith(" in line
+                or "StringUtils.equalsIgnoreCase(" in line
+            ):
+                continue
+            if NULL_OR_EMPTY_SAME_VAR_PATTERN.search(line) is not None:
+                violations.append(
+                    Violation(
+                        rule=self.name,
+                        severity=SEVERITY_ERROR,
+                        file=file_ctx.rel_path,
+                        line=index,
+                        reason="Direct null/empty check is forbidden. Use StringUtils.isEmpty/isNotEmpty.",
+                        snippet=raw.strip(),
+                    )
+                )
+                continue
+            if DIRECT_STARTS_WITH_PATTERN.search(line) is not None:
+                violations.append(
+                    Violation(
+                        rule=self.name,
+                        severity=SEVERITY_ERROR,
+                        file=file_ctx.rel_path,
+                        line=index,
+                        reason="Direct .startsWith() is forbidden. Use StringUtils.startsWith.",
+                        snippet=raw.strip(),
+                    )
+                )
+                continue
+            if DIRECT_ENDS_WITH_PATTERN.search(line) is not None:
+                violations.append(
+                    Violation(
+                        rule=self.name,
+                        severity=SEVERITY_ERROR,
+                        file=file_ctx.rel_path,
+                        line=index,
+                        reason="Direct .endsWith() is forbidden. Use StringUtils.endsWith.",
+                        snippet=raw.strip(),
+                    )
+                )
+                continue
+            if DIRECT_EQUALS_IGNORE_CASE_PATTERN.search(line) is None:
+                continue
+            violations.append(
+                Violation(
+                    rule=self.name,
+                    severity=SEVERITY_ERROR,
+                    file=file_ctx.rel_path,
+                    line=index,
+                    reason="Direct .equalsIgnoreCase() is forbidden. Use StringUtils.equalsIgnoreCase.",
+                    snippet=raw.strip(),
+                )
+            )
+        return violations
+
+
+class NoDirectCollectionEmptyCheckRule(Rule):
+    name = RULE_NO_DIRECT_COLLECTION_EMPTY_CHECK
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        violations: list[Violation] = []
+        for index, raw in enumerate(file_ctx.lines, start=1):
+            line = _strip_line_comment(raw).strip()
+            if line == "":
+                continue
+            if "CollectionUtils.isEmpty(" in line or "CollectionUtils.isNotEmpty(" in line:
+                continue
+
+            same_var_match = NULL_OR_EMPTY_SAME_VAR_PATTERN.search(line)
+            if same_var_match is not None:
+                variable_name = same_var_match.group(1)
+                if not _looks_like_collection_variable(file_ctx.lines, index, variable_name):
+                    continue
+                violations.append(
+                    Violation(
+                        rule=self.name,
+                        severity=SEVERITY_ERROR,
+                        file=file_ctx.rel_path,
+                        line=index,
+                        reason="Direct null/empty collection check is forbidden. Use CollectionUtils.isEmpty/isNotEmpty from Apache Commons Collections4.",
+                        snippet=raw.strip(),
+                    )
+                )
+                continue
+
+            not_empty_match = NOT_NULL_AND_NOT_EMPTY_SAME_VAR_PATTERN.search(line)
+            if not_empty_match is not None:
+                variable_name = not_empty_match.group(1)
+                if not _looks_like_collection_variable(file_ctx.lines, index, variable_name):
+                    continue
+                violations.append(
+                    Violation(
+                        rule=self.name,
+                        severity=SEVERITY_ERROR,
+                        file=file_ctx.rel_path,
+                        line=index,
+                        reason="Direct null/empty collection check is forbidden. Use CollectionUtils.isEmpty/isNotEmpty from Apache Commons Collections4.",
+                        snippet=raw.strip(),
+                    )
+                )
+                continue
+
+            direct_empty_match = DIRECT_IS_EMPTY_CALL_PATTERN.search(line)
+            if direct_empty_match is None:
+                continue
+            variable_name = direct_empty_match.group(1)
+            if not _looks_like_collection_variable(file_ctx.lines, index, variable_name):
+                continue
+            violations.append(
+                Violation(
+                    rule=self.name,
+                    severity=SEVERITY_ERROR,
+                    file=file_ctx.rel_path,
+                    line=index,
+                    reason="Direct collection .isEmpty() is forbidden. Use CollectionUtils.isEmpty/isNotEmpty from Apache Commons Collections4.",
                     snippet=raw.strip(),
                 )
             )
@@ -893,6 +1424,20 @@ def _default_rules() -> list[Rule]:
         EntityVersionRule(),
         EntityEnumeratedStringRule(),
         SoftDeleteNoHardDeleteRule(),
+        NoElseRule(),
+        NestedForShouldUseStreamRule(),
+        LombokRequiredArgsConstructorRule(),
+        LombokEntityGetterSetterRule(),
+        LombokBuilderPreferredRule(),
+        SharedMappedSuperclassRule(),
+        AuditEntitySeparateClassRule(),
+        AuditDtoSeparateClassRule(),
+        ExceptionSerialVersionUidRule(),
+        ExceptionMessageI18nRule(),
+        NoDirectTrimRule(),
+        NoDirectBlankCheckRule(),
+        NoDirectStringPredicateRule(),
+        NoDirectCollectionEmptyCheckRule(),
         PrecedingCommentRule(
             name=RULE_IF_REQUIRES_COMMENT,
             pattern=IF_STATEMENT_PATTERN,
@@ -935,6 +1480,8 @@ def _project_rule_names() -> set[str]:
     return {
         RULE_CONSTANT_PACKAGE_EXISTS,
         RULE_MESSAGE_BUNDLE_EXISTS,
+        RULE_MESSAGE_KEYS_BUNDLE,
+        RULE_VI_MESSAGES_ACCENTED,
     }
 
 
@@ -959,10 +1506,7 @@ def _project_violations(root: Path, selected_rule_names: set[str]) -> list[Viola
 
     resources_dir = root / "src" / "main" / "resources"
     if should_run_all or RULE_MESSAGE_BUNDLE_EXISTS in selected_rule_names:
-        required_files = [
-            resources_dir / "messages.properties",
-            resources_dir / "messages_vi.properties",
-        ]
+        required_files = [root / Path(relative_path) for relative_path in MESSAGE_BUNDLE_FILES]
         for required_file in required_files:
             if required_file.exists():
                 continue
@@ -976,6 +1520,12 @@ def _project_violations(root: Path, selected_rule_names: set[str]) -> list[Viola
                     snippet=required_file.name,
                 )
             )
+
+    if should_run_all or RULE_MESSAGE_KEYS_BUNDLE in selected_rule_names:
+        violations.extend(_check_error_message_keys_in_bundles(root))
+
+    if should_run_all or RULE_VI_MESSAGES_ACCENTED in selected_rule_names:
+        violations.extend(_check_vietnamese_messages(root))
 
     return violations
 
@@ -1229,6 +1779,178 @@ def _extract_param_names(signature: str) -> list[str]:
     return param_names
 
 
+def _indent_level(raw: str) -> int:
+    return len(raw) - len(raw.lstrip(" \t"))
+
+
+def _find_shared_field_lines(lines: list[str]) -> list[tuple[int, str]]:
+    results: list[tuple[int, str]] = []
+    for index, raw in enumerate(lines, start=1):
+        stripped = _strip_line_comment(raw).strip()
+        if stripped == "":
+            continue
+        if SHARED_FIELD_DECLARATION_PATTERN.search(stripped) is None:
+            continue
+        results.append((index, raw))
+    return results
+
+
+def _find_audit_field_lines(lines: list[str]) -> list[tuple[int, str]]:
+    results: list[tuple[int, str]] = []
+    for index, raw in enumerate(lines, start=1):
+        stripped = _strip_line_comment(raw).strip()
+        if stripped == "":
+            continue
+        if AUDIT_FIELD_DECLARATION_PATTERN.search(stripped) is None:
+            continue
+        results.append((index, raw))
+    return results
+
+
+def _has_comment_marker_above(lines: list[str], start_line: int, marker: str, max_lookback: int) -> bool:
+    start_index = start_line - 2
+    end_index = max(-1, start_index - max_lookback)
+    for index in range(start_index, end_index, -1):
+        raw = lines[index].strip()
+        if raw == "":
+            continue
+        if marker in raw:
+            return True
+        if raw.startswith("//") or raw.startswith("*") or raw.startswith("/*"):
+            continue
+        return False
+    return False
+
+
+def _find_exception_literal(stripped: str) -> str | None:
+    for pattern in (
+        THROW_NEW_EXCEPTION_LITERAL_PATTERN,
+        RESPONSE_STATUS_EXCEPTION_LITERAL_PATTERN,
+        MESSAGE_SOURCE_LITERAL_PATTERN,
+    ):
+        match = pattern.search(stripped)
+        if match is None:
+            continue
+        return match.group(1)
+    return None
+
+
+def _looks_like_message_key(value: str) -> bool:
+    return re.fullmatch(r"[a-z0-9]+(?:[.-][a-z0-9]+)+", value) is not None
+
+
+def _looks_like_collection_variable(lines: list[str], line_number: int, variable_name: str) -> bool:
+    declaration_pattern = re.compile(COLLECTION_DECLARATION_PATTERN_TEMPLATE.format(name=re.escape(variable_name)))
+    record_pattern = re.compile(rf"\bList\s*<[^;=()]+>\s+{re.escape(variable_name)}\b")
+    start_index = max(0, line_number - 40)
+    end_index = min(len(lines), line_number)
+    for index in range(start_index, end_index):
+        stripped = _strip_line_comment(lines[index]).strip()
+        if stripped == "":
+            continue
+        if declaration_pattern.search(stripped) is not None:
+            return True
+        if record_pattern.search(stripped) is not None:
+            return True
+    return False
+
+
+def _load_message_bundle_keys(bundle_path: Path) -> set[str]:
+    keys: set[str] = set()
+    for raw in bundle_path.read_text(encoding="utf-8").splitlines():
+        stripped = raw.strip()
+        if stripped == "" or stripped.startswith("#") or "=" not in stripped:
+            continue
+        key, _ = stripped.split("=", 1)
+        keys.add(key.strip())
+    return keys
+
+
+def _check_vietnamese_messages(root: Path) -> list[Violation]:
+    file_path = root / "src" / "main" / "resources" / "messages_vi.properties"
+    if not file_path.exists():
+        return [
+            Violation(
+                rule=RULE_VI_MESSAGES_ACCENTED,
+                severity=SEVERITY_ERROR,
+                file="src/main/resources/messages_vi.properties",
+                line=1,
+                reason="Missing messages_vi.properties.",
+                snippet="messages_vi.properties",
+            )
+        ]
+
+    violations: list[Violation] = []
+    relative = file_path.relative_to(root).as_posix()
+    for index, raw in enumerate(file_path.read_text(encoding="utf-8").splitlines(), start=1):
+        stripped = raw.strip()
+        if stripped == "" or stripped.startswith("#") or "=" not in stripped:
+            continue
+        _, value = stripped.split("=", 1)
+        normalized = value.strip()
+        if normalized == "":
+            continue
+        if not any(ch.isalpha() for ch in normalized):
+            continue
+        if VIETNAMESE_ACCENTED_CHAR_PATTERN.search(normalized) is not None:
+            continue
+        violations.append(
+            Violation(
+                rule=RULE_VI_MESSAGES_ACCENTED,
+                severity=SEVERITY_ERROR,
+                file=relative,
+                line=index,
+                reason="Vietnamese message must contain accented Vietnamese characters.",
+                snippet=raw.strip(),
+            )
+        )
+    return violations
+
+
+def _check_error_message_keys_in_bundles(root: Path) -> list[Violation]:
+    key_file = root / "src" / "main" / "java" / "com" / "memora" / "app" / "constant" / "ApiMessageKey.java"
+    if not key_file.exists():
+        return [
+            Violation(
+                rule=RULE_MESSAGE_KEYS_BUNDLE,
+                severity=SEVERITY_ERROR,
+                file="src/main/java/com/memora/app/constant/ApiMessageKey.java",
+                line=1,
+                reason="Missing ApiMessageKey.java for backend i18n contract.",
+                snippet="ApiMessageKey.java",
+            )
+        ]
+
+    key_text = key_file.read_text(encoding="utf-8")
+    key_lines = key_text.splitlines()
+    defined_keys: list[tuple[int, str]] = []
+    for match in MESSAGE_KEY_CONSTANT_PATTERN.finditer(key_text):
+        defined_keys.append((_line_for_offset(key_lines, match.start()), match.group(1)))
+
+    bundle_entries: dict[str, set[str]] = {}
+    for relative_path in MESSAGE_BUNDLE_FILES:
+        bundle_path = root / Path(relative_path)
+        bundle_entries[relative_path] = _load_message_bundle_keys(bundle_path) if bundle_path.exists() else set()
+
+    violations: list[Violation] = []
+    key_relative = key_file.relative_to(root).as_posix()
+    for line_number, key in defined_keys:
+        for relative_path in MESSAGE_BUNDLE_FILES:
+            if key in bundle_entries[relative_path]:
+                continue
+            violations.append(
+                Violation(
+                    rule=RULE_MESSAGE_KEYS_BUNDLE,
+                    severity=SEVERITY_ERROR,
+                    file=key_relative,
+                    line=line_number,
+                    reason=f'Message key "{key}" must exist in {relative_path}.',
+                    snippet=key,
+                )
+            )
+    return violations
+
+
 def _write_report(root: Path, violations: list[Violation]) -> None:
     payload = {
         "summary": {
@@ -1285,11 +2007,24 @@ def _rule_group_aliases() -> dict[str, set[str]]:
             RULE_STREAM_REQUIRES_COMMENT,
             RULE_RETURN_REQUIRES_COMMENT,
         },
+        "flow": {
+            RULE_NO_ELSE,
+            RULE_NESTED_FOR_STREAM,
+        },
+        "commons": {
+            RULE_NO_DIRECT_TRIM,
+            RULE_NO_DIRECT_BLANK_CHECK,
+            RULE_NO_DIRECT_STRING_PREDICATE,
+            RULE_NO_DIRECT_COLLECTION_EMPTY_CHECK,
+        },
         "i18n": {
             RULE_CONSTANT_PACKAGE_EXISTS,
             RULE_MESSAGE_BUNDLE_EXISTS,
             RULE_VALIDATION_MESSAGE_CONSTANT,
             RULE_INLINE_EXCEPTION_MESSAGE,
+            RULE_EXCEPTION_MESSAGE_I18N,
+            RULE_MESSAGE_KEYS_BUNDLE,
+            RULE_VI_MESSAGES_ACCENTED,
         },
         "jpa": {
             RULE_REPOSITORY_EXTENDS_JPA,
@@ -1301,7 +2036,19 @@ def _rule_group_aliases() -> dict[str, set[str]]:
             RULE_ENTITY_AUDIT_LIFECYCLE,
             RULE_ENTITY_OPTIMISTIC_LOCK,
             RULE_ENTITY_ENUM_STRING,
+            RULE_SHARED_MAPPED_SUPERCLASS,
+            RULE_AUDIT_ENTITY_SEPARATE_CLASS,
+            RULE_AUDIT_DTO_SEPARATE_CLASS,
             RULE_SOFT_DELETE_NO_HARD_DELETE,
+        },
+        "lombok": {
+            RULE_LOMBOK_REQUIRED_ARGS_CONSTRUCTOR,
+            RULE_LOMBOK_ENTITY_GETTER_SETTER,
+            RULE_LOMBOK_BUILDER_PREFERRED,
+        },
+        "exception": {
+            RULE_EXCEPTION_SERIAL_VERSION_UID,
+            RULE_EXCEPTION_MESSAGE_I18N,
         },
         "query": {
             RULE_QUERY_NATIVE_SQL_ONLY,

@@ -41,28 +41,35 @@ public class FlashcardServiceImpl implements FlashcardService {
         entity.setMeaning(ServiceValidationUtils.normalizeRequiredText(request.meaning(), ApiMessageKey.MEANING_REQUIRED));
         entity.setNote(ServiceValidationUtils.normalizeOptionalText(request.note()));
         entity.setBookmarked(request.bookmarked());
+        // Return the persisted flashcard.
         return FlashcardMapper.toDto(flashcardRepository.save(entity));
     }
 
     @Override
     @Transactional(readOnly = true)
     public FlashcardDto getFlashcard(final Long flashcardId) {
+        // Return the requested active flashcard.
         return FlashcardMapper.toDto(getActiveFlashcard(flashcardId));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<FlashcardDto> getFlashcards(final Long deckId) {
+        // Narrow the query when the caller requests flashcards for one deck.
         if (deckId != null) {
+            // Return active flashcards for the requested deck.
             return flashcardRepository.findAllByDeckIdAndDeletedAtIsNullOrderByIdAsc(
                     ServiceValidationUtils.requirePositiveId(deckId, ApiMessageKey.DECK_ID_POSITIVE)
                 )
+                // Convert persisted flashcard rows into DTOs for the API layer.
                 .stream()
                 .map(FlashcardMapper::toDto)
                 .toList();
         }
 
+        // Return every active flashcard when no deck filter is provided.
         return flashcardRepository.findAllByDeletedAtIsNullOrderByIdAsc()
+            // Convert persisted flashcard rows into DTOs for the API layer.
             .stream()
             .map(FlashcardMapper::toDto)
             .toList();
@@ -79,6 +86,7 @@ public class FlashcardServiceImpl implements FlashcardService {
         entity.setMeaning(ServiceValidationUtils.normalizeRequiredText(request.meaning(), ApiMessageKey.MEANING_REQUIRED));
         entity.setNote(ServiceValidationUtils.normalizeOptionalText(request.note()));
         entity.setBookmarked(request.bookmarked());
+        // Return the updated flashcard snapshot.
         return FlashcardMapper.toDto(flashcardRepository.save(entity));
     }
 
@@ -93,6 +101,7 @@ public class FlashcardServiceImpl implements FlashcardService {
 
     private DeckEntity getActiveDeck(final Long deckId) {
         final Long validatedId = ServiceValidationUtils.requirePositiveId(deckId, ApiMessageKey.DECK_ID_POSITIVE);
+        // Return the active deck that owns the flashcard.
         return deckRepository.findByIdAndDeletedAtIsNull(validatedId)
             .orElseThrow(() -> new ResourceNotFoundException(ApiMessageKey.DECK_NOT_FOUND, validatedId));
     }
@@ -102,6 +111,7 @@ public class FlashcardServiceImpl implements FlashcardService {
             flashcardId,
             ApiMessageKey.FLASHCARD_ID_POSITIVE
         );
+        // Return the active flashcard or fail when the row is missing or soft-deleted.
         return flashcardRepository.findByIdAndDeletedAtIsNull(validatedId)
             .orElseThrow(() -> new ResourceNotFoundException(ApiMessageKey.FLASHCARD_NOT_FOUND, validatedId));
     }

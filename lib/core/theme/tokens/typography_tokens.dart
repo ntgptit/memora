@@ -6,9 +6,26 @@ abstract final class AppTypographyTokens {
   static const FontWeight semibold = FontWeight.w600;
   static const FontWeight bold = FontWeight.w700;
 
-  static const double display = 40;
-  static const double headline = 28;
-  static const double title = 20;
-  static const double body = 16;
-  static const double label = 14;
+  static const double displayLarge = 46;
+  static const double displayMedium = 40;
+  static const double headlineLarge = 32;
+  static const double headlineMedium = 28;
+  static const double titleLarge = 22;
+  static const double titleMedium = 18;
+  static const double bodyLarge = 16;
+  static const double bodyMedium = 14;
+  static const double labelLarge = 14;
+  static const double labelMedium = 12;
+
+  static const double display = displayLarge;
+  static const double headline = headlineMedium;
+  static const double title = titleLarge;
+  static const double body = bodyLarge;
+  static const double label = labelLarge;
+
+  static const double displayHeight = 1.06;
+  static const double headlineHeight = 1.15;
+  static const double titleHeight = 1.2;
+  static const double bodyHeight = 1.5;
+  static const double labelHeight = 1.25;
 }

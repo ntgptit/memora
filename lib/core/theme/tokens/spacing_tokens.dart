@@ -6,4 +6,8 @@ abstract final class AppSpacingTokens {
   static const double lg = 24;
   static const double xl = 32;
   static const double xxl = 48;
+  static const double xxxl = 64;
+  static const double section = 24;
+  static const double gutter = 20;
+  static const double gridGap = 16;
 }

@@ -1,3 +1,4 @@
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:memora/core/theme/app_color_scheme.dart';
 import 'package:memora/core/theme/app_text_theme.dart';
@@ -16,6 +17,7 @@ import 'package:memora/core/theme/component_themes/slider_theme.dart';
 import 'package:memora/core/theme/component_themes/switch_theme.dart';
 import 'package:memora/core/theme/responsive/responsive_theme_factory.dart';
 import 'package:memora/core/theme/responsive/screen_info.dart';
+import 'package:memora/core/theme/tokens/color_tokens.dart';
 
 abstract final class AppTheme {
   static ThemeData light({required ScreenInfo screenInfo}) {
@@ -30,19 +32,30 @@ abstract final class AppTheme {
     required Brightness brightness,
     required ScreenInfo screenInfo,
   }) {
+    final baseTheme = brightness == Brightness.dark
+        ? FlexThemeData.dark(
+            useMaterial3: true,
+            visualDensity: VisualDensity.standard,
+          )
+        : FlexThemeData.light(
+            useMaterial3: true,
+            visualDensity: VisualDensity.standard,
+          );
     final colorScheme = AppColorScheme.build(brightness);
-    final bundle = ResponsiveThemeFactory.create(screenInfo: screenInfo);
+    final bundle = ResponsiveThemeFactory.create(
+      screenInfo: screenInfo,
+      brightness: brightness,
+    );
     final dimensions = bundle.dimensions;
     final components = bundle.components;
     final text = bundle.text;
     final textTheme = AppTextTheme.build(colorScheme, text.typography);
 
-    return ThemeData(
-      useMaterial3: true,
+    return baseTheme.copyWith(
       brightness: brightness,
       colorScheme: colorScheme,
       textTheme: textTheme,
-      scaffoldBackgroundColor: colorScheme.surface,
+      scaffoldBackgroundColor: AppColorTokens.background(brightness),
       appBarTheme: MemoraAppBarTheme.build(
         colorScheme: colorScheme,
         dims: dimensions,
@@ -74,12 +87,7 @@ abstract final class AppTheme {
       sliderTheme: MemoraSliderTheme.build(colorScheme),
       progressIndicatorTheme: MemoraProgressIndicatorTheme.build(colorScheme),
       bottomSheetTheme: MemoraBottomSheetTheme.build(colorScheme, dimensions),
-      extensions: <ThemeExtension<dynamic>>[
-        dimensions,
-        components,
-        text,
-        bundle.colors,
-      ],
+      extensions: bundle.asList(),
     );
   }
 }
