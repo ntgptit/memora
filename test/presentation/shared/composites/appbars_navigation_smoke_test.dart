@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memora/core/theme/app_theme.dart';
 import 'package:memora/core/theme/responsive/screen_info.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/composites/appbars/app_search_top_bar.dart';
 import 'package:memora/presentation/shared/composites/appbars/app_selection_top_bar.dart';
 import 'package:memora/presentation/shared/composites/appbars/app_top_bar.dart';
@@ -18,6 +19,8 @@ void main() {
   Widget wrap(Widget child) {
     return MaterialApp(
       theme: AppTheme.light(screenInfo: const ScreenInfo.fallback()),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(body: child),
     );
   }

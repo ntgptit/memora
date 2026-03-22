@@ -1,1 +1,171 @@
-{}
+{
+  "@@locale": "ko",
+  "appName": "Memora",
+  "splashTitle": "Preparing your learning workspace",
+  "loading": "Loading...",
+  "retry": "Retry",
+  "navigationDashboardLabel": "Dashboard",
+  "navigationFoldersLabel": "Folders",
+  "navigationDecksLabel": "Decks",
+  "navigationProgressLabel": "Progress",
+  "navigationSettingsLabel": "Settings",
+  "dashboardTitle": "Dashboard",
+  "dashboardHeadlineSubtitle": "Stay on pace with today's study plan and clear the next useful review block.",
+  "dashboardSummaryTitle": "Today's overview",
+  "dashboardSummarySubtitle": "A quick read on workload, cadence, and study momentum.",
+  "dashboardSummaryDueDecksLabel": "Due decks",
+  "dashboardSummaryDueCardsLabel": "Cards today",
+  "dashboardSummaryReviewedLabel": "Reviewed",
+  "dashboardSummaryFocusTimeLabel": "Focus time",
+  "dashboardStreakTitle": "Study streak",
+  "dashboardStreakSubtitle": "Consistency compounds when you keep short sessions moving.",
+  "dashboardDailyGoalLabel": "Daily goal",
+  "dashboardQuickActionsTitle": "Quick actions",
+  "dashboardQuickActionsSubtitle": "Jump straight into the next useful move.",
+  "dashboardDueDecksTitle": "Due decks",
+  "dashboardDueDecksSubtitle": "Start with the decks carrying the heaviest review debt.",
+  "dashboardRefreshTooltip": "Refresh dashboard",
+  "dashboardStartActionLabel": "Start",
+  "dashboardOpenActionLabel": "Open",
+  "dashboardLaterActionLabel": "Later",
+  "dashboardReviewActionTitle": "Start review",
+  "dashboardReviewActionSubtitle": "Focus on the decks with the highest due volume first.",
+  "dashboardCreateDeckActionTitle": "Create deck",
+  "dashboardCreateDeckActionSubtitle": "Capture a new topic while the idea is still fresh.",
+  "dashboardImportCardsActionTitle": "Import cards",
+  "dashboardImportCardsActionSubtitle": "Bring in prepared content and queue it for practice.",
+  "dashboardReviewFocusLabel": "Review sprint",
+  "dashboardCaptureFocusLabel": "Capture mode",
+  "dashboardImportFocusLabel": "Import queue",
+  "dashboardCompleteFocusLabel": "Inbox clear",
+  "dashboardLaterFocusLabel": "Later queue",
+  "dashboardNoDueDecksSubtitle": "You have cleared every due deck in the current queue.",
+  "dashboardQuickActionsEmptyTitle": "No quick actions right now",
+  "dashboardQuickActionsEmptySubtitle": "The current queue is stable, so you can stay with the active study flow.",
+  "dashboardTravelDeckTitle": "Travel phrases",
+  "dashboardMedicalDeckTitle": "Medical terminology",
+  "dashboardVerbsDeckTitle": "Korean verbs",
+  "dashboardLanguageLabFolder": "Language Lab",
+  "dashboardExamPrepFolder": "Exam Prep",
+  "dashboardDailyPracticeFolder": "Daily Practice",
+  "dashboardRecallModeLabel": "Recall",
+  "dashboardReviewModeLabel": "Review",
+  "dashboardSpeedModeLabel": "Speed drill",
+  "foldersTitle": "Folders",
+  "foldersPlaceholderTitle": "Folder hub is ready",
+  "foldersPlaceholderMessage": "This root tab is wired into the shared app navigation. Folder-specific content can expand here next.",
+  "decksTitle": "Decks",
+  "decksPlaceholderTitle": "Deck library is ready",
+  "decksPlaceholderMessage": "This tab is now part of the common shell, so deck listing and filtering can grow without changing app navigation.",
+  "progressTitle": "Progress",
+  "progressPlaceholderTitle": "Progress workspace is ready",
+  "progressPlaceholderMessage": "Charts, streaks, and history can plug into this shared navigation slot when the feature slice is implemented.",
+  "settingsTitle": "Settings",
+  "settingsPlaceholderTitle": "Settings center is ready",
+  "settingsPlaceholderMessage": "App preferences already have a dedicated root tab, ready for theme, language, audio, and backup settings.",
+  "offlineTitle": "You are offline",
+  "offlineMessage": "Check your internet connection and try again.",
+  "offlineRetryLabel": "Retry",
+  "maintenanceTitle": "Maintenance",
+  "maintenanceMessage": "The system is temporarily unavailable.",
+  "notFoundTitle": "Page not found",
+  "notFoundMessage": "The requested page does not exist.",
+  "clearSelectionTooltip": "Clear selection",
+  "filterTooltip": "Filter",
+  "sortTooltip": "Sort",
+  "noResultsTitle": "No results found",
+  "noResultsMessage": "Try adjusting your filters or search terms.",
+  "accessRequiredTitle": "Access required",
+  "signInMessage": "Sign in to continue.",
+  "signInLabel": "Sign in",
+  "clearDateTooltip": "Clear date",
+  "clearTimeTooltip": "Clear time",
+  "clearSearchTooltip": "Clear search",
+  "selectDateLabel": "Select date",
+  "selectTimeLabel": "Select time",
+  "searchLabel": "Search",
+  "requiredFieldMark": " *",
+  "selectionCountLabel": "{count} selected",
+  "@selectionCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardFocusChipLabel": "Focus: {focusLabel}",
+  "@dashboardFocusChipLabel": {
+    "placeholders": {
+      "focusLabel": {}
+    }
+  },
+  "dashboardDueDeckChipLabel": "{dueDeckCount} decks due",
+  "@dashboardDueDeckChipLabel": {
+    "placeholders": {
+      "dueDeckCount": {}
+    }
+  },
+  "dashboardDueCardChipLabel": "{dueCardCount} cards today",
+  "@dashboardDueCardChipLabel": {
+    "placeholders": {
+      "dueCardCount": {}
+    }
+  },
+  "dashboardDueDeckValue": "{dueDeckCount} decks",
+  "@dashboardDueDeckValue": {
+    "placeholders": {
+      "dueDeckCount": {}
+    }
+  },
+  "dashboardDueCardValue": "{dueCardCount} cards",
+  "@dashboardDueCardValue": {
+    "placeholders": {
+      "dueCardCount": {}
+    }
+  },
+  "dashboardReviewedValue": "{reviewedCount} cards",
+  "@dashboardReviewedValue": {
+    "placeholders": {
+      "reviewedCount": {}
+    }
+  },
+  "dashboardStudyMinutesValue": "{minutes} min",
+  "@dashboardStudyMinutesValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "dashboardStreakValue": "{days} days",
+  "@dashboardStreakValue": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "dashboardGoalProgressMessage": "{reviewed} / {goal} cards reviewed today",
+  "@dashboardGoalProgressMessage": {
+    "placeholders": {
+      "reviewed": {},
+      "goal": {}
+    }
+  },
+  "dashboardGoalRemainingMessage": "{remaining} cards left to hit today's goal",
+  "@dashboardGoalRemainingMessage": {
+    "placeholders": {
+      "remaining": {}
+    }
+  },
+  "dashboardDeckStatusMessage": "{folderName} • {modeLabel} • {mastery}% mastered",
+  "@dashboardDeckStatusMessage": {
+    "placeholders": {
+      "folderName": {},
+      "modeLabel": {},
+      "mastery": {}
+    }
+  },
+  "dashboardDueCountLabel": "{dueCount} due",
+  "@dashboardDueCountLabel": {
+    "placeholders": {
+      "dueCount": {}
+    }
+  }
+}

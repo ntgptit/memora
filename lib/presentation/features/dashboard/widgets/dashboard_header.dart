@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memora/core/config/app_strings.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/composites/navigation/app_page_header.dart';
 import 'package:memora/presentation/shared/primitives/buttons/app_icon_button.dart';
 import 'package:memora/presentation/shared/primitives/displays/app_chip.dart';
@@ -27,13 +27,15 @@ class DashboardHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return AppPageHeader(
       title: AppTitleText(text: title),
       subtitle: AppBodyText(text: subtitle, isSecondary: true),
       actions: [
         AppIconButton(
           icon: const Icon(Icons.refresh_rounded),
-          tooltip: AppStrings.dashboardRefreshTooltip,
+          tooltip: l10n.dashboardRefreshTooltip,
           onPressed: onRefresh,
         ),
       ],
@@ -42,19 +44,11 @@ class DashboardHeader extends StatelessWidget {
         runSpacing: 12,
         children: [
           AppTag(
-            label: AppStrings.dashboardFocusChipLabel(focusLabel),
+            label: l10n.dashboardFocusChipLabel(focusLabel),
             icon: const Icon(Icons.auto_awesome_rounded, size: 14),
           ),
-          AppChip(
-            label: Text(
-              AppStrings.dashboardDueDeckChipLabel(dueDeckCount.toString()),
-            ),
-          ),
-          AppChip(
-            label: Text(
-              AppStrings.dashboardDueCardChipLabel(dueCardCount.toString()),
-            ),
-          ),
+          AppChip(label: Text(l10n.dashboardDueDeckChipLabel(dueDeckCount))),
+          AppChip(label: Text(l10n.dashboardDueCardChipLabel(dueCardCount))),
         ],
       ),
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memora/core/theme/app_theme.dart';
 import 'package:memora/core/theme/responsive/screen_info.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/primitives/buttons/app_button.dart';
 import 'package:memora/presentation/shared/primitives/buttons/app_danger_button.dart';
 import 'package:memora/presentation/shared/primitives/buttons/app_fab_button.dart';
@@ -30,13 +31,16 @@ import 'package:memora/presentation/shared/primitives/text/app_title_text.dart';
 void main() {
   Finder richTextContaining(String text) {
     return find.byWidgetPredicate(
-      (widget) => widget is RichText && widget.text.toPlainText().contains(text),
+      (widget) =>
+          widget is RichText && widget.text.toPlainText().contains(text),
     );
   }
 
   Widget wrapWithApp(Widget child) {
     return MaterialApp(
       theme: AppTheme.light(screenInfo: const ScreenInfo.fallback()),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -59,10 +63,7 @@ void main() {
             AppTextButton(text: 'Text'),
             AppDangerButton(text: 'Danger'),
             AppIconButton(icon: Icon(Icons.edit_rounded)),
-            AppFabButton(
-              icon: Icon(Icons.add_rounded),
-              label: 'Create',
-            ),
+            AppFabButton(icon: Icon(Icons.add_rounded), label: 'Create'),
           ],
         ),
       ),
@@ -84,10 +85,7 @@ void main() {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const AppTextField(
-              label: 'Name',
-              hintText: 'Enter name',
-            ),
+            const AppTextField(label: 'Name', hintText: 'Enter name'),
             const SizedBox(height: 16),
             const AppPasswordField(label: 'Password'),
             const SizedBox(height: 16),
@@ -127,11 +125,7 @@ void main() {
               onChanged: (_) {},
             ),
             const SizedBox(height: 16),
-            AppScoreInput(
-              label: 'Result score',
-              score: 3,
-              onChanged: (_) {},
-            ),
+            AppScoreInput(label: 'Result score', score: 3, onChanged: (_) {}),
             const SizedBox(height: 16),
             const AppFormFieldLabel(label: 'Standalone label'),
           ],

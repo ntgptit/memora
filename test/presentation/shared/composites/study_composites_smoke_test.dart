@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memora/core/theme/app_theme.dart';
 import 'package:memora/core/theme/responsive/screen_info.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/composites/study/app_answer_result_banner.dart';
 import 'package:memora/presentation/shared/composites/study/app_flashcard_face.dart';
 import 'package:memora/presentation/shared/composites/study/app_score_input_dialog.dart';
@@ -11,6 +12,8 @@ void main() {
   Widget wrap(Widget child) {
     return MaterialApp(
       theme: AppTheme.light(screenInfo: const ScreenInfo.fallback()),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),

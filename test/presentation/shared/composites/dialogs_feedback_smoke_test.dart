@@ -4,6 +4,7 @@ import 'package:memora/core/enums/dialog_type.dart';
 import 'package:memora/core/enums/snackbar_type.dart';
 import 'package:memora/core/theme/app_theme.dart';
 import 'package:memora/core/theme/responsive/screen_info.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/composites/dialogs/app_action_sheet.dart';
 import 'package:memora/presentation/shared/composites/dialogs/app_alert_dialog.dart';
 import 'package:memora/presentation/shared/composites/dialogs/app_bottom_sheet.dart';
@@ -17,6 +18,8 @@ void main() {
   Widget wrap(Widget child) {
     return MaterialApp(
       theme: AppTheme.light(screenInfo: const ScreenInfo.fallback()),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -59,10 +62,7 @@ void main() {
             AppActionSheet(
               title: 'Actions',
               actions: [
-                AppActionSheetAction(
-                  label: 'One',
-                  onPressed: () {},
-                ),
+                AppActionSheetAction(label: 'One', onPressed: () {}),
                 AppActionSheetAction(
                   label: 'Delete',
                   destructive: true,

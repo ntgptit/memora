@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:memora/core/config/app_strings.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/primitives/inputs/app_text_field.dart';
 
 class AppDateField extends StatefulWidget {
@@ -84,7 +84,7 @@ class _AppDateFieldState extends State<AppDateField> {
       labelTrailing: widget.labelTrailing,
       isRequired: widget.isRequired,
       controller: _controller,
-      hintText: widget.hintText ?? AppStrings.selectDateLabel,
+      hintText: widget.hintText ?? context.l10n.selectDateLabel,
       helperText: widget.helperText,
       errorText: widget.errorText,
       enabled: widget.enabled,
@@ -171,7 +171,7 @@ class _DateSuffix extends StatelessWidget {
         if (clearable && hasValue)
           IconButton(
             onPressed: enabled ? onClear : null,
-            tooltip: AppStrings.clearDateTooltip,
+            tooltip: context.l10n.clearDateTooltip,
             icon: Icon(Icons.close_rounded, size: context.iconSize.md),
           ),
         Icon(Icons.calendar_today_rounded, size: context.iconSize.md),

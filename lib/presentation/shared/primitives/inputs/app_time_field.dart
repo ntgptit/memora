@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:memora/core/config/app_strings.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/primitives/inputs/app_text_field.dart';
 
 class AppTimeField extends StatefulWidget {
@@ -72,7 +72,7 @@ class _AppTimeFieldState extends State<AppTimeField> {
       labelTrailing: widget.labelTrailing,
       isRequired: widget.isRequired,
       controller: _controller,
-      hintText: widget.hintText ?? AppStrings.selectTimeLabel,
+      hintText: widget.hintText ?? context.l10n.selectTimeLabel,
       helperText: widget.helperText,
       errorText: widget.errorText,
       enabled: widget.enabled,
@@ -138,7 +138,7 @@ class _TimeSuffix extends StatelessWidget {
         if (clearable && hasValue)
           IconButton(
             onPressed: enabled ? onClear : null,
-            tooltip: AppStrings.clearTimeTooltip,
+            tooltip: context.l10n.clearTimeTooltip,
             icon: Icon(Icons.close_rounded, size: context.iconSize.md),
           ),
         Icon(Icons.schedule_rounded, size: context.iconSize.md),

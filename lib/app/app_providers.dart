@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:memora/core/config/app_constants.dart';
 import 'package:memora/core/config/app_keys.dart';
 import 'package:memora/core/enums/app_theme_type.dart';
 import 'package:memora/core/enums/app_locale.dart';
 import 'package:memora/core/di/core_providers.dart';
 import 'package:memora/core/utils/logger.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_providers.g.dart';
@@ -89,5 +89,5 @@ Locale appLocale(Ref ref) {
 
 @Riverpod(keepAlive: true)
 List<Locale> supportedLocales(Ref ref) {
-  return AppConstants.supportedLocales;
+  return AppLocalizations.supportedLocales;
 }

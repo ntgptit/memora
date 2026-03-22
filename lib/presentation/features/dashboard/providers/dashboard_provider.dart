@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:memora/core/config/app_strings.dart';
+import 'package:memora/presentation/features/dashboard/providers/dashboard_l10n.dart';
 import 'package:memora/presentation/features/dashboard/providers/dashboard_state.dart';
 
 part 'dashboard_provider.g.dart';
@@ -22,7 +22,7 @@ class DashboardController extends _$DashboardController {
     }
 
     state = state.copyWith(
-      focusLabel: AppStrings.dashboardReviewFocusLabel,
+      focus: DashboardFocus.reviewSprint,
       reviewedToday: state.reviewedToday + reviewedDeck.dueCardCount,
       dueDecks: state.dueDecks
           .where((deck) => deck.id != deckId)
@@ -30,9 +30,7 @@ class DashboardController extends _$DashboardController {
     );
 
     if (state.dueDecks.isEmpty) {
-      state = state.copyWith(
-        focusLabel: AppStrings.dashboardCompleteFocusLabel,
-      );
+      state = state.copyWith(focus: DashboardFocus.inboxClear);
     }
   }
 
@@ -49,7 +47,7 @@ class DashboardController extends _$DashboardController {
 
     state = state.copyWith(
       dueDecks: remainingDecks,
-      focusLabel: AppStrings.dashboardCaptureFocusLabel,
+      focus: DashboardFocus.captureMode,
     );
   }
 
@@ -59,7 +57,7 @@ class DashboardController extends _$DashboardController {
       return;
     }
 
-    state = state.copyWith(focusLabel: quickAction.focusLabel);
+    state = state.copyWith(focus: quickAction.type.focus);
   }
 
   void deferQuickAction(String actionId) {
@@ -75,7 +73,7 @@ class DashboardController extends _$DashboardController {
 
     state = state.copyWith(
       quickActions: deferredActions,
-      focusLabel: AppStrings.dashboardLaterFocusLabel,
+      focus: DashboardFocus.laterQueue,
     );
   }
 
@@ -90,7 +88,7 @@ class DashboardController extends _$DashboardController {
 
   DashboardQuickActionItem? _findQuickAction(String actionId) {
     for (final action in state.quickActions) {
-      if (action.id == actionId) {
+      if (action.type.name == actionId) {
         return action;
       }
     }

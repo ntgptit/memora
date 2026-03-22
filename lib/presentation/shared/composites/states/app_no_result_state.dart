@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memora/core/config/app_strings.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/primitives/buttons/app_primary_button.dart';
 import 'package:memora/presentation/shared/composites/states/app_empty_state.dart';
 import 'package:memora/presentation/shared/primitives/displays/app_icon.dart';
@@ -21,8 +21,8 @@ class AppNoResultState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppEmptyState(
-      title: AppStrings.noResultsTitle,
-      message: message ?? AppStrings.noResultsMessage,
+      title: context.l10n.noResultsTitle,
+      message: message ?? context.l10n.noResultsMessage,
       icon: const AppIcon(Icons.search_off_rounded),
       maxWidth: maxWidth,
       actions: [

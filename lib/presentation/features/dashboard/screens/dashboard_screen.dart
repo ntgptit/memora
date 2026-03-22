@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:memora/core/config/app_strings.dart';
 import 'package:memora/core/theme/extensions/screen_context_ext.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
+import 'package:memora/l10n/l10n.dart';
+import 'package:memora/presentation/features/dashboard/providers/dashboard_l10n.dart';
 import 'package:memora/presentation/features/dashboard/providers/dashboard_provider.dart';
 import 'package:memora/presentation/features/dashboard/providers/dashboard_state.dart';
 import 'package:memora/presentation/features/dashboard/widgets/dashboard_due_decks.dart';
@@ -21,6 +22,7 @@ class DashboardScreen extends ConsumerWidget {
     final state = ref.watch(dashboardControllerProvider);
     final controller = ref.read(dashboardControllerProvider.notifier);
     final spacing = context.spacing;
+    final l10n = context.l10n;
     final mainContent = _DashboardMainContent(
       state: state,
       includePrioritySidebar: !context.screenClass.canUseSplitView,
@@ -32,7 +34,7 @@ class DashboardScreen extends ConsumerWidget {
     );
 
     return AppScaffold(
-      title: AppStrings.appName,
+      title: l10n.dashboardTitle,
       body: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: context.screenClass.canUseSplitView
@@ -51,7 +53,7 @@ class DashboardScreen extends ConsumerWidget {
                     SizedBox(height: spacing.lg),
                     DashboardQuickActions(
                       actions: state.quickActions,
-                      focusLabel: state.focusLabel,
+                      focusLabel: state.focus.label(l10n),
                       onApplyAction: controller.applyQuickAction,
                       onDeferAction: controller.deferQuickAction,
                     ),
@@ -86,14 +88,15 @@ class _DashboardMainContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final spacing = context.spacing;
+    final l10n = context.l10n;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         DashboardHeader(
-          title: state.headlineTitle,
-          subtitle: state.headlineSubtitle,
-          focusLabel: state.focusLabel,
+          title: l10n.dashboardTitle,
+          subtitle: l10n.dashboardHeadlineSubtitle,
+          focusLabel: state.focus.label(l10n),
           dueDeckCount: state.dueDeckCount,
           dueCardCount: state.dueCardCount,
           onRefresh: onRefresh,
@@ -124,7 +127,7 @@ class _DashboardMainContent extends StatelessWidget {
           SizedBox(height: spacing.xl),
           DashboardQuickActions(
             actions: state.quickActions,
-            focusLabel: state.focusLabel,
+            focusLabel: state.focus.label(l10n),
             onApplyAction: onApplyQuickAction,
             onDeferAction: onDeferQuickAction,
           ),

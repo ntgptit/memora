@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memora/core/theme/app_theme.dart';
 import 'package:memora/core/theme/responsive/screen_info.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/primitives/layout/app_constrained_box.dart';
 import 'package:memora/presentation/shared/primitives/layout/app_gap.dart';
 import 'package:memora/presentation/shared/primitives/layout/app_responsive_container.dart';
@@ -12,6 +13,8 @@ void main() {
   Widget wrapWithApp(Widget child) {
     return MaterialApp(
       theme: AppTheme.light(screenInfo: const ScreenInfo.fallback()),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: child,
     );
   }

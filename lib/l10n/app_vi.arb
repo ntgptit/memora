@@ -1,1 +1,171 @@
-{}
+{
+  "@@locale": "vi",
+  "appName": "Memora",
+  "splashTitle": "Đang chuẩn bị không gian học tập của bạn",
+  "loading": "Đang tải...",
+  "retry": "Thử lại",
+  "navigationDashboardLabel": "Bảng điều khiển",
+  "navigationFoldersLabel": "Thư mục",
+  "navigationDecksLabel": "Bộ thẻ",
+  "navigationProgressLabel": "Tiến độ",
+  "navigationSettingsLabel": "Cài đặt",
+  "dashboardTitle": "Bảng điều khiển",
+  "dashboardHeadlineSubtitle": "Bám sát kế hoạch học hôm nay và xử lý khối ôn tập hữu ích tiếp theo.",
+  "dashboardSummaryTitle": "Tổng quan hôm nay",
+  "dashboardSummarySubtitle": "Cái nhìn nhanh về khối lượng học, nhịp độ và đà học tập.",
+  "dashboardSummaryDueDecksLabel": "Bộ thẻ đến hạn",
+  "dashboardSummaryDueCardsLabel": "Thẻ hôm nay",
+  "dashboardSummaryReviewedLabel": "Đã ôn",
+  "dashboardSummaryFocusTimeLabel": "Thời gian tập trung",
+  "dashboardStreakTitle": "Chuỗi ngày học",
+  "dashboardStreakSubtitle": "Sự đều đặn tạo nên khác biệt khi bạn duy trì các phiên học ngắn.",
+  "dashboardDailyGoalLabel": "Mục tiêu hằng ngày",
+  "dashboardQuickActionsTitle": "Thao tác nhanh",
+  "dashboardQuickActionsSubtitle": "Đi thẳng vào bước hữu ích tiếp theo.",
+  "dashboardDueDecksTitle": "Bộ thẻ đến hạn",
+  "dashboardDueDecksSubtitle": "Bắt đầu với những bộ thẻ có lượng ôn tập tồn đọng cao nhất.",
+  "dashboardRefreshTooltip": "Làm mới bảng điều khiển",
+  "dashboardStartActionLabel": "Bắt đầu",
+  "dashboardOpenActionLabel": "Mở",
+  "dashboardLaterActionLabel": "Để sau",
+  "dashboardReviewActionTitle": "Bắt đầu ôn tập",
+  "dashboardReviewActionSubtitle": "Ưu tiên các bộ thẻ có số lượng đến hạn nhiều nhất trước.",
+  "dashboardCreateDeckActionTitle": "Tạo bộ thẻ",
+  "dashboardCreateDeckActionSubtitle": "Ghi lại một chủ đề mới khi ý tưởng vẫn còn rõ ràng.",
+  "dashboardImportCardsActionTitle": "Nhập thẻ",
+  "dashboardImportCardsActionSubtitle": "Đưa nội dung đã chuẩn bị vào hàng đợi để luyện tập.",
+  "dashboardReviewFocusLabel": "Phiên ôn tập",
+  "dashboardCaptureFocusLabel": "Chế độ ghi nhận",
+  "dashboardImportFocusLabel": "Hàng đợi nhập",
+  "dashboardCompleteFocusLabel": "Đã dọn sạch hộp chờ",
+  "dashboardLaterFocusLabel": "Hàng đợi để sau",
+  "dashboardNoDueDecksSubtitle": "Bạn đã xử lý xong toàn bộ bộ thẻ đến hạn trong hàng đợi hiện tại.",
+  "dashboardQuickActionsEmptyTitle": "Hiện chưa có thao tác nhanh",
+  "dashboardQuickActionsEmptySubtitle": "Hàng đợi hiện tại đang ổn định, bạn có thể tiếp tục luồng học đang diễn ra.",
+  "dashboardTravelDeckTitle": "Cụm từ du lịch",
+  "dashboardMedicalDeckTitle": "Thuật ngữ y khoa",
+  "dashboardVerbsDeckTitle": "Động từ tiếng Hàn",
+  "dashboardLanguageLabFolder": "Phòng ngôn ngữ",
+  "dashboardExamPrepFolder": "Luyện thi",
+  "dashboardDailyPracticeFolder": "Luyện tập hằng ngày",
+  "dashboardRecallModeLabel": "Gợi nhớ",
+  "dashboardReviewModeLabel": "Ôn tập",
+  "dashboardSpeedModeLabel": "Luyện nhanh",
+  "foldersTitle": "Thư mục",
+  "foldersPlaceholderTitle": "Khu vực thư mục đã sẵn sàng",
+  "foldersPlaceholderMessage": "Tab gốc này đã được nối vào điều hướng chung của ứng dụng. Nội dung riêng cho thư mục có thể được phát triển tiếp tại đây.",
+  "decksTitle": "Bộ thẻ",
+  "decksPlaceholderTitle": "Thư viện bộ thẻ đã sẵn sàng",
+  "decksPlaceholderMessage": "Tab này hiện đã là một phần của app shell chung, nên danh sách và bộ lọc bộ thẻ có thể phát triển tiếp mà không cần đổi kiến trúc điều hướng.",
+  "progressTitle": "Tiến độ",
+  "progressPlaceholderTitle": "Không gian tiến độ đã sẵn sàng",
+  "progressPlaceholderMessage": "Biểu đồ, chuỗi ngày học và lịch sử có thể được gắn vào vị trí điều hướng chung này khi feature được triển khai.",
+  "settingsTitle": "Cài đặt",
+  "settingsPlaceholderTitle": "Trung tâm cài đặt đã sẵn sàng",
+  "settingsPlaceholderMessage": "Ứng dụng đã có sẵn tab gốc cho tuỳ chọn, phù hợp để mở rộng theme, ngôn ngữ, âm thanh và sao lưu.",
+  "offlineTitle": "Bạn đang ngoại tuyến",
+  "offlineMessage": "Hãy kiểm tra kết nối internet và thử lại.",
+  "offlineRetryLabel": "Thử lại",
+  "maintenanceTitle": "Bảo trì",
+  "maintenanceMessage": "Hệ thống hiện đang tạm thời không khả dụng.",
+  "notFoundTitle": "Không tìm thấy trang",
+  "notFoundMessage": "Trang bạn yêu cầu không tồn tại.",
+  "clearSelectionTooltip": "Bỏ chọn",
+  "filterTooltip": "Lọc",
+  "sortTooltip": "Sắp xếp",
+  "noResultsTitle": "Không tìm thấy kết quả",
+  "noResultsMessage": "Hãy thử điều chỉnh bộ lọc hoặc từ khóa tìm kiếm.",
+  "accessRequiredTitle": "Cần quyền truy cập",
+  "signInMessage": "Đăng nhập để tiếp tục.",
+  "signInLabel": "Đăng nhập",
+  "clearDateTooltip": "Xóa ngày",
+  "clearTimeTooltip": "Xóa giờ",
+  "clearSearchTooltip": "Xóa tìm kiếm",
+  "selectDateLabel": "Chọn ngày",
+  "selectTimeLabel": "Chọn giờ",
+  "searchLabel": "Tìm kiếm",
+  "requiredFieldMark": " *",
+  "selectionCountLabel": "Đã chọn {count}",
+  "@selectionCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardFocusChipLabel": "Trọng tâm: {focusLabel}",
+  "@dashboardFocusChipLabel": {
+    "placeholders": {
+      "focusLabel": {}
+    }
+  },
+  "dashboardDueDeckChipLabel": "{dueDeckCount} bộ thẻ đến hạn",
+  "@dashboardDueDeckChipLabel": {
+    "placeholders": {
+      "dueDeckCount": {}
+    }
+  },
+  "dashboardDueCardChipLabel": "{dueCardCount} thẻ hôm nay",
+  "@dashboardDueCardChipLabel": {
+    "placeholders": {
+      "dueCardCount": {}
+    }
+  },
+  "dashboardDueDeckValue": "{dueDeckCount} bộ thẻ",
+  "@dashboardDueDeckValue": {
+    "placeholders": {
+      "dueDeckCount": {}
+    }
+  },
+  "dashboardDueCardValue": "{dueCardCount} thẻ",
+  "@dashboardDueCardValue": {
+    "placeholders": {
+      "dueCardCount": {}
+    }
+  },
+  "dashboardReviewedValue": "{reviewedCount} thẻ",
+  "@dashboardReviewedValue": {
+    "placeholders": {
+      "reviewedCount": {}
+    }
+  },
+  "dashboardStudyMinutesValue": "{minutes} phút",
+  "@dashboardStudyMinutesValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "dashboardStreakValue": "{days} ngày",
+  "@dashboardStreakValue": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "dashboardGoalProgressMessage": "Đã ôn {reviewed} / {goal} thẻ hôm nay",
+  "@dashboardGoalProgressMessage": {
+    "placeholders": {
+      "reviewed": {},
+      "goal": {}
+    }
+  },
+  "dashboardGoalRemainingMessage": "Còn {remaining} thẻ để đạt mục tiêu hôm nay",
+  "@dashboardGoalRemainingMessage": {
+    "placeholders": {
+      "remaining": {}
+    }
+  },
+  "dashboardDeckStatusMessage": "{folderName} • {modeLabel} • {mastery}% thành thạo",
+  "@dashboardDeckStatusMessage": {
+    "placeholders": {
+      "folderName": {},
+      "modeLabel": {},
+      "mastery": {}
+    }
+  },
+  "dashboardDueCountLabel": "{dueCount} đến hạn",
+  "@dashboardDueCountLabel": {
+    "placeholders": {
+      "dueCount": {}
+    }
+  }
+}

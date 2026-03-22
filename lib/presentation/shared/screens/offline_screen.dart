@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memora/core/config/app_strings.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/composites/states/app_offline_state.dart';
 import 'package:memora/presentation/shared/layouts/app_scaffold.dart';
 
@@ -8,10 +8,10 @@ class OfflineScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AppScaffold(
-      title: AppStrings.offlineTitle,
+    return AppScaffold(
+      title: context.l10n.offlineTitle,
       body: AppOfflineState(
-        message: AppStrings.offlineMessage,
+        message: context.l10n.offlineMessage,
       ),
       constrainBody: true,
     );

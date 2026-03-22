@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:memora/core/enums/snackbar_type.dart';
 import 'package:memora/core/theme/app_theme.dart';
 import 'package:memora/core/theme/responsive/screen_info.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/primitives/feedback/app_banner.dart';
 import 'package:memora/presentation/shared/primitives/feedback/app_circular_loader.dart';
 import 'package:memora/presentation/shared/primitives/feedback/app_linear_loader.dart';
@@ -15,9 +16,9 @@ void main() {
   Widget wrap(Widget child) {
     return MaterialApp(
       theme: AppTheme.light(screenInfo: const ScreenInfo.fallback()),
-      home: Scaffold(
-        body: Center(child: child),
-      ),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: Scaffold(body: Center(child: child)),
     );
   }
 
@@ -37,7 +38,11 @@ void main() {
             const AppLinearLoader(value: 0.4),
             const SizedBox(height: 16),
             const AppShimmer(
-              child: SizedBox(width: 120, height: 16, child: ColoredBox(color: Colors.white)),
+              child: SizedBox(
+                width: 120,
+                height: 16,
+                child: ColoredBox(color: Colors.white),
+              ),
             ),
             const SizedBox(height: 16),
             const AppTooltip(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:memora/core/config/app_strings.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/composites/appbars/app_top_bar.dart';
 import 'package:memora/presentation/shared/primitives/buttons/app_icon_button.dart';
 import 'package:memora/presentation/shared/primitives/text/app_title_text.dart';
@@ -34,7 +34,7 @@ class AppSelectionTopBar extends StatelessWidget
     final resolvedTitle =
         title ??
         AppTitleText(
-          text: _labelFor(selectedCount),
+          text: _labelFor(context, selectedCount),
           style: context.textTheme.titleMedium,
         );
     return AppTopBar(
@@ -44,7 +44,7 @@ class AppSelectionTopBar extends StatelessWidget
               ? null
               : AppIconButton(
                   icon: const Icon(Icons.close_rounded),
-                  tooltip: AppStrings.clearSelectionTooltip,
+                  tooltip: context.l10n.clearSelectionTooltip,
                   onPressed: onClearSelection,
                 )),
       title: resolvedTitle,
@@ -55,7 +55,8 @@ class AppSelectionTopBar extends StatelessWidget
     );
   }
 
-  String _labelFor(int count) {
-    return selectedCountLabelBuilder?.call(count) ?? '$count selected';
+  String _labelFor(BuildContext context, int count) {
+    return selectedCountLabelBuilder?.call(count) ??
+        context.l10n.selectionCountLabel(count);
   }
 }

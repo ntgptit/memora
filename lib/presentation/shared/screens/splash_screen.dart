@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memora/core/config/app_strings.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/layouts/app_scaffold.dart';
 import 'package:memora/presentation/shared/composites/states/app_loading_state.dart';
 
@@ -8,11 +8,11 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AppScaffold(
-      title: AppStrings.appName,
+    return AppScaffold(
+      title: context.l10n.appName,
       body: AppLoadingState(
-        message: AppStrings.splashTitle,
-        subtitle: AppStrings.loading,
+        message: context.l10n.splashTitle,
+        subtitle: context.l10n.loading,
       ),
       constrainBody: true,
     );

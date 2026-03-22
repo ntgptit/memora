@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:memora/core/config/app_strings.dart';
 
 @immutable
 class DashboardState {
   const DashboardState({
-    required this.headlineTitle,
-    required this.headlineSubtitle,
-    required this.focusLabel,
+    required this.focus,
     required this.reviewedToday,
     required this.dailyGoal,
     required this.totalStudyMinutes,
@@ -16,76 +13,57 @@ class DashboardState {
   });
 
   factory DashboardState.sample() {
-    return DashboardState(
-      headlineTitle: AppStrings.dashboardTitle,
-      headlineSubtitle: AppStrings.dashboardHeadlineSubtitle,
-      focusLabel: AppStrings.dashboardReviewFocusLabel,
+    return const DashboardState(
+      focus: DashboardFocus.reviewSprint,
       reviewedToday: 36,
       dailyGoal: 60,
       totalStudyMinutes: 48,
       currentStreak: 9,
-      dueDecks: const [
+      dueDecks: [
         DashboardDueDeckItem(
           id: 'verbs',
-          title: AppStrings.dashboardVerbsDeckTitle,
-          folderName: AppStrings.dashboardLanguageLabFolder,
-          modeLabel: AppStrings.dashboardRecallModeLabel,
+          deck: DashboardDeckSeed.verbs,
+          folder: DashboardFolderSeed.languageLab,
+          mode: DashboardStudyMode.recall,
           dueCardCount: 18,
           masteryProgress: 0.72,
           isPriority: true,
         ),
         DashboardDueDeckItem(
           id: 'medical',
-          title: AppStrings.dashboardMedicalDeckTitle,
-          folderName: AppStrings.dashboardExamPrepFolder,
-          modeLabel: AppStrings.dashboardReviewModeLabel,
+          deck: DashboardDeckSeed.medical,
+          folder: DashboardFolderSeed.examPrep,
+          mode: DashboardStudyMode.review,
           dueCardCount: 14,
           masteryProgress: 0.61,
         ),
         DashboardDueDeckItem(
           id: 'travel',
-          title: AppStrings.dashboardTravelDeckTitle,
-          folderName: AppStrings.dashboardDailyPracticeFolder,
-          modeLabel: AppStrings.dashboardSpeedModeLabel,
+          deck: DashboardDeckSeed.travel,
+          folder: DashboardFolderSeed.dailyPractice,
+          mode: DashboardStudyMode.speedDrill,
           dueCardCount: 10,
           masteryProgress: 0.84,
         ),
       ],
-      quickActions: const [
+      quickActions: [
         DashboardQuickActionItem(
-          id: 'review',
-          title: AppStrings.dashboardReviewActionTitle,
-          subtitle: AppStrings.dashboardReviewActionSubtitle,
-          primaryActionLabel: AppStrings.dashboardStartActionLabel,
-          secondaryActionLabel: AppStrings.dashboardLaterActionLabel,
-          focusLabel: AppStrings.dashboardReviewFocusLabel,
+          type: DashboardQuickActionType.review,
           icon: Icons.play_circle_fill_rounded,
         ),
         DashboardQuickActionItem(
-          id: 'create',
-          title: AppStrings.dashboardCreateDeckActionTitle,
-          subtitle: AppStrings.dashboardCreateDeckActionSubtitle,
-          primaryActionLabel: AppStrings.dashboardOpenActionLabel,
-          secondaryActionLabel: AppStrings.dashboardLaterActionLabel,
-          focusLabel: AppStrings.dashboardCaptureFocusLabel,
+          type: DashboardQuickActionType.createDeck,
           icon: Icons.add_card_rounded,
         ),
         DashboardQuickActionItem(
-          id: 'import',
-          title: AppStrings.dashboardImportCardsActionTitle,
-          subtitle: AppStrings.dashboardImportCardsActionSubtitle,
-          primaryActionLabel: AppStrings.dashboardOpenActionLabel,
-          secondaryActionLabel: AppStrings.dashboardLaterActionLabel,
-          focusLabel: AppStrings.dashboardImportFocusLabel,
+          type: DashboardQuickActionType.importCards,
           icon: Icons.file_upload_outlined,
         ),
       ],
     );
   }
 
-  final String headlineTitle;
-  final String headlineSubtitle;
-  final String focusLabel;
+  final DashboardFocus focus;
   final int reviewedToday;
   final int dailyGoal;
   final int totalStudyMinutes;
@@ -96,23 +74,11 @@ class DashboardState {
   int get dueDeckCount => dueDecks.length;
 
   int get dueCardCount {
-    return dueDecks.fold<int>(
-      0,
-      (total, deck) => total + deck.dueCardCount,
-    );
-  }
-
-  double get dailyGoalProgress {
-    if (dailyGoal == 0) {
-      return 0;
-    }
-    return (reviewedToday / dailyGoal).clamp(0, 1).toDouble();
+    return dueDecks.fold<int>(0, (total, deck) => total + deck.dueCardCount);
   }
 
   DashboardState copyWith({
-    String? headlineTitle,
-    String? headlineSubtitle,
-    String? focusLabel,
+    DashboardFocus? focus,
     int? reviewedToday,
     int? dailyGoal,
     int? totalStudyMinutes,
@@ -121,9 +87,7 @@ class DashboardState {
     List<DashboardQuickActionItem>? quickActions,
   }) {
     return DashboardState(
-      headlineTitle: headlineTitle ?? this.headlineTitle,
-      headlineSubtitle: headlineSubtitle ?? this.headlineSubtitle,
-      focusLabel: focusLabel ?? this.focusLabel,
+      focus: focus ?? this.focus,
       reviewedToday: reviewedToday ?? this.reviewedToday,
       dailyGoal: dailyGoal ?? this.dailyGoal,
       totalStudyMinutes: totalStudyMinutes ?? this.totalStudyMinutes,
@@ -138,36 +102,36 @@ class DashboardState {
 class DashboardDueDeckItem {
   const DashboardDueDeckItem({
     required this.id,
-    required this.title,
-    required this.folderName,
-    required this.modeLabel,
+    required this.deck,
+    required this.folder,
+    required this.mode,
     required this.dueCardCount,
     required this.masteryProgress,
     this.isPriority = false,
   });
 
   final String id;
-  final String title;
-  final String folderName;
-  final String modeLabel;
+  final DashboardDeckSeed deck;
+  final DashboardFolderSeed folder;
+  final DashboardStudyMode mode;
   final int dueCardCount;
   final double masteryProgress;
   final bool isPriority;
 
   DashboardDueDeckItem copyWith({
     String? id,
-    String? title,
-    String? folderName,
-    String? modeLabel,
+    DashboardDeckSeed? deck,
+    DashboardFolderSeed? folder,
+    DashboardStudyMode? mode,
     int? dueCardCount,
     double? masteryProgress,
     bool? isPriority,
   }) {
     return DashboardDueDeckItem(
       id: id ?? this.id,
-      title: title ?? this.title,
-      folderName: folderName ?? this.folderName,
-      modeLabel: modeLabel ?? this.modeLabel,
+      deck: deck ?? this.deck,
+      folder: folder ?? this.folder,
+      mode: mode ?? this.mode,
       dueCardCount: dueCardCount ?? this.dueCardCount,
       masteryProgress: masteryProgress ?? this.masteryProgress,
       isPriority: isPriority ?? this.isPriority,
@@ -177,42 +141,36 @@ class DashboardDueDeckItem {
 
 @immutable
 class DashboardQuickActionItem {
-  const DashboardQuickActionItem({
-    required this.id,
-    required this.title,
-    required this.subtitle,
-    required this.primaryActionLabel,
-    required this.secondaryActionLabel,
-    required this.focusLabel,
-    required this.icon,
-  });
+  const DashboardQuickActionItem({required this.type, required this.icon});
 
-  final String id;
-  final String title;
-  final String subtitle;
-  final String primaryActionLabel;
-  final String secondaryActionLabel;
-  final String focusLabel;
+  final DashboardQuickActionType type;
   final IconData icon;
 
+  String get id => type.name;
+
   DashboardQuickActionItem copyWith({
-    String? id,
-    String? title,
-    String? subtitle,
-    String? primaryActionLabel,
-    String? secondaryActionLabel,
-    String? focusLabel,
+    DashboardQuickActionType? type,
     IconData? icon,
   }) {
     return DashboardQuickActionItem(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      subtitle: subtitle ?? this.subtitle,
-      primaryActionLabel: primaryActionLabel ?? this.primaryActionLabel,
-      secondaryActionLabel:
-          secondaryActionLabel ?? this.secondaryActionLabel,
-      focusLabel: focusLabel ?? this.focusLabel,
+      type: type ?? this.type,
       icon: icon ?? this.icon,
     );
   }
 }
+
+enum DashboardFocus {
+  reviewSprint,
+  captureMode,
+  importQueue,
+  inboxClear,
+  laterQueue,
+}
+
+enum DashboardDeckSeed { verbs, medical, travel }
+
+enum DashboardFolderSeed { languageLab, examPrep, dailyPractice }
+
+enum DashboardStudyMode { recall, review, speedDrill }
+
+enum DashboardQuickActionType { review, createDeck, importCards }

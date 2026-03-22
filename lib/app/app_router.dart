@@ -1,7 +1,12 @@
 import 'package:go_router/go_router.dart';
+import 'package:memora/app/app_shell.dart';
 import 'package:memora/app/app_routes.dart';
 import 'package:memora/core/di/core_providers.dart';
 import 'package:memora/presentation/features/dashboard/screens/dashboard_screen.dart';
+import 'package:memora/presentation/features/deck/screens/deck_list_screen.dart';
+import 'package:memora/presentation/features/folder/screens/folder_list_screen.dart';
+import 'package:memora/presentation/features/progress/screens/learning_progress_screen.dart';
+import 'package:memora/presentation/features/settings/screens/settings_screen.dart';
 import 'package:memora/presentation/shared/screens/maintenance_screen.dart';
 import 'package:memora/presentation/shared/screens/not_found_screen.dart';
 import 'package:memora/presentation/shared/screens/offline_screen.dart';
@@ -25,10 +30,57 @@ GoRouter appRouter(Ref ref) {
         name: AppRouteNames.splash,
         builder: (context, state) => const SplashScreen(),
       ),
-      GoRoute(
-        path: AppRoutes.dashboard,
-        name: AppRouteNames.dashboard,
-        builder: (context, state) => const DashboardScreen(),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return AppShell(navigationShell: navigationShell);
+        },
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.dashboard,
+                name: AppRouteNames.dashboard,
+                builder: (context, state) => const DashboardScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.folders,
+                name: AppRouteNames.folders,
+                builder: (context, state) => const FolderListScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.decks,
+                name: AppRouteNames.decks,
+                builder: (context, state) => const DeckListScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.progress,
+                name: AppRouteNames.progress,
+                builder: (context, state) => const LearningProgressScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.settings,
+                name: AppRouteNames.settings,
+                builder: (context, state) => const SettingsScreen(),
+              ),
+            ],
+          ),
+        ],
       ),
       GoRoute(
         path: AppRoutes.offline,

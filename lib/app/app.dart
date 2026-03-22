@@ -10,6 +10,7 @@ import 'package:memora/core/config/env_config.dart';
 import 'package:memora/core/theme/app_theme.dart';
 import 'package:memora/core/theme/responsive/screen_info.dart';
 import 'package:memora/core/theme/theme_helpers.dart';
+import 'package:memora/l10n/l10n.dart';
 
 class App extends StatelessWidget {
   const App({super.key, this.container});
@@ -50,6 +51,7 @@ class _AppView extends ConsumerWidget {
       routerConfig: router,
       restorationScopeId: AppConstants.appRestorationScopeId,
       locale: locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: supportedLocales,
       showPerformanceOverlay: envConfig.showPerformanceOverlay,
       themeMode: ThemeHelpers.resolveThemeMode(themeType),

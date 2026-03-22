@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:memora/core/theme/app_theme.dart';
 import 'package:memora/core/theme/responsive/screen_info.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/composites/forms/app_filter_bar.dart';
 import 'package:memora/presentation/shared/composites/forms/app_form_section.dart';
 import 'package:memora/presentation/shared/composites/forms/app_search_bar.dart';
@@ -21,6 +22,8 @@ void main() {
   Widget wrap(Widget child) {
     return MaterialApp(
       theme: AppTheme.light(screenInfo: const ScreenInfo.fallback()),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -74,9 +77,7 @@ void main() {
             ),
             const SizedBox(height: 16),
             AppSubmitBar(
-              actions: const [
-                AppSecondaryButton(text: 'Cancel'),
-              ],
+              actions: const [AppSecondaryButton(text: 'Cancel')],
               primaryAction: const AppPrimaryButton(text: 'Save'),
             ),
             const SizedBox(height: 16),

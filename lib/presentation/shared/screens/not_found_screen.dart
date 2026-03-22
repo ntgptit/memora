@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memora/core/config/app_strings.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/composites/states/app_empty_state.dart';
 import 'package:memora/presentation/shared/layouts/app_scaffold.dart';
 import 'package:memora/presentation/shared/primitives/displays/app_icon.dart';
@@ -9,11 +9,11 @@ class NotFoundScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AppScaffold(
-      title: AppStrings.notFoundTitle,
+    return AppScaffold(
+      title: context.l10n.notFoundTitle,
       body: AppEmptyState(
-        title: AppStrings.notFoundTitle,
-        message: AppStrings.notFoundMessage,
+        title: context.l10n.notFoundTitle,
+        message: context.l10n.notFoundMessage,
         icon: AppIcon(Icons.search_off_rounded),
       ),
       constrainBody: true,

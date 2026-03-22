@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:memora/core/config/app_strings.dart';
 import 'package:memora/core/theme/app_theme.dart';
 import 'package:memora/core/theme/responsive/screen_info.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/composites/forms/app_submit_bar.dart';
 import 'package:memora/presentation/shared/layouts/app_dashboard_layout.dart';
 import 'package:memora/presentation/shared/layouts/app_detail_page_layout.dart';
@@ -23,6 +23,8 @@ void main() {
   Widget wrapWithApp(Widget child, {Size size = const Size(390, 844)}) {
     return MaterialApp(
       theme: AppTheme.light(screenInfo: ScreenInfo.fromSize(size)),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: child,
     );
   }
@@ -150,19 +152,22 @@ void main() {
 
   testWidgets('shared system screens render expected states', (tester) async {
     await tester.pumpWidget(wrapWithApp(const SplashScreen()));
-    expect(find.text(AppStrings.appName), findsOneWidget);
-    expect(find.text(AppStrings.splashTitle), findsOneWidget);
+    expect(find.text('Memora'), findsOneWidget);
+    expect(find.text('Preparing your learning workspace'), findsOneWidget);
 
     await tester.pumpWidget(wrapWithApp(const NotFoundScreen()));
-    expect(find.text(AppStrings.notFoundTitle), findsAtLeastNWidgets(1));
-    expect(find.text(AppStrings.notFoundMessage), findsOneWidget);
+    expect(find.text('Page not found'), findsAtLeastNWidgets(1));
+    expect(find.text('The requested page does not exist.'), findsOneWidget);
 
     await tester.pumpWidget(wrapWithApp(const MaintenanceScreen()));
-    expect(find.text(AppStrings.maintenanceTitle), findsAtLeastNWidgets(1));
-    expect(find.text(AppStrings.maintenanceMessage), findsOneWidget);
+    expect(find.text('Maintenance'), findsAtLeastNWidgets(1));
+    expect(find.text('The system is temporarily unavailable.'), findsOneWidget);
 
     await tester.pumpWidget(wrapWithApp(const OfflineScreen()));
-    expect(find.text(AppStrings.offlineTitle), findsAtLeastNWidgets(1));
-    expect(find.text(AppStrings.offlineMessage), findsOneWidget);
+    expect(find.text('You are offline'), findsAtLeastNWidgets(1));
+    expect(
+      find.text('Check your internet connection and try again.'),
+      findsOneWidget,
+    );
   });
 }

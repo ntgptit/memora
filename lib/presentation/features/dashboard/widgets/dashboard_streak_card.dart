@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:memora/core/config/app_strings.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/composites/cards/app_info_card.dart';
 import 'package:memora/presentation/shared/primitives/displays/app_progress_bar.dart';
 import 'package:memora/presentation/shared/primitives/displays/app_tag.dart';
@@ -25,10 +25,11 @@ class DashboardStreakCard extends StatelessWidget {
         ? 0.0
         : (reviewedToday / dailyGoal).clamp(0, 1).toDouble();
     final remaining = (dailyGoal - reviewedToday).clamp(0, dailyGoal);
+    final l10n = context.l10n;
 
     return AppInfoCard(
-      title: AppStrings.dashboardStreakTitle,
-      subtitle: AppStrings.dashboardStreakSubtitle,
+      title: l10n.dashboardStreakTitle,
+      subtitle: l10n.dashboardStreakSubtitle,
       leading: Icon(
         Icons.local_fire_department_rounded,
         color: context.colorScheme.error,
@@ -37,28 +38,23 @@ class DashboardStreakCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppTag(
-            label: AppStrings.dashboardStreakValue(currentStreak.toString()),
+            label: l10n.dashboardStreakValue(currentStreak),
             icon: const Icon(Icons.whatshot_rounded, size: 14),
             backgroundColor: context.colorScheme.errorContainer,
             textColor: context.colorScheme.onErrorContainer,
           ),
           SizedBox(height: context.spacing.md),
-          AppTitleText(text: AppStrings.dashboardDailyGoalLabel),
+          AppTitleText(text: l10n.dashboardDailyGoalLabel),
           SizedBox(height: context.spacing.xxs),
           AppBodyText(
-            text: AppStrings.dashboardGoalProgressMessage(
-              reviewedToday.toString(),
-              dailyGoal.toString(),
-            ),
+            text: l10n.dashboardGoalProgressMessage(reviewedToday, dailyGoal),
             isSecondary: true,
           ),
           SizedBox(height: context.spacing.sm),
           AppProgressBar(value: progress),
           SizedBox(height: context.spacing.sm),
           AppBodyText(
-            text: AppStrings.dashboardGoalRemainingMessage(
-              remaining.toString(),
-            ),
+            text: l10n.dashboardGoalRemainingMessage(remaining),
             isSecondary: true,
           ),
         ],

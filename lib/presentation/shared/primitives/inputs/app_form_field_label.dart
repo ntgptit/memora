@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memora/core/config/app_strings.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
 
 class AppFormFieldLabel extends StatelessWidget {
@@ -39,7 +39,7 @@ class AppFormFieldLabel extends StatelessWidget {
                     TextSpan(text: label),
                     if (isRequired)
                       TextSpan(
-                        text: AppStrings.requiredFieldMark,
+                        text: context.l10n.requiredFieldMark,
                         style: titleStyle?.copyWith(
                           color: context.colorScheme.error,
                         ),

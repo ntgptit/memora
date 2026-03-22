@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:memora/core/config/app_strings.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/primitives/inputs/app_text_field.dart';
 
 class AppSearchField extends StatefulWidget {
@@ -73,7 +73,7 @@ class _AppSearchFieldState extends State<AppSearchField> {
       supportingText: widget.supportingText,
       controller: _controller,
       focusNode: widget.focusNode,
-      hintText: widget.hintText ?? AppStrings.searchLabel,
+      hintText: widget.hintText ?? context.l10n.searchLabel,
       enabled: widget.enabled,
       autofocus: widget.autofocus,
       keyboardType: TextInputType.text,
@@ -85,7 +85,7 @@ class _AppSearchFieldState extends State<AppSearchField> {
           ? null
           : IconButton(
               onPressed: widget.enabled ? _clear : null,
-              tooltip: AppStrings.clearSearchTooltip,
+              tooltip: context.l10n.clearSearchTooltip,
               icon: Icon(Icons.close_rounded, size: context.iconSize.md),
             ),
     );

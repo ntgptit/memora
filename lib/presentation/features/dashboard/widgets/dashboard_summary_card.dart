@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:memora/core/config/app_strings.dart';
 import 'package:memora/core/theme/extensions/screen_context_ext.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/composites/cards/app_stat_card.dart';
 
 class DashboardSummaryCard extends StatelessWidget {
@@ -24,36 +24,30 @@ class DashboardSummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final gap = context.spacing.md;
     final remaining = (dailyGoal - reviewedToday).clamp(0, dailyGoal);
+    final l10n = context.l10n;
     final metrics = [
       _MetricData(
-        label: AppStrings.dashboardSummaryDueDecksLabel,
-        value: AppStrings.dashboardDueDeckValue(dueDeckCount.toString()),
-        subtitle: AppStrings.dashboardDueDeckChipLabel(dueDeckCount.toString()),
+        label: l10n.dashboardSummaryDueDecksLabel,
+        value: l10n.dashboardDueDeckValue(dueDeckCount),
+        subtitle: l10n.dashboardDueDeckChipLabel(dueDeckCount),
         icon: Icons.layers_rounded,
       ),
       _MetricData(
-        label: AppStrings.dashboardSummaryDueCardsLabel,
-        value: AppStrings.dashboardDueCardValue(dueCardCount.toString()),
-        subtitle: AppStrings.dashboardDueCardChipLabel(dueCardCount.toString()),
+        label: l10n.dashboardSummaryDueCardsLabel,
+        value: l10n.dashboardDueCardValue(dueCardCount),
+        subtitle: l10n.dashboardDueCardChipLabel(dueCardCount),
         icon: Icons.style_rounded,
       ),
       _MetricData(
-        label: AppStrings.dashboardSummaryReviewedLabel,
-        value: AppStrings.dashboardReviewedValue(reviewedToday.toString()),
-        subtitle: AppStrings.dashboardGoalProgressMessage(
-          reviewedToday.toString(),
-          dailyGoal.toString(),
-        ),
+        label: l10n.dashboardSummaryReviewedLabel,
+        value: l10n.dashboardReviewedValue(reviewedToday),
+        subtitle: l10n.dashboardGoalProgressMessage(reviewedToday, dailyGoal),
         icon: Icons.check_circle_rounded,
       ),
       _MetricData(
-        label: AppStrings.dashboardSummaryFocusTimeLabel,
-        value: AppStrings.dashboardStudyMinutesValue(
-          totalStudyMinutes.toString(),
-        ),
-        subtitle: AppStrings.dashboardGoalRemainingMessage(
-          remaining.toString(),
-        ),
+        label: l10n.dashboardSummaryFocusTimeLabel,
+        value: l10n.dashboardStudyMinutesValue(totalStudyMinutes),
+        subtitle: l10n.dashboardGoalRemainingMessage(remaining),
         icon: Icons.schedule_rounded,
       ),
     ];
@@ -61,13 +55,10 @@ class DashboardSummaryCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          AppStrings.dashboardSummaryTitle,
-          style: context.textTheme.titleLarge,
-        ),
+        Text(l10n.dashboardSummaryTitle, style: context.textTheme.titleLarge),
         SizedBox(height: context.spacing.xxs),
         Text(
-          AppStrings.dashboardSummarySubtitle,
+          l10n.dashboardSummarySubtitle,
           style: context.textTheme.bodyMedium?.copyWith(
             color: context.colorScheme.onSurfaceVariant,
           ),

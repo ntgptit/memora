@@ -4,6 +4,11 @@ abstract final class AppStrings {
   static const loading = 'Loading...';
   static const genericError = 'Something went wrong.';
   static const retry = 'Retry';
+  static const navigationDashboardLabel = 'Dashboard';
+  static const navigationFoldersLabel = 'Folders';
+  static const navigationDecksLabel = 'Decks';
+  static const navigationProgressLabel = 'Progress';
+  static const navigationSettingsLabel = 'Settings';
   static const dashboardTitle = 'Dashboard';
   static const dashboardFoundationTitle = 'Dashboard foundation';
   static const dashboardFoundationDescription =
@@ -62,6 +67,22 @@ abstract final class AppStrings {
   static const dashboardRecallModeLabel = 'Recall';
   static const dashboardReviewModeLabel = 'Review';
   static const dashboardSpeedModeLabel = 'Speed drill';
+  static const foldersTitle = 'Folders';
+  static const foldersPlaceholderTitle = 'Folder hub is ready';
+  static const foldersPlaceholderMessage =
+      'This root tab is wired into the shared app navigation. Folder-specific content can expand here next.';
+  static const decksTitle = 'Decks';
+  static const decksPlaceholderTitle = 'Deck library is ready';
+  static const decksPlaceholderMessage =
+      'This tab is now part of the common shell, so deck listing and filtering can grow without changing app navigation.';
+  static const progressTitle = 'Progress';
+  static const progressPlaceholderTitle = 'Progress workspace is ready';
+  static const progressPlaceholderMessage =
+      'Charts, streaks, and history can plug into this shared navigation slot when the feature slice is implemented.';
+  static const settingsTitle = 'Settings';
+  static const settingsPlaceholderTitle = 'Settings center is ready';
+  static const settingsPlaceholderMessage =
+      'App preferences already have a dedicated root tab, ready for theme, language, audio, and backup settings.';
   static const offlineTitle = 'You are offline';
   static const offlineMessage = 'Check your internet connection and try again.';
   static const offlineRetryLabel = 'Retry';

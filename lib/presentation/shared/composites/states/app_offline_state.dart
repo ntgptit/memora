@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memora/core/config/app_strings.dart';
+import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/composites/states/app_error_state.dart';
 
 class AppOfflineState extends StatelessWidget {
@@ -19,9 +19,9 @@ class AppOfflineState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppErrorState(
-      title: AppStrings.offlineTitle,
-      message: message ?? AppStrings.offlineMessage,
-      primaryActionLabel: retryLabel ?? AppStrings.offlineRetryLabel,
+      title: context.l10n.offlineTitle,
+      message: message ?? context.l10n.offlineMessage,
+      primaryActionLabel: retryLabel ?? context.l10n.offlineRetryLabel,
       onPrimaryAction: onRetry,
       maxWidth: maxWidth,
     );
