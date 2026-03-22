@@ -4,11 +4,11 @@ spring:
       on-profile: dev
   datasource:
     url: ${MEMORA_DB_URL:jdbc:postgresql://localhost:5432/memora}
-    username: ${MEMORA_DB_USERNAME:memora}
-    password: ${MEMORA_DB_PASSWORD:memora_dev}
+    username: ${MEMORA_DB_USERNAME:giapnt}
+    password: ${MEMORA_DB_PASSWORD:abcd1234}
   docker:
     compose:
-      enabled: ${MEMORA_DOCKER_COMPOSE_ENABLED:true}
+      enabled: ${MEMORA_DOCKER_COMPOSE_ENABLED:false}
 
 springdoc:
   api-docs:

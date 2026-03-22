@@ -3,9 +3,9 @@
 ## Run
 
 ```bash
-dart run tool/verify_frontend_checklists.dart
-dart run tool/verify_frontend_checklists.dart --strict
-dart run tool/verify_frontend_checklists.dart --only=state
+python tool/verify_frontend_checklists.py
+python tool/verify_frontend_checklists.py --strict
+python tool/verify_frontend_checklists.py --only=state
 ```
 
 ## Output
@@ -41,6 +41,6 @@ dart run tool/verify_frontend_checklists.dart --only=state
 
 ## Notes
 
-- Guard này giữ pattern vận hành của backend guard nhưng đổi sang contract cho Flutter frontend client.
+- Guard này giữ pattern vận hành và runtime của backend guard nhưng đổi rule contract sang Flutter frontend client.
 - `--strict` sẽ fail khi có cả warning.
 - Rule `PRESENTATION_AVOID_RAW_THEME_ACCESS` đang là `WARN` để hỗ trợ siết dần theme usage thay vì chặn cứng ngay.
