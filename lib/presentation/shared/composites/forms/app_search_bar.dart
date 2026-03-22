@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memora/core/config/app_strings.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
 import 'package:memora/presentation/shared/primitives/buttons/app_icon_button.dart';
 import 'package:memora/presentation/shared/primitives/inputs/app_search_field.dart';
@@ -39,13 +40,13 @@ class AppSearchBar extends StatelessWidget {
       if (onFilterPressed != null)
         AppIconButton(
           icon: const Icon(Icons.tune_rounded),
-          tooltip: 'Filter',
+          tooltip: AppStrings.filterTooltip,
           onPressed: onFilterPressed,
         ),
       if (onSortPressed != null)
         AppIconButton(
           icon: const Icon(Icons.swap_vert_rounded),
-          tooltip: 'Sort',
+          tooltip: AppStrings.sortTooltip,
           onPressed: onSortPressed,
         ),
       ...actions,

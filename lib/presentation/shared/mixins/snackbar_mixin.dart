@@ -1,1 +1,44 @@
+import 'package:flutter/material.dart';
+import 'package:memora/core/enums/snackbar_type.dart';
+import 'package:memora/presentation/shared/primitives/feedback/app_snackbar.dart';
 
+mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
+  void showAppSnackbar({
+    required String message,
+    String? title,
+    SnackbarType type = SnackbarType.info,
+    String? actionLabel,
+    VoidCallback? onActionPressed,
+    Duration? duration,
+    bool clearCurrent = true,
+  }) {
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    if (messenger == null) {
+      return;
+    }
+
+    if (clearCurrent) {
+      messenger.hideCurrentSnackBar();
+    }
+
+    messenger.showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        duration: duration ?? type.defaultDuration,
+        content: AppSnackbar(
+          message: message,
+          title: title,
+          type: type,
+          actionLabel: actionLabel,
+          onActionPressed: onActionPressed,
+        ),
+      ),
+    );
+  }
+
+  void clearAppSnackbars() {
+    ScaffoldMessenger.maybeOf(context)?.clearSnackBars();
+  }
+}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 abstract final class ContextUtils {
   static Size screenSize(BuildContext context) => MediaQuery.sizeOf(context);
@@ -16,5 +17,6 @@ abstract final class ContextUtils {
     FocusScope.of(context).unfocus();
   }
 
-  static bool canPop(BuildContext context) => Navigator.of(context).canPop();
+  static bool canPop(BuildContext context) =>
+      GoRouter.maybeOf(context)?.canPop() ?? false;
 }

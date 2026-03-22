@@ -27,14 +27,7 @@ class AppSpacing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final spacing = _resolve(context);
-    return axis == Axis.horizontal
-        ? SizedBox(width: spacing)
-        : SizedBox(height: spacing);
-  }
-
-  double _resolve(BuildContext context) {
-    return switch (size) {
+    final spacing = switch (size) {
       AppSpacingSize.xxs => context.spacing.xxs,
       AppSpacingSize.xs => context.spacing.xs,
       AppSpacingSize.sm => context.spacing.sm,
@@ -47,5 +40,8 @@ class AppSpacing extends StatelessWidget {
       AppSpacingSize.gutter => context.spacing.gutter,
       AppSpacingSize.gridGap => context.spacing.gridGap,
     };
+    return axis == Axis.horizontal
+        ? SizedBox(width: spacing)
+        : SizedBox(height: spacing);
   }
 }

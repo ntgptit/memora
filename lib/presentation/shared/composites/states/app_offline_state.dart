@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memora/core/config/app_strings.dart';
 import 'package:memora/presentation/shared/composites/states/app_error_state.dart';
 
 class AppOfflineState extends StatelessWidget {
@@ -18,9 +19,9 @@ class AppOfflineState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppErrorState(
-      title: 'You are offline',
-      message: message ?? 'Check your connection and try again.',
-      primaryActionLabel: retryLabel ?? 'Retry',
+      title: AppStrings.offlineTitle,
+      message: message ?? AppStrings.offlineMessage,
+      primaryActionLabel: retryLabel ?? AppStrings.offlineRetryLabel,
       onPrimaryAction: onRetry,
       maxWidth: maxWidth,
     );

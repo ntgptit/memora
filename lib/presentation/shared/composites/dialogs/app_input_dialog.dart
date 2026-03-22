@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:memora/core/enums/dialog_type.dart';
 import 'package:memora/presentation/shared/composites/dialogs/app_alert_dialog.dart';
 import 'package:memora/presentation/shared/primitives/buttons/app_outline_button.dart';
@@ -75,20 +76,15 @@ class _AppInputDialogState extends State<AppInputDialog> {
       actions: [
         AppOutlineButton(
           text: widget.cancelLabel,
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: () => context.pop(),
         ),
-        AppPrimaryButton(
-          text: widget.confirmLabel,
-          onPressed: _submit,
-        ),
+        AppPrimaryButton(text: widget.confirmLabel, onPressed: _submit),
       ],
     );
   }
 
   void _submit() {
-    Navigator.of(context).pop();
+    context.pop();
     widget.onSubmitted(_controller.text);
   }
 }

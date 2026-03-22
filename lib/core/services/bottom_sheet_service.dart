@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class BottomSheetService {
   const BottomSheetService(this.navigatorKey);
@@ -36,11 +37,11 @@ class BottomSheetService {
       return;
     }
 
-    final navigator = Navigator.of(context, rootNavigator: true);
-    if (!navigator.canPop()) {
+    final router = GoRouter.maybeOf(context);
+    if (router == null || !router.canPop()) {
       return;
     }
 
-    navigator.pop<T>(result);
+    router.pop<T>(result);
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memora/core/config/app_strings.dart';
 import 'package:memora/presentation/shared/composites/states/app_error_state.dart';
 
 class AppUnauthorizedState extends StatelessWidget {
@@ -18,9 +19,9 @@ class AppUnauthorizedState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppErrorState(
-      title: 'Access required',
-      message: message ?? 'Sign in to continue.',
-      primaryActionLabel: actionLabel ?? 'Sign in',
+      title: AppStrings.accessRequiredTitle,
+      message: message ?? AppStrings.signInMessage,
+      primaryActionLabel: actionLabel ?? AppStrings.signInLabel,
       onPrimaryAction: onActionPressed,
       maxWidth: maxWidth,
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
 import 'package:memora/presentation/shared/composites/dialogs/app_bottom_sheet.dart';
 import 'package:memora/presentation/shared/primitives/buttons/app_danger_button.dart';
@@ -25,16 +26,14 @@ class AppActionSheet extends StatelessWidget {
       title: title,
       subtitle: subtitle,
       actions: [
-        AppTextButton(
-          text: cancelLabel,
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+        AppTextButton(text: cancelLabel, onPressed: () => context.pop()),
       ],
       child: ListView.separated(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: actions.length,
-        separatorBuilder: (context, index) => SizedBox(height: context.spacing.sm),
+        separatorBuilder: (context, index) =>
+            SizedBox(height: context.spacing.sm),
         itemBuilder: (context, index) {
           final action = actions[index];
           final button = action.destructive
@@ -44,16 +43,16 @@ class AppActionSheet extends StatelessWidget {
                   onPressed: action.onPressed,
                 )
               : action.variant == AppActionSheetActionVariant.outline
-                  ? AppOutlineButton(
-                      text: action.label,
-                      expand: true,
-                      onPressed: action.onPressed,
-                    )
-                  : AppTextButton(
-                      text: action.label,
-                      expand: true,
-                      onPressed: action.onPressed,
-                    );
+              ? AppOutlineButton(
+                  text: action.label,
+                  expand: true,
+                  onPressed: action.onPressed,
+                )
+              : AppTextButton(
+                  text: action.label,
+                  expand: true,
+                  onPressed: action.onPressed,
+                );
           return button;
         },
       ),

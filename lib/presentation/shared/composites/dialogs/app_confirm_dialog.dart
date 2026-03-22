@@ -34,29 +34,11 @@ class AppConfirmDialog extends StatelessWidget {
       content: content,
       type: type,
       actions: [
-        AppOutlineButton(
-          text: cancelLabel,
-          onPressed: () {
-            Navigator.of(context).pop();
-            onCancel?.call();
-          },
-        ),
+        AppOutlineButton(text: cancelLabel, onPressed: onCancel),
         if (isDestructive)
-          AppDangerButton(
-            text: confirmLabel,
-            onPressed: () {
-              Navigator.of(context).pop();
-              onConfirm();
-            },
-          )
+          AppDangerButton(text: confirmLabel, onPressed: onConfirm)
         else
-          AppPrimaryButton(
-            text: confirmLabel,
-            onPressed: () {
-              Navigator.of(context).pop();
-              onConfirm();
-            },
-          ),
+          AppPrimaryButton(text: confirmLabel, onPressed: onConfirm),
       ],
     );
   }

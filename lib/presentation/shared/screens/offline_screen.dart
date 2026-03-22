@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/config/app_strings.dart';
+import 'package:memora/presentation/shared/composites/states/app_offline_state.dart';
 import 'package:memora/presentation/shared/layouts/app_scaffold.dart';
 
 class OfflineScreen extends StatelessWidget {
@@ -9,9 +10,10 @@ class OfflineScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const AppScaffold(
       title: AppStrings.offlineTitle,
-      body: Center(
-        child: Text(AppStrings.offlineMessage),
+      body: AppOfflineState(
+        message: AppStrings.offlineMessage,
       ),
+      constrainBody: true,
     );
   }
 }

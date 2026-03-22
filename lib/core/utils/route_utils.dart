@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
 
 abstract final class RouteUtils {
   static String? currentRouteName(BuildContext context) {
@@ -10,7 +11,7 @@ abstract final class RouteUtils {
   }
 
   static bool canPop(BuildContext context) {
-    return Navigator.of(context).canPop();
+    return GoRouter.maybeOf(context)?.canPop() ?? false;
   }
 
   static bool popIfPossible<T extends Object?>(
@@ -20,7 +21,7 @@ abstract final class RouteUtils {
     if (!canPop(context)) {
       return false;
     }
-    Navigator.of(context).pop(result);
+    GoRouter.maybeOf(context)?.pop<T>(result);
     return true;
   }
 }

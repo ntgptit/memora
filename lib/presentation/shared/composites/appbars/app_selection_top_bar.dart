@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memora/core/config/app_strings.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
 import 'package:memora/presentation/shared/composites/appbars/app_top_bar.dart';
 import 'package:memora/presentation/shared/primitives/buttons/app_icon_button.dart';
@@ -43,7 +44,7 @@ class AppSelectionTopBar extends StatelessWidget
               ? null
               : AppIconButton(
                   icon: const Icon(Icons.close_rounded),
-                  tooltip: 'Clear selection',
+                  tooltip: AppStrings.clearSelectionTooltip,
                   onPressed: onClearSelection,
                 )),
       title: resolvedTitle,
