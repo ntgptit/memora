@@ -1,1 +1,60 @@
+import 'package:flutter/material.dart';
+import 'package:memora/core/theme/extensions/theme_context_ext.dart';
+import 'package:memora/presentation/shared/composites/appbars/app_top_bar.dart';
+import 'package:memora/presentation/shared/primitives/buttons/app_icon_button.dart';
+import 'package:memora/presentation/shared/primitives/text/app_title_text.dart';
 
+class AppSelectionTopBar extends StatelessWidget
+    implements PreferredSizeWidget {
+  const AppSelectionTopBar({
+    super.key,
+    required this.selectedCount,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.actions = const [],
+    this.onClearSelection,
+    this.selectedCountLabelBuilder,
+  });
+
+  final int selectedCount;
+  final Widget? title;
+  final Widget? subtitle;
+  final Widget? leading;
+  final List<Widget> actions;
+  final VoidCallback? onClearSelection;
+  final String Function(int selectedCount)? selectedCountLabelBuilder;
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  @override
+  Widget build(BuildContext context) {
+    final resolvedTitle =
+        title ??
+        AppTitleText(
+          text: _labelFor(selectedCount),
+          style: context.textTheme.titleMedium,
+        );
+    return AppTopBar(
+      leading:
+          leading ??
+          (onClearSelection == null
+              ? null
+              : AppIconButton(
+                  icon: const Icon(Icons.close_rounded),
+                  tooltip: 'Clear selection',
+                  onPressed: onClearSelection,
+                )),
+      title: resolvedTitle,
+      subtitle: subtitle,
+      actions: actions,
+      toolbarHeight: kToolbarHeight,
+      automaticallyImplyLeading: false,
+    );
+  }
+
+  String _labelFor(int count) {
+    return selectedCountLabelBuilder?.call(count) ?? '$count selected';
+  }
+}
