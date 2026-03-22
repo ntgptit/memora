@@ -1,29 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/config/app_constants.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:memora/core/di/core_providers.dart';
 import 'package:memora/core/config/app_keys.dart';
 import 'package:memora/core/enums/app_theme_type.dart';
 import 'package:memora/core/enums/app_locale.dart';
-import 'package:memora/core/services/bottom_sheet_service.dart';
-import 'package:memora/core/services/dialog_service.dart';
-import 'package:memora/core/services/navigation_service.dart';
-import 'package:memora/core/services/snackbar_service.dart';
+import 'package:memora/core/di/core_providers.dart';
 import 'package:memora/core/utils/logger.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_providers.g.dart';
-
-@Riverpod(keepAlive: true)
-GlobalKey<NavigatorState> rootNavigatorKey(Ref ref) {
-  return GlobalKey<NavigatorState>(debugLabel: AppKeys.rootNavigatorKeyLabel);
-}
-
-@Riverpod(keepAlive: true)
-GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey(Ref ref) {
-  return GlobalKey<ScaffoldMessengerState>(
-    debugLabel: AppKeys.rootScaffoldMessengerKeyLabel,
-  );
-}
 
 @Riverpod(keepAlive: true)
 class ThemeTypeController extends _$ThemeTypeController {
@@ -32,7 +16,7 @@ class ThemeTypeController extends _$ThemeTypeController {
     final storage = ref.watch(preferencesStorageProvider);
     final rawValue = storage.read<String>(AppKeys.themeTypeStorageKey);
 
-    return _themeTypeFromStorage(rawValue);
+    return AppThemeType.fromName(rawValue);
   }
 
   Future<void> setTheme(AppThemeType themeType) async {
@@ -65,7 +49,7 @@ class AppLocaleController extends _$AppLocaleController {
     final storage = ref.watch(preferencesStorageProvider);
     final rawValue = storage.read<String>(AppKeys.localeStorageKey);
 
-    return _localeFromStorage(rawValue);
+    return AppLocale.fromLanguageCode(rawValue);
   }
 
   Future<void> setLocale(AppLocale locale) async {
@@ -76,7 +60,7 @@ class AppLocaleController extends _$AppLocaleController {
   }
 
   Future<void> reset() {
-    return setLocale(_localeFromStorage(null));
+    return setLocale(AppLocale.fromLanguageCode(null));
   }
 }
 
@@ -100,60 +84,10 @@ class LifecycleStateController extends _$LifecycleStateController {
 @Riverpod(keepAlive: true)
 Locale appLocale(Ref ref) {
   final selectedLocale = ref.watch(appLocaleControllerProvider);
-  return Locale(selectedLocale.languageCode);
+  return selectedLocale.locale;
 }
 
 @Riverpod(keepAlive: true)
 List<Locale> supportedLocales(Ref ref) {
   return AppConstants.supportedLocales;
-}
-
-@Riverpod(keepAlive: true)
-NavigationService navigationService(Ref ref) {
-  final navigatorKey = ref.watch(rootNavigatorKeyProvider);
-  return NavigationService(navigatorKey);
-}
-
-@Riverpod(keepAlive: true)
-DialogService dialogService(Ref ref) {
-  final navigatorKey = ref.watch(rootNavigatorKeyProvider);
-  return DialogService(navigatorKey);
-}
-
-@Riverpod(keepAlive: true)
-BottomSheetService bottomSheetService(Ref ref) {
-  final navigatorKey = ref.watch(rootNavigatorKeyProvider);
-  return BottomSheetService(navigatorKey);
-}
-
-@Riverpod(keepAlive: true)
-SnackbarService snackbarService(Ref ref) {
-  final messengerKey = ref.watch(rootScaffoldMessengerKeyProvider);
-  return SnackbarService(messengerKey);
-}
-
-AppThemeType _themeTypeFromStorage(String? rawValue) {
-  switch (rawValue) {
-    case 'light':
-      return AppThemeType.light;
-    case 'dark':
-      return AppThemeType.dark;
-    default:
-      return AppThemeType.system;
-  }
-}
-
-AppLocale _localeFromStorage(String? rawValue) {
-  switch (rawValue) {
-    case 'vi':
-      return AppLocale.vi;
-    case 'ko':
-      return AppLocale.ko;
-    case 'en':
-    default:
-      return AppLocale.values.firstWhere(
-        (locale) => locale.languageCode == AppConstants.defaultLocaleCode,
-        orElse: () => AppLocale.en,
-      );
-  }
 }

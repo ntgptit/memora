@@ -8,4 +8,19 @@ abstract final class RouteUtils {
   static bool isCurrentRoute(BuildContext context, String routeName) {
     return currentRouteName(context) == routeName;
   }
+
+  static bool canPop(BuildContext context) {
+    return Navigator.of(context).canPop();
+  }
+
+  static bool popIfPossible<T extends Object?>(
+    BuildContext context, [
+    T? result,
+  ]) {
+    if (!canPop(context)) {
+      return false;
+    }
+    Navigator.of(context).pop(result);
+    return true;
+  }
 }

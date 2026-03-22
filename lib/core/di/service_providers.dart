@@ -1,15 +1,19 @@
+import 'package:memora/core/services/bottom_sheet_service.dart';
 import 'package:memora/core/di/core_providers.dart';
 import 'package:memora/core/services/analytics_service.dart';
 import 'package:memora/core/services/audio_service.dart';
 import 'package:memora/core/services/clock_service.dart';
 import 'package:memora/core/services/connectivity_service.dart';
 import 'package:memora/core/services/crashlytics_service.dart';
+import 'package:memora/core/services/dialog_service.dart';
 import 'package:memora/core/services/file_picker_service.dart';
 import 'package:memora/core/services/local_notification_service.dart';
+import 'package:memora/core/services/navigation_service.dart';
 import 'package:memora/core/services/notification_service.dart';
 import 'package:memora/core/services/permission_service.dart';
 import 'package:memora/core/services/review_service.dart';
 import 'package:memora/core/services/share_service.dart';
+import 'package:memora/core/services/snackbar_service.dart';
 import 'package:memora/core/services/text_to_speech_service.dart';
 import 'package:memora/core/services/vibration_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -19,6 +23,30 @@ part 'service_providers.g.dart';
 @Riverpod(keepAlive: true)
 ClockService clockService(Ref ref) {
   return const SystemClockService();
+}
+
+@Riverpod(keepAlive: true)
+NavigationService navigationService(Ref ref) {
+  final navigatorKey = ref.watch(rootNavigatorKeyProvider);
+  return NavigationService(navigatorKey);
+}
+
+@Riverpod(keepAlive: true)
+DialogService dialogService(Ref ref) {
+  final navigatorKey = ref.watch(rootNavigatorKeyProvider);
+  return DialogService(navigatorKey);
+}
+
+@Riverpod(keepAlive: true)
+BottomSheetService bottomSheetService(Ref ref) {
+  final navigatorKey = ref.watch(rootNavigatorKeyProvider);
+  return BottomSheetService(navigatorKey);
+}
+
+@Riverpod(keepAlive: true)
+SnackbarService snackbarService(Ref ref) {
+  final messengerKey = ref.watch(rootScaffoldMessengerKeyProvider);
+  return SnackbarService(messengerKey);
 }
 
 @Riverpod(keepAlive: true)

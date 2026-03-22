@@ -1,5 +1,12 @@
-class LoggingInterceptor {
-  const LoggingInterceptor();
+import 'package:memora/core/utils/logger.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-  String get name => 'logging_interceptor';
+class LoggingInterceptor extends PrettyDioLogger {
+  LoggingInterceptor({required super.enabled})
+    : super(
+        requestHeader: true,
+        requestBody: true,
+        responseBody: true,
+        logPrint: (object) => Logger.debug(object.toString()),
+      );
 }

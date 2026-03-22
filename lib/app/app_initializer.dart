@@ -60,6 +60,10 @@ abstract final class AppInitializer {
       'Bootstrapping ${envConfig.appName} (${envConfig.environmentLabel}) -> ${envConfig.baseUrl}',
     );
 
+    await _guardedTask('preferences.initialize', () async {
+      await container.read(preferencesStorageProvider).initialize();
+    });
+
     container.read(themeTypeControllerProvider);
     container.read(appLocaleProvider);
     container.read(rootNavigatorKeyProvider);

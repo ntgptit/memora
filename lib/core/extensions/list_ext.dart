@@ -1,17 +1,15 @@
+import 'package:memora/core/utils/list_utils.dart';
+
 extension ListExt<T> on List<T> {
+  T? safeElementAt(int index) => ListUtils.safeElementAt(this, index);
+
   List<T> replacingAt(int index, T value) {
-    final next = List<T>.of(this);
-    next[index] = value;
-    return next;
+    return ListUtils.replaceAt(this, index, value);
   }
 
   List<T> toggled(T value) {
-    final next = List<T>.of(this);
-    if (next.contains(value)) {
-      next.remove(value);
-    } else {
-      next.add(value);
-    }
-    return next;
+    return ListUtils.toggle(this, value);
   }
+
+  List<T> get unique => ListUtils.unique(this);
 }

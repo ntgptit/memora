@@ -1,15 +1,11 @@
+import 'package:memora/core/utils/duration_utils.dart';
+
 extension DurationExt on Duration {
   int get totalSeconds => inSeconds;
+  int get totalMinutes => DurationUtils.inWholeMinutes(this);
+  bool get isZeroDuration => this == Duration.zero;
 
-  String toClockText() {
-    final hours = inHours;
-    final minutes = inMinutes.remainder(60).toString().padLeft(2, '0');
-    final seconds = inSeconds.remainder(60).toString().padLeft(2, '0');
+  String toClockText() => DurationUtils.formatClock(this);
 
-    if (hours <= 0) {
-      return '$minutes:$seconds';
-    }
-
-    return '${hours.toString().padLeft(2, '0')}:$minutes:$seconds';
-  }
+  String toShortText() => DurationUtils.formatShort(this);
 }

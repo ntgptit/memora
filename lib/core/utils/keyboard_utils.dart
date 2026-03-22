@@ -8,4 +8,8 @@ abstract final class KeyboardUtils {
   static void dismiss(BuildContext context) {
     FocusScope.of(context).unfocus();
   }
+
+  static bool isVisible(BuildContext context) {
+    return MediaQuery.viewInsetsOf(context).bottom > 0;
+  }
 }

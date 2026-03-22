@@ -1,21 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:memora/core/enums/snackbar_type.dart';
 
 class SnackbarService {
   const SnackbarService(this.messengerKey);
 
   final GlobalKey<ScaffoldMessengerState> messengerKey;
 
+  ScaffoldMessengerState? get messenger => messengerKey.currentState;
+  bool get isAvailable => messenger != null;
+
   void show(
     String message, {
+    SnackbarType type = SnackbarType.info,
     SnackBarAction? action,
-    Duration duration = const Duration(seconds: 3),
+    Duration? duration,
+    bool clearCurrent = true,
   }) {
-    messengerKey.currentState?.showSnackBar(
-      SnackBar(content: Text(message), action: action, duration: duration),
+    final messenger = this.messenger;
+    if (messenger == null) {
+      return;
+    }
+
+    if (clearCurrent) {
+      messenger.hideCurrentSnackBar();
+    }
+
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(message),
+        action: action,
+        duration: duration ?? type.defaultDuration,
+      ),
     );
   }
 
   void clear() {
-    messengerKey.currentState?.clearSnackBars();
+    messenger?.clearSnackBars();
   }
 }

@@ -4,6 +4,15 @@ abstract final class FileUtils {
     return segments.isEmpty ? path : segments.last;
   }
 
+  static String fileNameWithoutExtension(String path) {
+    final name = fileName(path);
+    final index = name.lastIndexOf('.');
+    if (index <= 0) {
+      return name;
+    }
+    return name.substring(0, index);
+  }
+
   static String extension(String path) {
     final name = fileName(path);
     final index = name.lastIndexOf('.');
@@ -16,5 +25,16 @@ abstract final class FileUtils {
 
   static bool hasExtension(String path, String expected) {
     return extension(path) == expected.toLowerCase().replaceFirst('.', '');
+  }
+
+  static bool isImageFile(String path) {
+    return const {
+      'jpg',
+      'jpeg',
+      'png',
+      'gif',
+      'webp',
+      'bmp',
+    }.contains(extension(path));
   }
 }

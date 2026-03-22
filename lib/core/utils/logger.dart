@@ -1,6 +1,13 @@
 import 'package:flutter/foundation.dart';
 
 abstract final class Logger {
+  static void trace(String message) {
+    if (!kDebugMode) {
+      return;
+    }
+    _log('TRACE', message);
+  }
+
   static void debug(String message) {
     if (!kDebugMode) {
       return;
@@ -15,6 +22,10 @@ abstract final class Logger {
 
   static void warning(String message) {
     _log('WARN', message);
+  }
+
+  static void success(String message) {
+    _log('SUCCESS', message);
   }
 
   static void error(String message, {Object? error, StackTrace? stackTrace}) {

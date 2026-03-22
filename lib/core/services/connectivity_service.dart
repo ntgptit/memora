@@ -2,6 +2,7 @@ import 'package:memora/core/network/network_info.dart';
 
 abstract interface class ConnectivityService {
   Future<bool> get isConnected;
+  Stream<bool> get onStatusChange;
 }
 
 class DefaultConnectivityService implements ConnectivityService {
@@ -11,4 +12,7 @@ class DefaultConnectivityService implements ConnectivityService {
 
   @override
   Future<bool> get isConnected => _networkInfo.isConnected;
+
+  @override
+  Stream<bool> get onStatusChange => _networkInfo.onStatusChange;
 }

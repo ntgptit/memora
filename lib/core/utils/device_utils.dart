@@ -5,6 +5,17 @@ abstract final class DeviceUtils {
 
   static TargetPlatform get platform => defaultTargetPlatform;
 
+  static bool get isAndroid => platform == TargetPlatform.android;
+
+  static bool get isIOS => platform == TargetPlatform.iOS;
+
+  static bool get isApplePlatform {
+    return switch (platform) {
+      TargetPlatform.iOS || TargetPlatform.macOS => true,
+      _ => false,
+    };
+  }
+
   static bool get isMobile {
     return switch (platform) {
       TargetPlatform.android || TargetPlatform.iOS => true,

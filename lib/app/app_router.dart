@@ -1,5 +1,4 @@
 import 'package:go_router/go_router.dart';
-import 'package:memora/app/app_providers.dart';
 import 'package:memora/app/app_routes.dart';
 import 'package:memora/core/di/core_providers.dart';
 import 'package:memora/presentation/features/dashboard/screens/dashboard_screen.dart';

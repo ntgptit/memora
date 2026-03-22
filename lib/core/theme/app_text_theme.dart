@@ -1,10 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:memora/core/theme/app_color_scheme.dart';
 import 'package:memora/core/theme/responsive/adaptive_typography.dart';
 import 'package:memora/core/theme/tokens/typography_tokens.dart';
 
 abstract final class AppTextTheme {
+  static TextTheme light(AdaptiveTypography typography) {
+    return build(AppColorScheme.light(), typography);
+  }
+
+  static TextTheme dark(AdaptiveTypography typography) {
+    return build(AppColorScheme.dark(), typography);
+  }
+
   static TextTheme build(
     ColorScheme colorScheme,
     AdaptiveTypography typography,

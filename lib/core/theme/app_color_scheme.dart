@@ -24,7 +24,25 @@ abstract final class AppColorScheme {
     tertiaryLightRef: AppColorTokens.tertiary,
   );
 
+  static ColorScheme light() {
+    return _applySurfaceTokens(
+      _materialScheme(Brightness.light),
+      brightness: Brightness.light,
+    );
+  }
+
+  static ColorScheme dark() {
+    return _applySurfaceTokens(
+      _materialScheme(Brightness.dark),
+      brightness: Brightness.dark,
+    );
+  }
+
   static ColorScheme build(Brightness brightness) {
+    return brightness == Brightness.dark ? dark() : light();
+  }
+
+  static ColorScheme _materialScheme(Brightness brightness) {
     final theme = brightness == Brightness.dark
         ? FlexThemeData.dark(
             useMaterial3: true,
@@ -37,8 +55,13 @@ abstract final class AppColorScheme {
             visualDensity: VisualDensity.standard,
           );
 
-    final scheme = theme.colorScheme;
+    return theme.colorScheme;
+  }
 
+  static ColorScheme _applySurfaceTokens(
+    ColorScheme scheme, {
+    required Brightness brightness,
+  }) {
     if (brightness == Brightness.dark) {
       return scheme.copyWith(
         surface: AppColorTokens.darkSurface,

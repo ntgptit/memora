@@ -6,6 +6,8 @@ class CacheManager {
   final DateTime Function() _now;
   final Map<String, _CacheEntry<Object?>> _entries = {};
 
+  bool contains(String key) => read<Object?>(key) != null;
+
   T? read<T>(String key) {
     final entry = _entries[key];
     if (entry == null) {
@@ -28,12 +30,28 @@ class CacheManager {
     );
   }
 
+  T readOrLoad<T>(String key, T Function() loader, {Duration? ttl}) {
+    final cached = read<T>(key);
+    if (cached != null) {
+      return cached;
+    }
+
+    final computed = loader();
+    write(key, computed, ttl: ttl);
+    return computed;
+  }
+
   void remove(String key) {
     _entries.remove(key);
   }
 
   void clear() {
     _entries.clear();
+  }
+
+  void pruneExpired() {
+    final now = _now();
+    _entries.removeWhere((_, entry) => entry.isExpired(now));
   }
 }
 

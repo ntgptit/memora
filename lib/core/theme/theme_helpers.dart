@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/enums/app_theme_type.dart';
 import 'package:memora/core/theme/app_theme.dart';
+import 'package:memora/core/theme/app_theme_mode.dart';
 import 'package:memora/core/theme/responsive/screen_info.dart';
 
 abstract final class ThemeHelpers {
@@ -8,42 +9,39 @@ abstract final class ThemeHelpers {
     return ScreenInfo.fromContext(context);
   }
 
+  static AppThemeMode resolveAppThemeMode(AppThemeType themeType) {
+    return themeType.appThemeMode;
+  }
+
   static ThemeMode resolveThemeMode(AppThemeType themeType) {
-    switch (themeType) {
-      case AppThemeType.system:
-        return ThemeMode.system;
-      case AppThemeType.light:
-        return ThemeMode.light;
-      case AppThemeType.dark:
-        return ThemeMode.dark;
-    }
+    return resolveAppThemeMode(themeType).materialThemeMode;
   }
 
   static Brightness resolveBrightness(
     BuildContext context, {
     required AppThemeType themeType,
   }) {
-    switch (themeType) {
-      case AppThemeType.light:
-        return Brightness.light;
-      case AppThemeType.dark:
-        return Brightness.dark;
-      case AppThemeType.system:
-        return MediaQuery.platformBrightnessOf(context);
-    }
+    return resolveAppThemeMode(
+      themeType,
+    ).resolveBrightness(MediaQuery.platformBrightnessOf(context));
+  }
+
+  static ThemeData lightTheme(BuildContext context) {
+    return AppTheme.light(screenInfo: screenInfoOf(context));
+  }
+
+  static ThemeData darkTheme(BuildContext context) {
+    return AppTheme.dark(screenInfo: screenInfoOf(context));
   }
 
   static ThemeData resolveTheme(
     BuildContext context, {
     required AppThemeType themeType,
   }) {
-    final brightness = resolveBrightness(context, themeType: themeType);
-    final screenInfo = screenInfoOf(context);
-
-    if (brightness == Brightness.dark) {
-      return AppTheme.dark(screenInfo: screenInfo);
-    }
-
-    return AppTheme.light(screenInfo: screenInfo);
+    return AppTheme.resolve(
+      mode: resolveAppThemeMode(themeType),
+      screenInfo: screenInfoOf(context),
+      platformBrightness: MediaQuery.platformBrightnessOf(context),
+    );
   }
 }
