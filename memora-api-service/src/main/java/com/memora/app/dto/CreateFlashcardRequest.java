@@ -4,21 +4,24 @@ import com.memora.app.constant.ApiValidationMessage;
 import com.memora.app.constant.ValidationSizeConstant;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 public record CreateFlashcardRequest(
-    @NotNull(message = ApiValidationMessage.NOT_NULL)
-    @Positive(message = ApiValidationMessage.POSITIVE)
-    Long deckId,
     @NotBlank(message = ApiValidationMessage.NOT_BLANK)
-    @Size(max = ValidationSizeConstant.FLASHCARD_TERM_MAX_LENGTH, message = ApiValidationMessage.SIZE_MAX_300)
-    String term,
+    @Size(
+        max = ValidationSizeConstant.FLASHCARD_FRONT_TEXT_MAX_LENGTH,
+        message = ApiValidationMessage.SIZE_MAX_300
+    )
+    String frontText,
     @NotBlank(message = ApiValidationMessage.NOT_BLANK)
-    String meaning,
-    String note,
-    @NotNull(message = ApiValidationMessage.NOT_NULL)
-    Boolean bookmarked
+    @Size(
+        max = ValidationSizeConstant.FLASHCARD_BACK_TEXT_MAX_LENGTH,
+        message = ApiValidationMessage.SIZE_MAX_2000
+    )
+    String backText,
+    @Size(max = ValidationSizeConstant.LANGUAGE_CODE_MAX_LENGTH, message = ApiValidationMessage.SIZE_MAX_16)
+    String frontLangCode,
+    @Size(max = ValidationSizeConstant.LANGUAGE_CODE_MAX_LENGTH, message = ApiValidationMessage.SIZE_MAX_16)
+    String backLangCode
 ) {
 }

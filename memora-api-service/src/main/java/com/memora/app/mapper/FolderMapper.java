@@ -8,21 +8,24 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class FolderMapper {
 
-    public FolderDto toDto(final FolderEntity entity) {
+    public FolderDto toDto(final FolderEntity entity, final String colorHex, final Long childFolderCount) {
         if (entity == null) {
             return null;
         }
         return new FolderDto(
             entity.getId(),
-            entity.getUserId(),
-            entity.getParentId(),
             entity.getName(),
             entity.getDescription(),
+            colorHex,
+            entity.getParentId(),
             entity.getDepth(),
-            entity.getDeletedAt(),
-            entity.getCreatedAt(),
-            entity.getUpdatedAt(),
-            entity.getVersion()
+            childFolderCount,
+            new com.memora.app.dto.AuditDto(
+                entity.getCreatedAt(),
+                entity.getUpdatedAt(),
+                entity.getDeletedAt(),
+                entity.getVersion()
+            )
         );
     }
 
@@ -32,15 +35,10 @@ public class FolderMapper {
         }
         final FolderEntity entity = new FolderEntity();
         entity.setId(dto.id());
-        entity.setUserId(dto.userId());
         entity.setParentId(dto.parentId());
         entity.setName(dto.name());
         entity.setDescription(dto.description());
         entity.setDepth(dto.depth());
-        entity.setDeletedAt(dto.deletedAt());
-        entity.setCreatedAt(dto.createdAt());
-        entity.setUpdatedAt(dto.updatedAt());
-        entity.setVersion(dto.version());
         return entity;
     }
 }

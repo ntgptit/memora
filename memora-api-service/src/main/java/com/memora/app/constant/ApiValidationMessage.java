@@ -16,5 +16,6 @@ public class ApiValidationMessage {
     public static final String SIZE_MAX_150 = "{validation.common.size.max.150}";
     public static final String SIZE_MAX_300 = "{validation.common.size.max.300}";
     public static final String SIZE_MAX_400 = "{validation.common.size.max.400}";
+    public static final String SIZE_MAX_2000 = "{validation.common.size.max.2000}";
     public static final String SIZE_BETWEEN_8_AND_240 = "{validation.common.size.between.8.240}";
 }

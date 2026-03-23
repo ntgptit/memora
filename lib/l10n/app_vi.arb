@@ -52,17 +52,399 @@
   "dashboardReviewModeLabel": "Ôn tập",
   "dashboardSpeedModeLabel": "Luyện nhanh",
   "foldersTitle": "Thư mục",
+  "folderLibraryTitle": "Thư viện thư mục",
+  "folderScreenSubtitle": "Duyệt cây thư viện, sắp xếp lại các nhánh, và chuyển sang quản lý deck khi bạn đi tới thư mục lá.",
+  "folderRootBreadcrumbLabel": "Thư viện",
+  "folderSearchHint": "Tìm thư mục",
+  "folderSortTitle": "Sắp xếp thư mục",
+  "folderSortDirectionTooltip": "Đổi chiều sắp xếp thư mục",
+  "folderSortByName": "Tên",
+  "folderSortByCreatedAt": "Ngày tạo",
+  "folderSortByUpdatedAt": "Cập nhật",
+  "folderActionsTooltip": "Thao tác thư mục",
+  "folderCreateAction": "Tạo thư mục",
+  "folderRenameAction": "Đổi tên thư mục",
+  "folderEditAction": "Chỉnh sửa thư mục",
+  "folderSaveAction": "Lưu thư mục",
+  "folderDeleteAction": "Xóa thư mục",
+  "folderCancelAction": "Hủy",
+  "folderLeafLabel": "Thư mục lá",
+  "folderErrorBannerTitle": "Thao tác thư mục thất bại",
+  "folderLoadErrorMessage": "Không thể tải danh sách thư mục lúc này. Hãy thử lại.",
+  "folderCreateDialogTitle": "Tạo thư mục mới",
+  "folderRenameDialogTitle": "Đổi tên thư mục",
+  "folderEditDialogTitle": "Chỉnh sửa thư mục",
+  "folderDeleteDialogMessage": "Xóa thư mục sẽ đồng thời xóa các thư mục con và toàn bộ deck nằm bên dưới khỏi không gian làm việc hiện tại.",
+  "folderNameFieldLabel": "Tên thư mục",
+  "folderDescriptionFieldLabel": "Mô tả",
+  "folderNameRequiredMessage": "Tên thư mục là bắt buộc.",
+  "folderRootEmptyTitle": "Bắt đầu cấu trúc thư viện",
+  "folderRootEmptyMessage": "Tạo thư mục cấp cao đầu tiên để sắp xếp deck theo chủ đề, môn học hoặc dự án.",
+  "folderLevelEmptyTitle": "Nhánh này chưa có thư mục con",
+  "folderLevelEmptyMessage": "Tạo thư mục con tại đây hoặc quay lại nhánh cha.",
+  "folderChildCountValue": "{count} thư mục con",
+  "@folderChildCountValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "folderDeleteDialogTitle": "Xóa \"{folderName}\"?",
+  "@folderDeleteDialogTitle": {
+    "placeholders": {
+      "folderName": {}
+    }
+  },
   "foldersPlaceholderTitle": "Khu vực thư mục đã sẵn sàng",
   "foldersPlaceholderMessage": "Tab gốc này đã được nối vào điều hướng chung của ứng dụng. Nội dung riêng cho thư mục có thể được phát triển tiếp tại đây.",
   "decksTitle": "Bộ thẻ",
+  "deckShellTitle": "Deck nằm bên trong thư mục",
+  "deckShellSubtitle": "Hãy chọn một thư mục lá trước, rồi quản lý các deck thuộc về nhánh đó.",
+  "deckShellMessage": "Deck hiện đi theo cây thư mục, vì vậy hãy dùng tab thư mục để chọn đúng nhánh bạn muốn học hoặc bảo trì.",
+  "deckShellBrowseFoldersAction": "Mở thư mục",
+  "deckScreenSubtitle": "Quản lý các deck nằm trong thư mục lá hiện tại.",
+  "deckSearchHint": "Tìm deck",
+  "deckSortTitle": "Sắp xếp deck",
+  "deckSortDirectionTooltip": "Đổi chiều sắp xếp deck",
+  "deckSortByName": "Tên",
+  "deckSortByCreatedAt": "Ngày tạo",
+  "deckSortByUpdatedAt": "Cập nhật",
+  "deckActionsTooltip": "Thao tác deck",
+  "deckCreateAction": "Tạo deck",
+  "deckEditAction": "Chỉnh sửa deck",
+  "deckSaveAction": "Lưu deck",
+  "deckDeleteAction": "Xóa deck",
+  "deckCancelAction": "Hủy",
+  "deckErrorBannerTitle": "Thao tác deck thất bại",
+  "deckLoadErrorMessage": "Không thể tải danh sách deck lúc này. Hãy thử lại.",
+  "deckCreateDialogTitle": "Tạo deck mới",
+  "deckEditDialogTitle": "Chỉnh sửa deck",
+  "deckDeleteDialogMessage": "Xóa deck sẽ đồng thời xóa các flashcard của deck đó khỏi không gian làm việc hiện tại.",
+  "deckNameFieldLabel": "Tên deck",
+  "deckDescriptionFieldLabel": "Mô tả",
+  "deckNameRequiredMessage": "Tên deck là bắt buộc.",
+  "deckEmptyTitle": "Thư mục này chưa có deck",
+  "deckEmptyMessage": "Tạo deck đầu tiên trong nhánh này để bắt đầu thêm flashcard.",
+  "deckDetailTitle": "Chi tiết deck",
+  "deckDetailPlaceholderTitle": "Flashcard là lớp tiếp theo",
+  "deckDetailPlaceholderMessage": "Route này đã được nối sẵn cho slice flashcard tiếp theo. Hiện tại bạn có thể quay lại danh sách deck sau khi xác nhận đường dẫn deck hoạt động đúng.",
+  "deckBackToListAction": "Quay lại danh sách deck",
+  "deckFlashcardCountValue": "{count} flashcard",
+  "@deckFlashcardCountValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deckFlashcardCountChipLabel": "{count} thẻ",
+  "@deckFlashcardCountChipLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deckSummaryDeckCount": "{count} deck",
+  "@deckSummaryDeckCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deckSummaryFlashcardCount": "{count} flashcard",
+  "@deckSummaryFlashcardCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deckDeleteDialogTitle": "Xóa \"{deckName}\"?",
+  "@deckDeleteDialogTitle": {
+    "placeholders": {
+      "deckName": {}
+    }
+  },
   "decksPlaceholderTitle": "Thư viện bộ thẻ đã sẵn sàng",
   "decksPlaceholderMessage": "Tab này hiện đã là một phần của app shell chung, nên danh sách và bộ lọc bộ thẻ có thể phát triển tiếp mà không cần đổi kiến trúc điều hướng.",
   "progressTitle": "Tiến độ",
   "progressPlaceholderTitle": "Không gian tiến độ đã sẵn sàng",
   "progressPlaceholderMessage": "Biểu đồ, chuỗi ngày học và lịch sử có thể được gắn vào vị trí điều hướng chung này khi feature được triển khai.",
+  "progressOverviewSubtitle": "Theo dõi nhịp độ học, áp lực thẻ đến hạn và gợi ý ôn tập kế tiếp.",
+  "progressLoadingMessage": "Đang tải tiến độ học, chuỗi ngày học và gợi ý ôn tập.",
+  "progressErrorTitle": "Không thể tải tiến độ",
+  "progressLoadErrorMessage": "Hãy làm mới giai đoạn hiện tại hoặc thử lại sau ít phút.",
+  "progressCalendarActionLabel": "Lịch học",
+  "progressDeckProgressActionLabel": "Tiến độ deck",
+  "progressSummaryTitle": "Tổng quan học tập",
+  "progressSummarySubtitle": "Xem nhanh tải ôn tập, độ chính xác và áp lực nhắc học.",
+  "progressDueLabel": "Thẻ đến hạn",
+  "progressReminderTypesLabel": "Loại nhắc học",
+  "progressOverdueLabel": "Quá hạn",
+  "progressLearnedLabel": "Đã học",
+  "progressBoxDistributionLabel": "Phân bố hộp",
+  "progressAccuracyLabel": "Độ chính xác",
+  "progressPassedAttemptsLabel": "Lượt đúng",
+  "progressFailedAttemptsLabel": "Lượt sai",
+  "progressChartTitle": "Phân bố",
+  "progressChartSubtitle": "Xem cách các thẻ đang được phân bổ trong các hộp ôn tập hiện tại.",
+  "progressFilterTitle": "Giai đoạn theo dõi",
+  "progressRefreshTooltip": "Làm mới tiến độ",
+  "progressPeriodTodayLabel": "Hôm nay",
+  "progressPeriodWeekLabel": "Tuần",
+  "progressPeriodMonthLabel": "Tháng",
+  "progressRecommendationTitle": "Phiên ôn tập nên làm tiếp",
+  "progressRecommendationSubtitle": "Dùng deck có tải đến hạn cao nhất để chọn phiên học tiếp theo.",
+  "progressRecommendationEmptyMessage": "Hiện không có deck nào cần theo dõi ngay.",
+  "@progressRecommendationMetaLabel": {
+    "placeholders": {
+      "sessionType": {},
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "progressRecommendationMetaLabel": "{sessionType} · dự kiến {minutes} phút",
+  "progressStudyNowActionLabel": "Học ngay",
+  "progressViewDeckActionLabel": "Xem tiến độ deck",
+  "@progressDueCountChipLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "progressDueCountChipLabel": "{count} đến hạn",
+  "@progressOverdueCountChipLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "progressOverdueCountChipLabel": "{count} quá hạn",
+  "progressHistoryTitle": "Hoạt động gần đây",
+  "progressHistorySubtitle": "Nhật ký ngắn về kết quả học và thay đổi lịch ôn tập.",
+  "progressCalendarTitle": "Lịch chuỗi học",
+  "progressCalendarSubtitle": "Góc nhìn cô đọng về mức độ đều đặn trong những ngày gần đây.",
+  "progressEscalationCalmLabel": "Ổn định",
+  "progressEscalationWatchLabel": "Cần theo dõi",
+  "progressEscalationUrgentLabel": "Khẩn",
+  "progressEscalationCriticalLabel": "Rất khẩn",
+  "progressDeckScreenTitle": "Tiến độ deck",
+  "progressDeckScreenSubtitle": "Theo dõi áp lực thẻ đến hạn, độ chính xác và hoạt động gần đây của deck đã chọn.",
+  "progressDeckFocusTitle": "Deck đang xem",
+  "progressDeckFocusSubtitle": "Ảnh chụp nhanh cho deck hiện tại theo bộ lọc giai đoạn đang chọn.",
+  "@progressDeckIdLabel": {
+    "placeholders": {
+      "deckId": {
+        "type": "int"
+      }
+    }
+  },
+  "progressDeckIdLabel": "Deck #{deckId}",
+  "@progressDeckRecommendationLabel": {
+    "placeholders": {
+      "sessionType": {},
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "progressDeckRecommendationLabel": "{sessionType} · gợi ý {minutes} phút",
+  "progressCalendarScreenTitle": "Lịch học",
+  "progressCalendarScreenSubtitle": "Theo dõi chuỗi học và các phiên gần đây theo giai đoạn đang chọn.",
+  "progressJapaneseBasicsDeckTitle": "Tiếng Nhật cơ bản",
+  "progressExamPrepDeckTitle": "Luyện thi",
+  "progressReminderSrsReviewLabel": "Ôn tập SRS",
+  "progressReminderOverdueCatchUpLabel": "Bù thẻ quá hạn",
+  "progressReminderMorningReviewLabel": "Ôn buổi sáng",
+  "progressReminderEveningReviewLabel": "Ôn buổi tối",
+  "progressReminderAfternoonReviewLabel": "Ôn buổi chiều",
+  "progressSessionReviewSprintLabel": "Ôn nhanh",
+  "progressSessionFocusedReviewLabel": "Ôn tập trung",
+  "progressSessionDeepReviewLabel": "Ôn sâu",
+  "@progressBoxLabel": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "progressBoxLabel": "Hộp {index}",
+  "@progressHistoryCompletedAccuracy": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "accuracy": {
+        "type": "int"
+      }
+    }
+  },
+  "progressHistoryCompletedAccuracy": "Hoàn thành {count} thẻ với độ chính xác {accuracy}%",
+  "@progressHistoryMissedCards": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "progressHistoryMissedCards": "Bỏ lỡ {count} thẻ trong một phiên ôn nhanh",
+  "@progressHistoryScheduledTomorrow": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "progressHistoryScheduledTomorrow": "Đã lên lịch {count} thẻ cho ngày mai",
+  "@progressHistoryFinishedWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "progressHistoryFinishedWeek": "Hoàn thành {count} thẻ trong tuần này",
+  "@progressHistoryLeftForNextSprint": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "progressHistoryLeftForNextSprint": "Còn lại {count} thẻ cho lượt ôn kế tiếp",
+  "@progressHistoryResetToBoxOne": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "progressHistoryResetToBoxOne": "{count} thẻ được đưa lại về hộp 1",
+  "@progressHistoryMaintainedAccuracy": {
+    "placeholders": {
+      "accuracy": {
+        "type": "int"
+      }
+    }
+  },
+  "progressHistoryMaintainedAccuracy": "Giữ độ chính xác {accuracy}% trong cả tháng",
+  "@progressHistoryAccumulatedDueCards": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "progressHistoryAccumulatedDueCards": "Tích lũy {count} thẻ đến hạn cần ôn",
+  "@progressHistoryStrongestGrowth": {
+    "placeholders": {
+      "boxLabel": {}
+    }
+  },
+  "progressHistoryStrongestGrowth": "{boxLabel} có mức tăng trưởng mạnh nhất",
+  "@progressTimestampTodayAt": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "progressTimestampTodayAt": "Hôm nay • {time}",
+  "@progressTimestampYesterdayAt": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "progressTimestampYesterdayAt": "Hôm qua • {time}",
+  "@progressTimestampDayAt": {
+    "placeholders": {
+      "day": {},
+      "time": {}
+    }
+  },
+  "progressTimestampDayAt": "{day} • {time}",
+  "@progressTimestampHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "progressTimestampHoursAgo": "{hours} giờ trước",
+  "progressDayMonShort": "T2",
+  "progressDayTueShort": "T3",
+  "progressDayWedShort": "T4",
+  "progressDayThuShort": "T5",
+  "progressDayFriShort": "T6",
+  "progressDaySatShort": "T7",
+  "progressDaySunShort": "CN",
   "settingsTitle": "Cài đặt",
   "settingsPlaceholderTitle": "Trung tâm cài đặt đã sẵn sàng",
   "settingsPlaceholderMessage": "Ứng dụng đã có sẵn tab gốc cho tuỳ chọn, phù hợp để mở rộng theme, ngôn ngữ, âm thanh và sao lưu.",
+  "settingsSectionAppearanceTitle": "Giao diện",
+  "settingsSectionAppearanceSubtitle": "Điều chỉnh theme và ngôn ngữ hiển thị của ứng dụng.",
+  "settingsSectionAudioTitle": "Âm thanh và phản hồi",
+  "settingsSectionAudioSubtitle": "Kiểm soát phát âm, âm báo và phản hồi rung khi học.",
+  "settingsSectionBackupTitle": "Sao lưu và nhắc học",
+  "settingsSectionBackupSubtitle": "Giữ cấu hình học có thể khôi phục và dễ quản lý nhắc học.",
+  "settingsSectionAboutTitle": "Thông tin ứng dụng",
+  "settingsSectionAboutSubtitle": "Xem cấu hình môi trường và trạng thái client hiện tại.",
+  "settingsThemeTileTitle": "Giao diện",
+  "settingsLanguageTileTitle": "Ngôn ngữ",
+  "settingsAudioTileTitle": "Cài đặt âm thanh",
+  "settingsAudioTileSubtitle": "Thiết lập phát âm, âm báo và phản hồi rung.",
+  "settingsQuickHapticsTitle": "Rung nhanh",
+  "settingsQuickHapticsSubtitle": "Giữ phản hồi rung ngắn luôn sẵn trong màn cài đặt chính.",
+  "settingsBackupTileTitle": "Sao lưu và khôi phục",
+  "settingsBackupTileSubtitle": "Quản lý snapshot và trạng thái sẵn sàng đồng bộ của thiết bị.",
+  "settingsReminderTileTitle": "Cài đặt nhắc học",
+  "settingsReminderTileSubtitle": "Xem thời điểm nhắc học, khung giờ và bản xem trước thông báo.",
+  "settingsAboutTileTitle": "Về ứng dụng",
+  "settingsAboutTileSubtitle": "Xem môi trường chạy, ngôn ngữ, theme và API đang dùng.",
+  "themeSettingsTitle": "Cài đặt giao diện",
+  "themeSystemLabel": "Theo hệ thống",
+  "themeSystemSubtitle": "Tự động đồng bộ với chế độ sáng/tối của thiết bị.",
+  "themeLightLabel": "Sáng",
+  "themeLightSubtitle": "Giữ giao diện sáng trên toàn ứng dụng.",
+  "themeDarkLabel": "Tối",
+  "themeDarkSubtitle": "Dùng bảng màu tối hơn để học trong môi trường ít sáng.",
+  "languageSettingsTitle": "Cài đặt ngôn ngữ",
+  "audioSettingsTitle": "Cài đặt âm thanh",
+  "audioSettingsSectionTitle": "Điều khiển âm thanh học tập",
+  "audioSettingsSectionSubtitle": "Chọn các âm thanh hỗ trợ sẽ hoạt động trong phiên học.",
+  "audioTtsTitle": "Chuyển văn bản thành giọng nói",
+  "audioTtsSubtitle": "Cho phép phát âm các flashcard có hỗ trợ.",
+  "audioReviewSoundsTitle": "Âm báo chấm điểm",
+  "audioReviewSoundsSubtitle": "Phát âm báo ngắn khi làm đúng hoặc sai trong lúc học.",
+  "audioHapticsTitle": "Phản hồi rung",
+  "audioHapticsSubtitle": "Dùng rung ngắn để tăng cảm giác phản hồi cho thao tác.",
+  "backupRestoreTitle": "Sao lưu và khôi phục",
+  "backupRestoreSectionTitle": "Tùy chọn sao lưu",
+  "backupRestoreSectionSubtitle": "Kiểm soát việc giữ trạng thái sẵn sàng sao lưu cho thiết bị này.",
+  "backupCloudBackupTitle": "Sẵn sàng sao lưu đám mây",
+  "backupCloudBackupSubtitle": "Giữ bật cấu hình liên quan đến sao lưu để sẵn cho đồng bộ sau này.",
+  "backupSnapshotSectionTitle": "Snapshot cục bộ",
+  "backupNoSnapshotLabel": "Thiết bị này chưa tạo snapshot sao lưu nào.",
+  "@backupLastBackupLabel": {
+    "placeholders": {
+      "timestamp": {}
+    }
+  },
+  "backupLastBackupLabel": "Snapshot sao lưu gần nhất: {timestamp}",
+  "backupCreateAction": "Tạo snapshot",
+  "backupClearAction": "Xóa snapshot",
+  "aboutTitle": "Về ứng dụng",
+  "aboutApplicationSectionTitle": "Thông tin ứng dụng",
+  "aboutApplicationSectionSubtitle": "Các thông tin dưới đây phản ánh cấu hình runtime hiện tại.",
+  "aboutAppNameLabel": "Tên ứng dụng",
+  "aboutEnvironmentLabel": "Môi trường",
+  "aboutCurrentThemeLabel": "Giao diện hiện tại",
+  "aboutCurrentLanguageLabel": "Ngôn ngữ hiện tại",
+  "aboutBaseUrlLabel": "API base URL",
   "offlineTitle": "Bạn đang ngoại tuyến",
   "offlineMessage": "Hãy kiểm tra kết nối internet và thử lại.",
   "offlineRetryLabel": "Thử lại",
@@ -167,5 +549,497 @@
     "placeholders": {
       "dueCount": {}
     }
-  }
+  },
+  "createLabel": "Tạo",
+  "saveLabel": "Lưu",
+  "cancelLabel": "Hủy",
+  "deleteLabel": "Xóa",
+  "editLabel": "Sửa",
+  "openFoldersLabel": "Mở thư mục",
+  "manageDecksLabel": "Quản lý bộ thẻ",
+  "createFolderLabel": "Tạo thư mục",
+  "editFolderLabel": "Sửa thư mục",
+  "deleteFolderLabel": "Xóa thư mục",
+  "createDeckLabel": "Tạo bộ thẻ",
+  "editDeckLabel": "Sửa bộ thẻ",
+  "deleteDeckLabel": "Xóa bộ thẻ",
+  "folderNameLabel": "Tên thư mục",
+  "folderDescriptionLabel": "Mô tả thư mục",
+  "folderNameRequiredMessage": "Tên thư mục là bắt buộc.",
+  "deckNameLabel": "Tên bộ thẻ",
+  "deckDescriptionLabel": "Mô tả bộ thẻ",
+  "deckNameRequiredMessage": "Tên bộ thẻ là bắt buộc.",
+  "sortByNameLabel": "Tên",
+  "sortByCreatedAtLabel": "Ngày tạo",
+  "sortByUpdatedAtLabel": "Ngày cập nhật",
+  "ascendingLabel": "Tăng dần",
+  "descendingLabel": "Giảm dần",
+  "foldersEmptyTitle": "Chưa có thư mục nào",
+  "foldersEmptyMessage": "Tạo thư mục đầu tiên trong nhánh này để tổ chức thư viện học tập.",
+  "folderLeafLabel": "Lá",
+  "folderLeafHint": "Thư mục này không còn thư mục con.",
+  "folderBranchHint": "Thư mục này vẫn còn các nhánh con.",
+  "decksShellTitle": "Không gian bộ thẻ",
+  "decksShellMessage": "Mở một thư mục lá để quản lý các bộ thẻ bên trong.",
+  "decksEmptyTitle": "Chưa có bộ thẻ nào",
+  "decksEmptyMessage": "Tạo bộ thẻ đầu tiên trong thư mục này để bắt đầu học.",
+  "deckDetailPlaceholderMessage": "Không gian flashcard sẽ được nối tiếp ở bước sau.",
+  "deckSummaryTitle": "Tóm tắt bộ thẻ",
+  "flashcardsTitle": "Flashcard",
+  "flashcardScreenSubtitle": "Tìm kiếm, xem trước và duy trì các flashcard trong deck hiện tại.",
+  "flashcardSearchHint": "Tìm flashcard",
+  "flashcardSortTitle": "Sắp xếp flashcard",
+  "flashcardSortDirectionTooltip": "Đổi chiều sắp xếp flashcard",
+  "flashcardSortByCreatedAt": "Ngày tạo",
+  "flashcardSortByUpdatedAt": "Cập nhật",
+  "flashcardSortByFrontText": "Nội dung mặt trước",
+  "flashcardErrorBannerTitle": "Thao tác flashcard thất bại",
+  "flashcardCreateAction": "Tạo flashcard",
+  "flashcardEditAction": "Sửa flashcard",
+  "flashcardSaveAction": "Lưu flashcard",
+  "flashcardDeleteAction": "Xóa flashcard",
+  "flashcardCancelAction": "Hủy",
+  "flashcardEmptyTitle": "Deck này chưa có flashcard",
+  "flashcardEmptyMessage": "Tạo flashcard đầu tiên trong deck này để bắt đầu xây dựng nội dung học.",
+  "flashcardFrontFieldLabel": "Nội dung mặt trước",
+  "flashcardBackFieldLabel": "Nội dung mặt sau",
+  "flashcardFrontLangFieldLabel": "Mã ngôn ngữ mặt trước",
+  "flashcardBackLangFieldLabel": "Mã ngôn ngữ mặt sau",
+  "flashcardFrontRequiredMessage": "Nội dung mặt trước là bắt buộc.",
+  "flashcardBackRequiredMessage": "Nội dung mặt sau là bắt buộc.",
+  "@flashcardDeleteDialogTitle": {
+    "placeholders": {
+      "flashcardText": {}
+    }
+  },
+  "flashcardDeleteDialogTitle": "Xóa \"{flashcardText}\"?",
+  "flashcardDeleteDialogMessage": "Xóa flashcard sẽ loại nó khỏi deck đang hoạt động.",
+  "@flashcardPreviewCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "flashcardPreviewCountLabel": "{count} thẻ xem trước",
+  "flashcardBrowseModeLabel": "Chế độ duyệt",
+  "flashcardSearchModeLabel": "Chế độ tìm kiếm",
+  "flashcardPinnedLabel": "Đã ghim",
+  "flashcardPreviewEmptyTitle": "Khu vực xem trước flashcard đã sẵn sàng",
+  "flashcardPreviewEmptyMessage": "Thêm flashcard vào deck để xem các thẻ xem trước tại đây.",
+  "flashcardImportPlaceholderTitle": "Khu vực nhập flashcard đã sẵn sàng",
+  "flashcardImportPlaceholderMessage": "Có thể nối nhập hàng loạt tại đây sau mà không cần đổi workspace deck.",
+  "@flashcardImportCreatedLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "flashcardImportCreatedLabel": "{count} đã tạo",
+  "@flashcardImportFailedLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "flashcardImportFailedLabel": "{count} thất bại",
+  "flashcardActionsTooltip": "Thao tác flashcard",
+  "authLoginTitle": "Chào mừng quay lại",
+  "authRegisterTitle": "Tạo tài khoản học tập",
+  "authLoginSubtitle": "Đăng nhập để tiếp tục sắp xếp deck, theo dõi streak và xử lý phần ôn tập tiếp theo.",
+  "authRegisterSubtitle": "Tạo tài khoản để thư mục, deck và tiến độ học của bạn luôn đồng bộ.",
+  "authModeLoginLabel": "Đăng nhập",
+  "authModeRegisterLabel": "Đăng ký",
+  "authIdentifierLabel": "Email hoặc username",
+  "authIdentifierHint": "ban@example.com",
+  "authIdentifierRequiredError": "Hãy nhập email hoặc username.",
+  "authUsernameLabel": "Username",
+  "authUsernameHint": "nguoi_hoc",
+  "authUsernameRequiredError": "Hãy nhập username có ít nhất 3 ký tự.",
+  "authEmailLabel": "Email",
+  "authEmailHint": "hocvien@example.com",
+  "authEmailInvalidError": "Hãy nhập địa chỉ email hợp lệ.",
+  "authPasswordLabel": "Mật khẩu",
+  "authPasswordHint": "Dùng ít nhất 8 ký tự",
+  "authPasswordInvalidError": "Mật khẩu phải có ít nhất 8 ký tự.",
+  "authForgotPasswordAction": "Quên mật khẩu?",
+  "authSuccessBannerTitle": "Xong rồi",
+  "authWarningBannerTitle": "Cần kiểm tra lại",
+  "authErrorBannerTitle": "Xác thực thất bại",
+  "authInfoBannerTitle": "Lưu ý",
+  "authSocialSectionTitle": "Hoặc tiếp tục với",
+  "authContinueWithGoogle": "Tiếp tục với Google",
+  "authContinueWithApple": "Tiếp tục với Apple",
+  "authContinueWithKakao": "Tiếp tục với Kakao",
+  "authBootstrapLoadingTitle": "Đang kiểm tra phiên đã lưu",
+  "authBootstrapLoadingSubtitle": "Memora đang xác định xem bạn có thể vào thẳng ứng dụng hay cần xác thực lại.",
+  "authLoginSuccessMessage": "Bạn đã đăng nhập và sẵn sàng tiếp tục học.",
+  "authRegisterSuccessMessage": "Tài khoản đã sẵn sàng và không gian học đầu tiên của bạn đã được mở.",
+  "authSignOutSuccessMessage": "Phiên hiện tại đã được xóa khỏi thiết bị này.",
+  "authPasswordResetSuccessMessage": "Hướng dẫn đặt lại mật khẩu đã được gửi tới email của bạn.",
+  "authInvalidCredentialsMessage": "Thông tin đăng nhập chưa đúng. Hãy kiểm tra lại email/username và mật khẩu.",
+  "authDuplicateAccountMessage": "Username hoặc email này đã được sử dụng.",
+  "authInvalidResetRequestMessage": "Hãy nhập email hợp lệ trước khi yêu cầu đặt lại mật khẩu.",
+  "authNetworkFailureMessage": "Không thể kết nối máy chủ. Hãy thử lại khi mạng ổn định hơn.",
+  "authSessionReadyTitle": "Phiên đang hoạt động",
+  "authSessionReadyMessage": "Bạn hiện đang đăng nhập với tài khoản {userLabel}. Bạn có thể tiếp tục vào app hoặc đăng xuất để đổi tài khoản.",
+  "@authSessionReadyMessage": {
+    "placeholders": {
+      "userLabel": {}
+    }
+  },
+  "authContinueToAppAction": "Giữ đăng nhập",
+  "authSignOutAction": "Đăng xuất",
+  "authForgotPasswordTitle": "Đặt lại mật khẩu",
+  "authForgotPasswordSubtitle": "Nhập email tài khoản để Memora chuẩn bị hướng dẫn đặt lại mật khẩu.",
+  "authBackToLoginAction": "Quay lại đăng nhập",
+  "authSendResetAction": "Gửi hướng dẫn đặt lại",
+  "reminderTitle": "Nhắc học",
+  "reminderSubtitle": "Thiết lập thời điểm Memora nhắc bạn quay lại phiên ôn tập hữu ích tiếp theo.",
+  "reminderOverviewSectionTitle": "Tình trạng nhắc học",
+  "reminderOverviewSectionSubtitle": "Theo dõi khối lượng bài đến hạn và xem tín hiệu nhắc học có đang hoạt động không.",
+  "reminderToggleTitle": "Bật nhắc học",
+  "reminderToggleSubtitle": "Bật khi bạn muốn Memora giữ nhịp học luôn hiện diện trong ngày.",
+  "reminderDueCountLabel": "{count} thẻ đến hạn",
+  "@reminderDueCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reminderOverdueCountLabel": "{count} thẻ quá hạn",
+  "@reminderOverdueCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reminderActiveSlotsLabel": "{count} khung giờ hoạt động",
+  "@reminderActiveSlotsLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reminderFrequencySectionTitle": "Tần suất nhắc học",
+  "reminderFrequencySectionSubtitle": "Chọn nhắc mỗi ngày, chỉ ngày làm việc hoặc theo lịch tùy chỉnh.",
+  "reminderFrequencyDailyLabel": "Hằng ngày",
+  "reminderFrequencyWeekdaysLabel": "Ngày thường",
+  "reminderFrequencyCustomLabel": "Tùy chỉnh",
+  "reminderSuggestedDeckSectionTitle": "Deck nên học tiếp",
+  "reminderSuggestedDeckSectionSubtitle": "Dùng tín hiệu nhắc học để nhảy thẳng vào nhánh đang cần chú ý nhất.",
+  "reminderSuggestedDeckMessage": "Deck được gợi ý hiện có {dueCount} thẻ đến hạn và {overdueCount} thẻ đã quá hạn.",
+  "@reminderSuggestedDeckMessage": {
+    "placeholders": {
+      "dueCount": {},
+      "overdueCount": {}
+    }
+  },
+  "reminderPreviewAction": "Xem trước nhắc học",
+  "reminderManageSlotsAction": "Quản lý khung giờ",
+  "reminderTimeSlotsTitle": "Khung giờ nhắc học",
+  "reminderTimeSlotsSubtitle": "Điều chỉnh thời điểm lời nhắc xuất hiện trong ngày.",
+  "reminderAddSlotAction": "Thêm khung giờ",
+  "reminderCustomDaysSectionTitle": "Ngày áp dụng tùy chỉnh",
+  "reminderCustomDaysSectionSubtitle": "Chọn những ngày cụ thể mà nhắc học cần hoạt động.",
+  "reminderWeekdayMonday": "T2",
+  "reminderWeekdayTuesday": "T3",
+  "reminderWeekdayWednesday": "T4",
+  "reminderWeekdayThursday": "T5",
+  "reminderWeekdayFriday": "T6",
+  "reminderWeekdaySaturday": "T7",
+  "reminderWeekdaySunday": "CN",
+  "reminderSlotMorningReviewLabel": "Ôn buổi sáng",
+  "reminderSlotEveningResetLabel": "Chốt buổi tối",
+  "reminderSlotStudyBlockLabel": "Khung học tập",
+  "reminderSlotEnabledLabel": "Đang bật",
+  "reminderSlotPausedLabel": "Tạm dừng",
+  "reminderPreviewTitle": "Xem trước lời nhắc",
+  "reminderPreviewSubtitle": "Kiểm tra lời nhắc tiếp theo sẽ trông như thế nào trước khi đưa vào thói quen học.",
+  "reminderPreviewSummaryTitle": "Bản xem trước tiếp theo",
+  "reminderPreviewSummarySubtitle": "Bản xem trước này kết hợp tần suất, khung giờ đang bật và deck được gợi ý.",
+  "reminderPreviewScheduleMessage": "Lời nhắc tiếp theo sẽ xuất hiện vào {timeLabel}.",
+  "@reminderPreviewScheduleMessage": {
+    "placeholders": {
+      "timeLabel": {}
+    }
+  },
+  "reminderPreviewCardTitle": "Ôn {deckName} tiếp theo",
+  "@reminderPreviewCardTitle": {
+    "placeholders": {
+      "deckName": {}
+    }
+  },
+  "reminderPreviewCardMessage": "Hiện có {dueCount} thẻ sẵn sàng và {overdueCount} thẻ cần ưu tiên gấp.",
+  "@reminderPreviewCardMessage": {
+    "placeholders": {
+      "dueCount": {},
+      "overdueCount": {}
+    }
+  },
+  "reminderOpenSuggestedDeckAction": "Mở deck gợi ý",
+  "reminderBackToSettingsAction": "Quay lại cài đặt",
+  "onboardingTitle": "Bắt đầu sử dụng",
+  "onboardingPageOrganizeTitle": "Sắp xếp kiến thức rõ ràng",
+  "onboardingPageOrganizeDescription": "Tạo cây thư mục phản ánh đúng cách bạn nghĩ về chủ đề, khóa học hoặc luyện tập hằng ngày.",
+  "onboardingPageOrganizeHighlight": "Bắt đầu nhỏ rồi mở rộng thư viện từng nhánh rõ ràng một.",
+  "onboardingPageReviewTitle": "Ôn tập có chủ đích",
+  "onboardingPageReviewDescription": "Đi từ thư mục sang deck rồi flashcard mà không mất ngữ cảnh hay nhịp học.",
+  "onboardingPageReviewHighlight": "Giữ phần ôn tập hữu ích tiếp theo luôn hiện ra để bắt đầu dễ hơn.",
+  "onboardingPageMomentumTitle": "Giữ nhịp học ổn định",
+  "onboardingPageMomentumDescription": "Dùng lời nhắc, streak và mục tiêu hằng ngày để duy trì đều đặn mà không dồn quá sức.",
+  "onboardingPageMomentumHighlight": "Những phiên học ngắn nhưng lặp lại sẽ tích lũy tốt hơn các đợt học bùng nổ.",
+  "onboardingPermissionsAction": "Thiết lập quyền",
+  "onboardingSkipAction": "Để sau",
+  "onboardingContinueAction": "Tiếp tục",
+  "onboardingNextAction": "Tiếp theo",
+  "onboardingPermissionsTitle": "Chọn các tín hiệu hỗ trợ",
+  "onboardingPermissionsSubtitle": "Quyết định những gợi ý nào nên sẵn sàng khi bạn bắt đầu xây thói quen học.",
+  "onboardingPermissionNotificationsTitle": "Nhắc học",
+  "onboardingPermissionNotificationsDescription": "Cho phép lời nhắc để các deck đến hạn không bị chìm giữa một ngày bận rộn.",
+  "onboardingPermissionNotificationsNote": "Bạn vẫn có thể tinh chỉnh tần suất sau trong phần cài đặt nhắc học.",
+  "onboardingPermissionAudioTitle": "Gợi ý âm thanh",
+  "onboardingPermissionAudioDescription": "Chuẩn bị sẵn tuỳ chọn phát âm và tín hiệu âm thanh cho các mode học có dùng audio.",
+  "onboardingPermissionAudioNote": "Đây chỉ là tùy chọn ban đầu; bạn có thể đổi lại bất cứ lúc nào.",
+  "onboardingBackAction": "Quay lại",
+  "onboardingGoalSetupAction": "Thiết lập mục tiêu",
+  "onboardingGoalSetupTitle": "Đặt mục tiêu học đầu tiên",
+  "onboardingGoalSetupSubtitle": "Chọn nhịp học phù hợp rồi điều chỉnh số thẻ và thời lượng phiên học sao cho bền vững.",
+  "onboardingGoalSetupCompletedMessage": "Bạn đã sẵn sàng với {dailyGoal} thẻ mỗi ngày trong các phiên {sessionMinutes} phút.",
+  "@onboardingGoalSetupCompletedMessage": {
+    "placeholders": {
+      "dailyGoal": {},
+      "sessionMinutes": {}
+    }
+  },
+  "onboardingGoalPresetSectionTitle": "Nhịp mục tiêu",
+  "onboardingGoalPresetSectionSubtitle": "Chọn tốc độ phù hợp nhất với lịch học hiện tại của bạn.",
+  "onboardingGoalNumbersSectionTitle": "Chi tiết mục tiêu",
+  "onboardingGoalNumbersSectionSubtitle": "Điều chỉnh khối lượng học mỗi ngày và thời lượng phiên lý tưởng.",
+  "onboardingDailyGoalFieldLabel": "Mục tiêu số thẻ mỗi ngày",
+  "onboardingSessionLengthFieldLabel": "Thời lượng phiên (phút)",
+  "onboardingFinishAction": "Hoàn tất thiết lập",
+  "onboardingGoalSteadyLabel": "Ổn định",
+  "onboardingGoalFocusedLabel": "Tập trung",
+  "onboardingGoalIntensiveLabel": "Cao độ",
+  "studySessionTypeFirstLearning": "First learning",
+  "studySessionTypeReview": "Review",
+  "studySessionTypeFirstLearningSubtitle": "Move through the full progression with more guided support and repetition.",
+  "studySessionTypeReviewSubtitle": "Focus on due cards and keep the session fast, lean, and corrective.",
+  "studyModeReview": "Review",
+  "studyModeRecall": "Recall",
+  "studyModeGuess": "Guess",
+  "studyModeMatch": "Match",
+  "studyModeFill": "Fill",
+  "studyModeReviewDescription": "Skim quickly, make a confidence call, and keep the review queue moving.",
+  "studyModeRecallDescription": "Pause first, reveal second, then decide whether the answer was really there.",
+  "studyModeGuessDescription": "Pick from several close options to test recognition under light pressure.",
+  "studyModeMatchDescription": "Line up both sides of a concept set before confirming the whole board.",
+  "studyModeFillDescription": "Type the answer yourself so accuracy depends on recall instead of recognition.",
+  "studyLifecycleReady": "Ready",
+  "studyLifecycleInProgress": "In progress",
+  "studyLifecycleFeedback": "Feedback ready",
+  "studyLifecycleRetryPending": "Retry pending",
+  "studyLifecycleCompleted": "Completed",
+  "studyHistoryCompleted": "Completed",
+  "studyHistoryResumed": "Resumed",
+  "studyHistoryInterrupted": "Interrupted",
+  "studyAudioTitle": "Audio support",
+  "@studyAudioSubtitle": {
+    "placeholders": {
+      "voiceLabel": {}
+    }
+  },
+  "studyAudioSubtitle": "Pronunciation support is ready with {voiceLabel}.",
+  "studyAudioFallbackVoice": "the default voice",
+  "studyAudioUnavailableMessage": "This item does not include speech support, so the session stays visual.",
+  "studyAudioMuteAction": "Mute audio",
+  "studyAudioEnableAction": "Enable audio",
+  "studyAudioUnavailableAction": "No audio",
+  "studyExitDialogTitle": "Leave this study session?",
+  "studyExitConfirmAction": "Leave session",
+  "studyExitCancelAction": "Stay here",
+  "studyExitDialogMessage": "You can resume this session later, but any unsaved momentum in the current step may feel more abrupt when you return.",
+  "studyFooterTitle": "Session controls",
+  "@studyFooterSubtitle": {
+    "placeholders": {
+      "modeLabel": {},
+      "lifecycleLabel": {}
+    }
+  },
+  "studyFooterSubtitle": "{modeLabel} is active and the session is currently {lifecycleLabel}.",
+  "studyResetModeAction": "Reset current mode",
+  "studyExitAction": "Exit study",
+  "@studyHeaderSubtitle": {
+    "placeholders": {
+      "folderLabel": {},
+      "sessionType": {}
+    }
+  },
+  "studyHeaderSubtitle": "{folderLabel} · {sessionType}",
+  "@studyDueCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studyDueCountLabel": "{count} due cards",
+  "studyDueCountTitle": "Due now",
+  "studyModeSequenceTitle": "Mode sequence",
+  "studyModeSequenceSubtitle": "Keep the whole study arc visible while you decide how to start.",
+  "@studyModeProgressLabel": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studyModeProgressLabel": "{completed} of {total}",
+  "studyProgressTitle": "Session progress",
+  "@studyProgressSubtitle": {
+    "placeholders": {
+      "modeLabel": {},
+      "completedModes": {
+        "type": "int"
+      },
+      "totalModes": {
+        "type": "int"
+      }
+    }
+  },
+  "studyProgressSubtitle": "{modeLabel} · {completedModes} of {totalModes} modes cleared",
+  "@studyItemProgressLabel": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studyItemProgressLabel": "{completed} of {total} items",
+  "studyResultCompletionTitle": "Completion",
+  "studyResultCompletionSubtitle": "A quick read on how much of the session made it through the full cycle.",
+  "studyResultMasteredLabel": "Mastered items",
+  "studyResultMasteredSubtitle": "Items you moved forward without another retry pass.",
+  "studyResultRetryLabel": "Retry items",
+  "studyResultRetrySubtitle": "Items that still need another look in the next block.",
+  "studyResultFocusLabel": "Focus time",
+  "studyResultFocusSubtitle": "Total time budget reserved for this session shell.",
+  "@studyMinutesShortLabel": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "studyMinutesShortLabel": "{minutes} min",
+  "studyModePickerTitle": "Mode picker",
+  "studyModePickerSubtitle": "Preview the mode chain before you jump into the live session.",
+  "studyModePickerSelectedAction": "Selected",
+  "studyModePickerChooseAction": "Focus here",
+  "studySetupTitle": "Study setup",
+  "studySetupSubtitle": "Prime the next session, decide whether to resume, and check how the mode chain will unfold.",
+  "studyDeckReadinessTitle": "Deck readiness",
+  "studyDeckReadinessSubtitle": "Current mastery gives a quick signal for how demanding this session should feel.",
+  "studySetupEstimateTitle": "Estimated time",
+  "studySetupEstimateSubtitle": "A short, sustainable block for the current due queue.",
+  "studySessionTypeSelectedAction": "Selected",
+  "studySessionTypeChooseAction": "Use this flow",
+  "studyResumeTitle": "Resume where you stopped",
+  "@studyResumeSubtitle": {
+    "placeholders": {
+      "modeLabel": {},
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studyResumeSubtitle": "{modeLabel} was active with {completed} of {total} items already processed.",
+  "studyResumeAction": "Resume session",
+  "studyStartFreshAction": "Start fresh",
+  "studyHistoryPreviewTitle": "Recent study blocks",
+  "studyHistoryPreviewSubtitle": "Use the recent trail to decide whether you need repetition or a fresh pass.",
+  "@studyHistoryEntrySubtitle": {
+    "placeholders": {
+      "modeLabel": {},
+      "mastered": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studyHistoryEntrySubtitle": "{modeLabel} · {mastered} of {total} held",
+  "studyStartAction": "Prepare session",
+  "studyHistoryTitle": "Study history",
+  "studyHistorySubtitle": "Look back at recent sessions to spot where momentum is stable and where drift starts.",
+  "@studyHistoryEntryDescription": {
+    "placeholders": {
+      "statusLabel": {},
+      "modeLabel": {},
+      "dateLabel": {}
+    }
+  },
+  "studyHistoryEntryDescription": "{statusLabel} · {modeLabel} · {dateLabel}",
+  "studyResultTitle": "Study result",
+  "studyResultSubtitle": "Close the session with a compact summary before you decide what to do next.",
+  "studyResultNextBlockTitle": "Next useful move",
+  "@studyResultNextBlockSubtitle": {
+    "placeholders": {
+      "modeLabel": {}
+    }
+  },
+  "studyResultNextBlockSubtitle": "The session shell is ready to loop back into {modeLabel} if you want another pass.",
+  "studyRestartSessionAction": "Restart session",
+  "studyReturnToDeckAction": "Return to deck",
+  "studySessionCompletedSubtitle": "The current session has reached the result stage.",
+  "studySessionCompletedTitle": "Session completed",
+  "studySessionCompletedMessage": "Open the result summary or leave the study flow from here.",
+  "studyOpenResultAction": "Open result",
+  "studyRememberedAction": "Remembered",
+  "studyRetryItemAction": "Study again",
+  "studyNextAction": "Next item",
+  "studyCheckAnswerAction": "Check answer",
+  "studyMatchConfirmAction": "Confirm pairs",
+  "studyMatchLeftColumnTitle": "Prompt side",
+  "studyMatchRightColumnTitle": "Meaning side",
+  "studyMatchPairsTitle": "Current pairs",
+  "studyMatchPairsSubtitle": "Remove any pair if you want to rebuild it before submitting.",
+  "studyRevealAnswerAction": "Reveal answer",
+  "@studyRetryCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studyRetryCountLabel": "{count} retry",
+  "studyRecallAnswerTitle": "Answer revealed",
+  "studyRecallAnswerHiddenTitle": "Answer stays hidden",
+  "studyRecallAnswerHiddenSubtitle": "Try to recall it first, then reveal only when you are ready.",
+  "studyFillInputTitle": "Type your answer",
+  "studyFillInputSubtitle": "Use the field below to prove the answer from memory.",
+  "@studyFillAnswerReveal": {
+    "placeholders": {
+      "answer": {}
+    }
+  },
+  "studyFillAnswerReveal": "Expected answer: {answer}",
+  "studyResetModeDialogTitle": "Reset this mode?",
+  "studyResetModeDialogMessage": "This clears the current mode progress and sends you back to its first item."
 }

@@ -52,17 +52,399 @@
   "dashboardReviewModeLabel": "Review",
   "dashboardSpeedModeLabel": "Speed drill",
   "foldersTitle": "Folders",
+  "folderLibraryTitle": "Library folders",
+  "folderScreenSubtitle": "Browse the library tree, reorganize branches, and jump into deck management when you reach a leaf folder.",
+  "folderRootBreadcrumbLabel": "Library",
+  "folderSearchHint": "Search folders",
+  "folderSortTitle": "Sort folders",
+  "folderSortDirectionTooltip": "Toggle folder sort direction",
+  "folderSortByName": "Name",
+  "folderSortByCreatedAt": "Created",
+  "folderSortByUpdatedAt": "Updated",
+  "folderActionsTooltip": "Folder actions",
+  "folderCreateAction": "Create folder",
+  "folderRenameAction": "Rename folder",
+  "folderEditAction": "Edit folder",
+  "folderSaveAction": "Save folder",
+  "folderDeleteAction": "Delete folder",
+  "folderCancelAction": "Cancel",
+  "folderLeafLabel": "Leaf folder",
+  "folderErrorBannerTitle": "Folder action failed",
+  "folderLoadErrorMessage": "Unable to load folders right now. Try again.",
+  "folderCreateDialogTitle": "Create a new folder",
+  "folderRenameDialogTitle": "Rename folder",
+  "folderEditDialogTitle": "Edit folder",
+  "folderDeleteDialogMessage": "Deleting a folder also removes its child folders and every deck underneath it from the active workspace.",
+  "folderNameFieldLabel": "Folder name",
+  "folderDescriptionFieldLabel": "Description",
+  "folderNameRequiredMessage": "Folder name is required.",
+  "folderRootEmptyTitle": "Start your library structure",
+  "folderRootEmptyMessage": "Create the first top-level folder to organize decks by topic, course, or project.",
+  "folderLevelEmptyTitle": "This branch has no child folders",
+  "folderLevelEmptyMessage": "Create a child folder here or return to the parent branch.",
+  "folderChildCountValue": "{count} child folders",
+  "@folderChildCountValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "folderDeleteDialogTitle": "Delete \"{folderName}\"?",
+  "@folderDeleteDialogTitle": {
+    "placeholders": {
+      "folderName": {}
+    }
+  },
   "foldersPlaceholderTitle": "Folder hub is ready",
   "foldersPlaceholderMessage": "This root tab is wired into the shared app navigation. Folder-specific content can expand here next.",
   "decksTitle": "Decks",
+  "deckShellTitle": "Decks live inside folders",
+  "deckShellSubtitle": "Pick a leaf folder first, then manage the decks that belong to that branch.",
+  "deckShellMessage": "Deck management now follows the folder tree, so use the folders tab to choose the branch you want to study or maintain.",
+  "deckShellBrowseFoldersAction": "Browse folders",
+  "deckScreenSubtitle": "Manage the decks stored inside the current leaf folder.",
+  "deckSearchHint": "Search decks",
+  "deckSortTitle": "Sort decks",
+  "deckSortDirectionTooltip": "Toggle deck sort direction",
+  "deckSortByName": "Name",
+  "deckSortByCreatedAt": "Created",
+  "deckSortByUpdatedAt": "Updated",
+  "deckActionsTooltip": "Deck actions",
+  "deckCreateAction": "Create deck",
+  "deckEditAction": "Edit deck",
+  "deckSaveAction": "Save deck",
+  "deckDeleteAction": "Delete deck",
+  "deckCancelAction": "Cancel",
+  "deckErrorBannerTitle": "Deck action failed",
+  "deckLoadErrorMessage": "Unable to load decks right now. Try again.",
+  "deckCreateDialogTitle": "Create a new deck",
+  "deckEditDialogTitle": "Edit deck",
+  "deckDeleteDialogMessage": "Deleting a deck also removes its flashcards from the active workspace.",
+  "deckNameFieldLabel": "Deck name",
+  "deckDescriptionFieldLabel": "Description",
+  "deckNameRequiredMessage": "Deck name is required.",
+  "deckEmptyTitle": "No decks in this folder yet",
+  "deckEmptyMessage": "Create the first deck in this branch to start adding flashcards.",
+  "deckDetailTitle": "Deck details",
+  "deckDetailPlaceholderTitle": "Flashcards are the next layer",
+  "deckDetailPlaceholderMessage": "This route is wired for the next flashcard slice. For now, return to the deck list after confirming the deck path works.",
+  "deckBackToListAction": "Back to deck list",
+  "deckFlashcardCountValue": "{count} flashcards",
+  "@deckFlashcardCountValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deckFlashcardCountChipLabel": "{count} cards",
+  "@deckFlashcardCountChipLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deckSummaryDeckCount": "{count} decks",
+  "@deckSummaryDeckCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deckSummaryFlashcardCount": "{count} flashcards",
+  "@deckSummaryFlashcardCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deckDeleteDialogTitle": "Delete \"{deckName}\"?",
+  "@deckDeleteDialogTitle": {
+    "placeholders": {
+      "deckName": {}
+    }
+  },
   "decksPlaceholderTitle": "Deck library is ready",
   "decksPlaceholderMessage": "This tab is now part of the common shell, so deck listing and filtering can grow without changing app navigation.",
   "progressTitle": "Progress",
   "progressPlaceholderTitle": "Progress workspace is ready",
   "progressPlaceholderMessage": "Charts, streaks, and history can plug into this shared navigation slot when the feature slice is implemented.",
+  "progressOverviewSubtitle": "Track study cadence, due pressure, and the next recommended review block.",
+  "progressLoadingMessage": "Loading study performance, streaks, and due recommendations.",
+  "progressErrorTitle": "Unable to load progress",
+  "progressLoadErrorMessage": "Refresh the current period or try again in a moment.",
+  "progressCalendarActionLabel": "Study calendar",
+  "progressDeckProgressActionLabel": "Deck progress",
+  "progressSummaryTitle": "Study overview",
+  "progressSummarySubtitle": "A quick read on review load, accuracy, and reminder pressure.",
+  "progressDueLabel": "Due cards",
+  "progressReminderTypesLabel": "Reminder mix",
+  "progressOverdueLabel": "Overdue",
+  "progressLearnedLabel": "Learned",
+  "progressBoxDistributionLabel": "Box spread",
+  "progressAccuracyLabel": "Accuracy",
+  "progressPassedAttemptsLabel": "Passed attempts",
+  "progressFailedAttemptsLabel": "Failed attempts",
+  "progressChartTitle": "Distribution",
+  "progressChartSubtitle": "See how cards are currently spread across the active review boxes.",
+  "progressFilterTitle": "Progress period",
+  "progressRefreshTooltip": "Refresh progress",
+  "progressPeriodTodayLabel": "Today",
+  "progressPeriodWeekLabel": "Week",
+  "progressPeriodMonthLabel": "Month",
+  "progressRecommendationTitle": "Recommended next review",
+  "progressRecommendationSubtitle": "Use the heaviest due deck to decide the next useful session.",
+  "progressRecommendationEmptyMessage": "No specific deck needs immediate follow-up right now.",
+  "@progressRecommendationMetaLabel": {
+    "placeholders": {
+      "sessionType": {},
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "progressRecommendationMetaLabel": "{sessionType} · {minutes} min planned",
+  "progressStudyNowActionLabel": "Study now",
+  "progressViewDeckActionLabel": "View deck progress",
+  "@progressDueCountChipLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "progressDueCountChipLabel": "{count} due",
+  "@progressOverdueCountChipLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "progressOverdueCountChipLabel": "{count} overdue",
+  "progressHistoryTitle": "Recent activity",
+  "progressHistorySubtitle": "A short log of study outcomes and scheduling changes.",
+  "progressCalendarTitle": "Streak calendar",
+  "progressCalendarSubtitle": "A compact view of recent study consistency.",
+  "progressEscalationCalmLabel": "Calm",
+  "progressEscalationWatchLabel": "Watch",
+  "progressEscalationUrgentLabel": "Urgent",
+  "progressEscalationCriticalLabel": "Critical",
+  "progressDeckScreenTitle": "Deck progress",
+  "progressDeckScreenSubtitle": "Review due pressure, accuracy, and recent activity for the selected deck.",
+  "progressDeckFocusTitle": "Selected deck",
+  "progressDeckFocusSubtitle": "A focused snapshot for the current deck under the active period filter.",
+  "@progressDeckIdLabel": {
+    "placeholders": {
+      "deckId": {
+        "type": "int"
+      }
+    }
+  },
+  "progressDeckIdLabel": "Deck #{deckId}",
+  "@progressDeckRecommendationLabel": {
+    "placeholders": {
+      "sessionType": {},
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "progressDeckRecommendationLabel": "{sessionType} · {minutes} min recommended",
+  "progressCalendarScreenTitle": "Study calendar",
+  "progressCalendarScreenSubtitle": "Track streak consistency and recent sessions across the active period.",
+  "progressJapaneseBasicsDeckTitle": "Japanese basics",
+  "progressExamPrepDeckTitle": "Exam prep",
+  "progressReminderSrsReviewLabel": "SRS review",
+  "progressReminderOverdueCatchUpLabel": "Overdue catch-up",
+  "progressReminderMorningReviewLabel": "Morning review",
+  "progressReminderEveningReviewLabel": "Evening review",
+  "progressReminderAfternoonReviewLabel": "Afternoon review",
+  "progressSessionReviewSprintLabel": "Review sprint",
+  "progressSessionFocusedReviewLabel": "Focused review",
+  "progressSessionDeepReviewLabel": "Deep review",
+  "@progressBoxLabel": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "progressBoxLabel": "Box {index}",
+  "@progressHistoryCompletedAccuracy": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "accuracy": {
+        "type": "int"
+      }
+    }
+  },
+  "progressHistoryCompletedAccuracy": "Completed {count} cards with {accuracy}% accuracy",
+  "@progressHistoryMissedCards": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "progressHistoryMissedCards": "Missed {count} cards in a review sprint",
+  "@progressHistoryScheduledTomorrow": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "progressHistoryScheduledTomorrow": "Scheduled {count} cards for tomorrow",
+  "@progressHistoryFinishedWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "progressHistoryFinishedWeek": "Finished {count} cards this week",
+  "@progressHistoryLeftForNextSprint": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "progressHistoryLeftForNextSprint": "Left {count} cards for the next sprint",
+  "@progressHistoryResetToBoxOne": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "progressHistoryResetToBoxOne": "{count} cards scheduled back into box 1",
+  "@progressHistoryMaintainedAccuracy": {
+    "placeholders": {
+      "accuracy": {
+        "type": "int"
+      }
+    }
+  },
+  "progressHistoryMaintainedAccuracy": "Maintained {accuracy}% accuracy over the month",
+  "@progressHistoryAccumulatedDueCards": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "progressHistoryAccumulatedDueCards": "Accumulated {count} due cards for review",
+  "@progressHistoryStrongestGrowth": {
+    "placeholders": {
+      "boxLabel": {}
+    }
+  },
+  "progressHistoryStrongestGrowth": "{boxLabel} has the strongest growth",
+  "@progressTimestampTodayAt": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "progressTimestampTodayAt": "Today • {time}",
+  "@progressTimestampYesterdayAt": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "progressTimestampYesterdayAt": "Yesterday • {time}",
+  "@progressTimestampDayAt": {
+    "placeholders": {
+      "day": {},
+      "time": {}
+    }
+  },
+  "progressTimestampDayAt": "{day} • {time}",
+  "@progressTimestampHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "progressTimestampHoursAgo": "{hours}h ago",
+  "progressDayMonShort": "M",
+  "progressDayTueShort": "T",
+  "progressDayWedShort": "W",
+  "progressDayThuShort": "T",
+  "progressDayFriShort": "F",
+  "progressDaySatShort": "S",
+  "progressDaySunShort": "S",
   "settingsTitle": "Settings",
   "settingsPlaceholderTitle": "Settings center is ready",
   "settingsPlaceholderMessage": "App preferences already have a dedicated root tab, ready for theme, language, audio, and backup settings.",
+  "settingsSectionAppearanceTitle": "Appearance",
+  "settingsSectionAppearanceSubtitle": "Tune the app look and reading language.",
+  "settingsSectionAudioTitle": "Audio and feedback",
+  "settingsSectionAudioSubtitle": "Control playback, cues, and tactile feedback during study.",
+  "settingsSectionBackupTitle": "Backup and reminders",
+  "settingsSectionBackupSubtitle": "Keep study preferences recoverable and reminders discoverable.",
+  "settingsSectionAboutTitle": "About",
+  "settingsSectionAboutSubtitle": "Inspect the active app environment and client configuration.",
+  "settingsThemeTileTitle": "Theme",
+  "settingsLanguageTileTitle": "Language",
+  "settingsAudioTileTitle": "Audio settings",
+  "settingsAudioTileSubtitle": "Configure text-to-speech, sounds, and haptics.",
+  "settingsQuickHapticsTitle": "Quick haptics",
+  "settingsQuickHapticsSubtitle": "Keep short tactile feedback available in the main settings screen.",
+  "settingsBackupTileTitle": "Backup and restore",
+  "settingsBackupTileSubtitle": "Manage snapshots and sync readiness for the current device.",
+  "settingsReminderTileTitle": "Reminder settings",
+  "settingsReminderTileSubtitle": "Review study nudges, time slots, and reminder preview.",
+  "settingsAboutTileTitle": "About this app",
+  "settingsAboutTileSubtitle": "View runtime environment, language, theme, and API target.",
+  "themeSettingsTitle": "Theme settings",
+  "themeSystemLabel": "Follow system",
+  "themeSystemSubtitle": "Match the current platform brightness automatically.",
+  "themeLightLabel": "Light",
+  "themeLightSubtitle": "Keep the interface bright across the app.",
+  "themeDarkLabel": "Dark",
+  "themeDarkSubtitle": "Use a darker surface palette for lower-light study.",
+  "languageSettingsTitle": "Language settings",
+  "audioSettingsTitle": "Audio settings",
+  "audioSettingsSectionTitle": "Study audio controls",
+  "audioSettingsSectionSubtitle": "Choose which supporting sounds stay active during study sessions.",
+  "audioTtsTitle": "Text to speech",
+  "audioTtsSubtitle": "Allow pronunciation playback for supported flashcards.",
+  "audioReviewSoundsTitle": "Review sounds",
+  "audioReviewSoundsSubtitle": "Play short success and error cues during study.",
+  "audioHapticsTitle": "Haptic feedback",
+  "audioHapticsSubtitle": "Use short vibrations to reinforce actions and results.",
+  "backupRestoreTitle": "Backup and restore",
+  "backupRestoreSectionTitle": "Backup preferences",
+  "backupRestoreSectionSubtitle": "Control whether this device should keep sync-ready backup behavior enabled.",
+  "backupCloudBackupTitle": "Cloud backup readiness",
+  "backupCloudBackupSubtitle": "Keep backup-related preferences enabled for future sync support.",
+  "backupSnapshotSectionTitle": "Local snapshot",
+  "backupNoSnapshotLabel": "No backup snapshot has been created on this device yet.",
+  "@backupLastBackupLabel": {
+    "placeholders": {
+      "timestamp": {}
+    }
+  },
+  "backupLastBackupLabel": "Last backup snapshot: {timestamp}",
+  "backupCreateAction": "Create snapshot",
+  "backupClearAction": "Clear snapshot",
+  "aboutTitle": "About",
+  "aboutApplicationSectionTitle": "Application details",
+  "aboutApplicationSectionSubtitle": "This information reflects the active runtime configuration.",
+  "aboutAppNameLabel": "App name",
+  "aboutEnvironmentLabel": "Environment",
+  "aboutCurrentThemeLabel": "Current theme",
+  "aboutCurrentLanguageLabel": "Current language",
+  "aboutBaseUrlLabel": "API base URL",
   "offlineTitle": "You are offline",
   "offlineMessage": "Check your internet connection and try again.",
   "offlineRetryLabel": "Retry",
@@ -167,5 +549,497 @@
     "placeholders": {
       "dueCount": {}
     }
-  }
+  },
+  "createLabel": "Create",
+  "saveLabel": "Save",
+  "cancelLabel": "Cancel",
+  "deleteLabel": "Delete",
+  "editLabel": "Edit",
+  "openFoldersLabel": "Open folders",
+  "manageDecksLabel": "Manage decks",
+  "createFolderLabel": "Create folder",
+  "editFolderLabel": "Edit folder",
+  "deleteFolderLabel": "Delete folder",
+  "createDeckLabel": "Create deck",
+  "editDeckLabel": "Edit deck",
+  "deleteDeckLabel": "Delete deck",
+  "folderNameLabel": "Folder name",
+  "folderDescriptionLabel": "Folder description",
+  "folderNameRequiredMessage": "Folder name is required.",
+  "deckNameLabel": "Deck name",
+  "deckDescriptionLabel": "Deck description",
+  "deckNameRequiredMessage": "Deck name is required.",
+  "sortByNameLabel": "Name",
+  "sortByCreatedAtLabel": "Created",
+  "sortByUpdatedAtLabel": "Updated",
+  "ascendingLabel": "Ascending",
+  "descendingLabel": "Descending",
+  "foldersEmptyTitle": "No folders yet",
+  "foldersEmptyMessage": "Create the first folder in this branch to organize your study library.",
+  "folderLeafLabel": "Leaf",
+  "folderLeafHint": "This folder has no child folders.",
+  "folderBranchHint": "This folder still has child folders.",
+  "decksShellTitle": "Deck workspace",
+  "decksShellMessage": "Open a leaf folder to manage the decks inside it.",
+  "decksEmptyTitle": "No decks yet",
+  "decksEmptyMessage": "Create the first deck in this folder to start studying.",
+  "deckDetailPlaceholderMessage": "Flashcard workspace will be connected next.",
+  "deckSummaryTitle": "Deck summary",
+  "flashcardsTitle": "Flashcards",
+  "flashcardScreenSubtitle": "Search, preview, and maintain the flashcards in the current deck.",
+  "flashcardSearchHint": "Search flashcards",
+  "flashcardSortTitle": "Sort flashcards",
+  "flashcardSortDirectionTooltip": "Toggle flashcard sort direction",
+  "flashcardSortByCreatedAt": "Created",
+  "flashcardSortByUpdatedAt": "Updated",
+  "flashcardSortByFrontText": "Front text",
+  "flashcardErrorBannerTitle": "Flashcard action failed",
+  "flashcardCreateAction": "Create flashcard",
+  "flashcardEditAction": "Edit flashcard",
+  "flashcardSaveAction": "Save flashcard",
+  "flashcardDeleteAction": "Delete flashcard",
+  "flashcardCancelAction": "Cancel",
+  "flashcardEmptyTitle": "No flashcards in this deck yet",
+  "flashcardEmptyMessage": "Create the first flashcard in this deck to start building study content.",
+  "flashcardFrontFieldLabel": "Front text",
+  "flashcardBackFieldLabel": "Back text",
+  "flashcardFrontLangFieldLabel": "Front language code",
+  "flashcardBackLangFieldLabel": "Back language code",
+  "flashcardFrontRequiredMessage": "Front text is required.",
+  "flashcardBackRequiredMessage": "Back text is required.",
+  "@flashcardDeleteDialogTitle": {
+    "placeholders": {
+      "flashcardText": {}
+    }
+  },
+  "flashcardDeleteDialogTitle": "Delete \"{flashcardText}\"?",
+  "flashcardDeleteDialogMessage": "Deleting a flashcard removes it from the active deck.",
+  "@flashcardPreviewCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "flashcardPreviewCountLabel": "{count} preview cards",
+  "flashcardBrowseModeLabel": "Browse mode",
+  "flashcardSearchModeLabel": "Search mode",
+  "flashcardPinnedLabel": "Pinned",
+  "flashcardPreviewEmptyTitle": "Flashcard preview is ready",
+  "flashcardPreviewEmptyMessage": "Add flashcards to the deck to see preview cards here.",
+  "flashcardImportPlaceholderTitle": "Flashcard import is ready",
+  "flashcardImportPlaceholderMessage": "Bulk import can be connected here later without changing the deck workspace.",
+  "@flashcardImportCreatedLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "flashcardImportCreatedLabel": "{count} created",
+  "@flashcardImportFailedLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "flashcardImportFailedLabel": "{count} failed",
+  "flashcardActionsTooltip": "Flashcard actions",
+  "authLoginTitle": "Welcome back",
+  "authRegisterTitle": "Create your account",
+  "authLoginSubtitle": "Sign in to continue organizing decks, tracking streaks, and reviewing what is due next.",
+  "authRegisterSubtitle": "Create a study account so your folders, decks, and progress can stay in sync.",
+  "authModeLoginLabel": "Login",
+  "authModeRegisterLabel": "Register",
+  "authIdentifierLabel": "Email or username",
+  "authIdentifierHint": "you@example.com",
+  "authIdentifierRequiredError": "Enter your email or username.",
+  "authUsernameLabel": "Username",
+  "authUsernameHint": "study_builder",
+  "authUsernameRequiredError": "Enter a username with at least 3 characters.",
+  "authEmailLabel": "Email",
+  "authEmailHint": "learner@example.com",
+  "authEmailInvalidError": "Enter a valid email address.",
+  "authPasswordLabel": "Password",
+  "authPasswordHint": "Use at least 8 characters",
+  "authPasswordInvalidError": "Password must be at least 8 characters.",
+  "authForgotPasswordAction": "Forgot password?",
+  "authSuccessBannerTitle": "All set",
+  "authWarningBannerTitle": "Check this first",
+  "authErrorBannerTitle": "Authentication failed",
+  "authInfoBannerTitle": "Heads up",
+  "authSocialSectionTitle": "Or continue with",
+  "authContinueWithGoogle": "Continue with Google",
+  "authContinueWithApple": "Continue with Apple",
+  "authContinueWithKakao": "Continue with Kakao",
+  "authBootstrapLoadingTitle": "Checking your saved session",
+  "authBootstrapLoadingSubtitle": "We are deciding whether to send you straight into the app or back to authentication.",
+  "authLoginSuccessMessage": "You are signed in and ready to continue learning.",
+  "authRegisterSuccessMessage": "Your account is ready and your first learning workspace is unlocked.",
+  "authSignOutSuccessMessage": "Your current session has been cleared from this device.",
+  "authPasswordResetSuccessMessage": "Password reset instructions have been sent to your email.",
+  "authInvalidCredentialsMessage": "Your login details do not look right yet. Check the identifier and password.",
+  "authDuplicateAccountMessage": "That username or email is already being used.",
+  "authInvalidResetRequestMessage": "Enter a valid email before requesting a reset link.",
+  "authNetworkFailureMessage": "We could not reach the server. Try again when the network is stable.",
+  "authSessionReadyTitle": "Session is active",
+  "authSessionReadyMessage": "You are currently signed in as {userLabel}. Continue into the app or sign out to switch accounts.",
+  "@authSessionReadyMessage": {
+    "placeholders": {
+      "userLabel": {}
+    }
+  },
+  "authContinueToAppAction": "Stay signed in",
+  "authSignOutAction": "Sign out",
+  "authForgotPasswordTitle": "Reset your password",
+  "authForgotPasswordSubtitle": "Enter your account email and we will prepare a reset instruction message.",
+  "authBackToLoginAction": "Back to login",
+  "authSendResetAction": "Send reset instructions",
+  "reminderTitle": "Study reminders",
+  "reminderSubtitle": "Shape when Memora nudges you back into the next useful review block.",
+  "reminderOverviewSectionTitle": "Reminder health",
+  "reminderOverviewSectionSubtitle": "Keep track of how much study debt is building and whether reminder cues are active.",
+  "reminderToggleTitle": "Enable reminders",
+  "reminderToggleSubtitle": "Turn learning reminders on when you want Memora to keep your study rhythm visible.",
+  "reminderDueCountLabel": "{count} due now",
+  "@reminderDueCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reminderOverdueCountLabel": "{count} overdue",
+  "@reminderOverdueCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reminderActiveSlotsLabel": "{count} active slots",
+  "@reminderActiveSlotsLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reminderFrequencySectionTitle": "Reminder cadence",
+  "reminderFrequencySectionSubtitle": "Choose whether reminders should follow every day, only weekdays, or a custom pattern.",
+  "reminderFrequencyDailyLabel": "Daily",
+  "reminderFrequencyWeekdaysLabel": "Weekdays",
+  "reminderFrequencyCustomLabel": "Custom",
+  "reminderSuggestedDeckSectionTitle": "Suggested next deck",
+  "reminderSuggestedDeckSectionSubtitle": "Use the reminder signal to jump directly into the branch that needs attention first.",
+  "reminderSuggestedDeckMessage": "{dueCount} cards are due and {overdueCount} are already overdue in the suggested deck.",
+  "@reminderSuggestedDeckMessage": {
+    "placeholders": {
+      "dueCount": {},
+      "overdueCount": {}
+    }
+  },
+  "reminderPreviewAction": "Preview reminder",
+  "reminderManageSlotsAction": "Manage time slots",
+  "reminderTimeSlotsTitle": "Reminder time slots",
+  "reminderTimeSlotsSubtitle": "Adjust when reminder nudges can appear during the day.",
+  "reminderAddSlotAction": "Add slot",
+  "reminderCustomDaysSectionTitle": "Custom reminder days",
+  "reminderCustomDaysSectionSubtitle": "Pick the specific days when reminders should stay active.",
+  "reminderWeekdayMonday": "Mon",
+  "reminderWeekdayTuesday": "Tue",
+  "reminderWeekdayWednesday": "Wed",
+  "reminderWeekdayThursday": "Thu",
+  "reminderWeekdayFriday": "Fri",
+  "reminderWeekdaySaturday": "Sat",
+  "reminderWeekdaySunday": "Sun",
+  "reminderSlotMorningReviewLabel": "Morning review",
+  "reminderSlotEveningResetLabel": "Evening reset",
+  "reminderSlotStudyBlockLabel": "Study block",
+  "reminderSlotEnabledLabel": "Active",
+  "reminderSlotPausedLabel": "Paused",
+  "reminderPreviewTitle": "Reminder preview",
+  "reminderPreviewSubtitle": "See how the next notification cue would look before you save it into habit.",
+  "reminderPreviewSummaryTitle": "Next reminder snapshot",
+  "reminderPreviewSummarySubtitle": "This preview combines your current cadence, active time slots, and suggested study deck.",
+  "reminderPreviewScheduleMessage": "The next reminder is scheduled for {timeLabel}.",
+  "@reminderPreviewScheduleMessage": {
+    "placeholders": {
+      "timeLabel": {}
+    }
+  },
+  "reminderPreviewCardTitle": "Review {deckName} next",
+  "@reminderPreviewCardTitle": {
+    "placeholders": {
+      "deckName": {}
+    }
+  },
+  "reminderPreviewCardMessage": "{dueCount} cards are ready and {overdueCount} need urgent attention.",
+  "@reminderPreviewCardMessage": {
+    "placeholders": {
+      "dueCount": {},
+      "overdueCount": {}
+    }
+  },
+  "reminderOpenSuggestedDeckAction": "Open suggested deck",
+  "reminderBackToSettingsAction": "Back to settings",
+  "onboardingTitle": "Get started",
+  "onboardingPageOrganizeTitle": "Organize knowledge clearly",
+  "onboardingPageOrganizeDescription": "Build a folder tree that matches the way you think about topics, courses, or daily practice.",
+  "onboardingPageOrganizeHighlight": "Start small, then grow your library one clear branch at a time.",
+  "onboardingPageReviewTitle": "Review with intent",
+  "onboardingPageReviewDescription": "Move from folders to decks to flashcards without losing context or momentum.",
+  "onboardingPageReviewHighlight": "Keep the next useful review block visible so it is easier to begin.",
+  "onboardingPageMomentumTitle": "Protect your study rhythm",
+  "onboardingPageMomentumDescription": "Use reminders, streaks, and daily targets to stay consistent without overloading a single session.",
+  "onboardingPageMomentumHighlight": "Short, repeatable sessions compound faster than big bursts.",
+  "onboardingPermissionsAction": "Set permissions",
+  "onboardingSkipAction": "Skip for now",
+  "onboardingContinueAction": "Continue",
+  "onboardingNextAction": "Next",
+  "onboardingPermissionsTitle": "Choose your helpful nudges",
+  "onboardingPermissionsSubtitle": "Decide which app signals should be ready when you start building a routine.",
+  "onboardingPermissionNotificationsTitle": "Study reminders",
+  "onboardingPermissionNotificationsDescription": "Allow reminder prompts so due decks do not disappear behind a busy day.",
+  "onboardingPermissionNotificationsNote": "You can fine-tune the exact cadence later from reminder settings.",
+  "onboardingPermissionAudioTitle": "Audio prompts",
+  "onboardingPermissionAudioDescription": "Keep pronunciation and listening cues ready when you begin study modes that use sound.",
+  "onboardingPermissionAudioNote": "This simply prepares the preference; you can still change it whenever you want.",
+  "onboardingBackAction": "Back",
+  "onboardingGoalSetupAction": "Set study goal",
+  "onboardingGoalSetupTitle": "Define your first study target",
+  "onboardingGoalSetupSubtitle": "Pick a goal profile, then adjust the card target and session length that feel sustainable.",
+  "onboardingGoalSetupCompletedMessage": "You are set for {dailyGoal} cards per day across {sessionMinutes}-minute sessions.",
+  "@onboardingGoalSetupCompletedMessage": {
+    "placeholders": {
+      "dailyGoal": {},
+      "sessionMinutes": {}
+    }
+  },
+  "onboardingGoalPresetSectionTitle": "Goal profile",
+  "onboardingGoalPresetSectionSubtitle": "Choose the pace that best matches your current routine.",
+  "onboardingGoalNumbersSectionTitle": "Goal details",
+  "onboardingGoalNumbersSectionSubtitle": "Adjust the daily study volume and ideal session length.",
+  "onboardingDailyGoalFieldLabel": "Daily card goal",
+  "onboardingSessionLengthFieldLabel": "Session length (minutes)",
+  "onboardingFinishAction": "Finish setup",
+  "onboardingGoalSteadyLabel": "Steady",
+  "onboardingGoalFocusedLabel": "Focused",
+  "onboardingGoalIntensiveLabel": "Intensive",
+  "studySessionTypeFirstLearning": "First learning",
+  "studySessionTypeReview": "Review",
+  "studySessionTypeFirstLearningSubtitle": "Move through the full progression with more guided support and repetition.",
+  "studySessionTypeReviewSubtitle": "Focus on due cards and keep the session fast, lean, and corrective.",
+  "studyModeReview": "Review",
+  "studyModeRecall": "Recall",
+  "studyModeGuess": "Guess",
+  "studyModeMatch": "Match",
+  "studyModeFill": "Fill",
+  "studyModeReviewDescription": "Skim quickly, make a confidence call, and keep the review queue moving.",
+  "studyModeRecallDescription": "Pause first, reveal second, then decide whether the answer was really there.",
+  "studyModeGuessDescription": "Pick from several close options to test recognition under light pressure.",
+  "studyModeMatchDescription": "Line up both sides of a concept set before confirming the whole board.",
+  "studyModeFillDescription": "Type the answer yourself so accuracy depends on recall instead of recognition.",
+  "studyLifecycleReady": "Ready",
+  "studyLifecycleInProgress": "In progress",
+  "studyLifecycleFeedback": "Feedback ready",
+  "studyLifecycleRetryPending": "Retry pending",
+  "studyLifecycleCompleted": "Completed",
+  "studyHistoryCompleted": "Completed",
+  "studyHistoryResumed": "Resumed",
+  "studyHistoryInterrupted": "Interrupted",
+  "studyAudioTitle": "Audio support",
+  "@studyAudioSubtitle": {
+    "placeholders": {
+      "voiceLabel": {}
+    }
+  },
+  "studyAudioSubtitle": "Pronunciation support is ready with {voiceLabel}.",
+  "studyAudioFallbackVoice": "the default voice",
+  "studyAudioUnavailableMessage": "This item does not include speech support, so the session stays visual.",
+  "studyAudioMuteAction": "Mute audio",
+  "studyAudioEnableAction": "Enable audio",
+  "studyAudioUnavailableAction": "No audio",
+  "studyExitDialogTitle": "Leave this study session?",
+  "studyExitConfirmAction": "Leave session",
+  "studyExitCancelAction": "Stay here",
+  "studyExitDialogMessage": "You can resume this session later, but any unsaved momentum in the current step may feel more abrupt when you return.",
+  "studyFooterTitle": "Session controls",
+  "@studyFooterSubtitle": {
+    "placeholders": {
+      "modeLabel": {},
+      "lifecycleLabel": {}
+    }
+  },
+  "studyFooterSubtitle": "{modeLabel} is active and the session is currently {lifecycleLabel}.",
+  "studyResetModeAction": "Reset current mode",
+  "studyExitAction": "Exit study",
+  "@studyHeaderSubtitle": {
+    "placeholders": {
+      "folderLabel": {},
+      "sessionType": {}
+    }
+  },
+  "studyHeaderSubtitle": "{folderLabel} · {sessionType}",
+  "@studyDueCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studyDueCountLabel": "{count} due cards",
+  "studyDueCountTitle": "Due now",
+  "studyModeSequenceTitle": "Mode sequence",
+  "studyModeSequenceSubtitle": "Keep the whole study arc visible while you decide how to start.",
+  "@studyModeProgressLabel": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studyModeProgressLabel": "{completed} of {total}",
+  "studyProgressTitle": "Session progress",
+  "@studyProgressSubtitle": {
+    "placeholders": {
+      "modeLabel": {},
+      "completedModes": {
+        "type": "int"
+      },
+      "totalModes": {
+        "type": "int"
+      }
+    }
+  },
+  "studyProgressSubtitle": "{modeLabel} · {completedModes} of {totalModes} modes cleared",
+  "@studyItemProgressLabel": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studyItemProgressLabel": "{completed} of {total} items",
+  "studyResultCompletionTitle": "Completion",
+  "studyResultCompletionSubtitle": "A quick read on how much of the session made it through the full cycle.",
+  "studyResultMasteredLabel": "Mastered items",
+  "studyResultMasteredSubtitle": "Items you moved forward without another retry pass.",
+  "studyResultRetryLabel": "Retry items",
+  "studyResultRetrySubtitle": "Items that still need another look in the next block.",
+  "studyResultFocusLabel": "Focus time",
+  "studyResultFocusSubtitle": "Total time budget reserved for this session shell.",
+  "@studyMinutesShortLabel": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "studyMinutesShortLabel": "{minutes} min",
+  "studyModePickerTitle": "Mode picker",
+  "studyModePickerSubtitle": "Preview the mode chain before you jump into the live session.",
+  "studyModePickerSelectedAction": "Selected",
+  "studyModePickerChooseAction": "Focus here",
+  "studySetupTitle": "Study setup",
+  "studySetupSubtitle": "Prime the next session, decide whether to resume, and check how the mode chain will unfold.",
+  "studyDeckReadinessTitle": "Deck readiness",
+  "studyDeckReadinessSubtitle": "Current mastery gives a quick signal for how demanding this session should feel.",
+  "studySetupEstimateTitle": "Estimated time",
+  "studySetupEstimateSubtitle": "A short, sustainable block for the current due queue.",
+  "studySessionTypeSelectedAction": "Selected",
+  "studySessionTypeChooseAction": "Use this flow",
+  "studyResumeTitle": "Resume where you stopped",
+  "@studyResumeSubtitle": {
+    "placeholders": {
+      "modeLabel": {},
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studyResumeSubtitle": "{modeLabel} was active with {completed} of {total} items already processed.",
+  "studyResumeAction": "Resume session",
+  "studyStartFreshAction": "Start fresh",
+  "studyHistoryPreviewTitle": "Recent study blocks",
+  "studyHistoryPreviewSubtitle": "Use the recent trail to decide whether you need repetition or a fresh pass.",
+  "@studyHistoryEntrySubtitle": {
+    "placeholders": {
+      "modeLabel": {},
+      "mastered": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "studyHistoryEntrySubtitle": "{modeLabel} · {mastered} of {total} held",
+  "studyStartAction": "Prepare session",
+  "studyHistoryTitle": "Study history",
+  "studyHistorySubtitle": "Look back at recent sessions to spot where momentum is stable and where drift starts.",
+  "@studyHistoryEntryDescription": {
+    "placeholders": {
+      "statusLabel": {},
+      "modeLabel": {},
+      "dateLabel": {}
+    }
+  },
+  "studyHistoryEntryDescription": "{statusLabel} · {modeLabel} · {dateLabel}",
+  "studyResultTitle": "Study result",
+  "studyResultSubtitle": "Close the session with a compact summary before you decide what to do next.",
+  "studyResultNextBlockTitle": "Next useful move",
+  "@studyResultNextBlockSubtitle": {
+    "placeholders": {
+      "modeLabel": {}
+    }
+  },
+  "studyResultNextBlockSubtitle": "The session shell is ready to loop back into {modeLabel} if you want another pass.",
+  "studyRestartSessionAction": "Restart session",
+  "studyReturnToDeckAction": "Return to deck",
+  "studySessionCompletedSubtitle": "The current session has reached the result stage.",
+  "studySessionCompletedTitle": "Session completed",
+  "studySessionCompletedMessage": "Open the result summary or leave the study flow from here.",
+  "studyOpenResultAction": "Open result",
+  "studyRememberedAction": "Remembered",
+  "studyRetryItemAction": "Study again",
+  "studyNextAction": "Next item",
+  "studyCheckAnswerAction": "Check answer",
+  "studyMatchConfirmAction": "Confirm pairs",
+  "studyMatchLeftColumnTitle": "Prompt side",
+  "studyMatchRightColumnTitle": "Meaning side",
+  "studyMatchPairsTitle": "Current pairs",
+  "studyMatchPairsSubtitle": "Remove any pair if you want to rebuild it before submitting.",
+  "studyRevealAnswerAction": "Reveal answer",
+  "@studyRetryCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "studyRetryCountLabel": "{count} retry",
+  "studyRecallAnswerTitle": "Answer revealed",
+  "studyRecallAnswerHiddenTitle": "Answer stays hidden",
+  "studyRecallAnswerHiddenSubtitle": "Try to recall it first, then reveal only when you are ready.",
+  "studyFillInputTitle": "Type your answer",
+  "studyFillInputSubtitle": "Use the field below to prove the answer from memory.",
+  "@studyFillAnswerReveal": {
+    "placeholders": {
+      "answer": {}
+    }
+  },
+  "studyFillAnswerReveal": "Expected answer: {answer}",
+  "studyResetModeDialogTitle": "Reset this mode?",
+  "studyResetModeDialogMessage": "This clears the current mode progress and sends you back to its first item."
 }

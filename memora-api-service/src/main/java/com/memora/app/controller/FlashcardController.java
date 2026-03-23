@@ -1,9 +1,8 @@
 package com.memora.app.controller;
 
-import java.util.List;
-
 import com.memora.app.dto.CreateFlashcardRequest;
 import com.memora.app.dto.FlashcardDto;
+import com.memora.app.dto.FlashcardPageResponse;
 import com.memora.app.dto.UpdateFlashcardRequest;
 import com.memora.app.service.FlashcardService;
 
@@ -31,17 +30,18 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Tag(name = "Flashcards", description = "CRUD APIs for Memora flashcards")
 @RestController
-@RequestMapping("/api/v1/flashcards")
+@RequestMapping("/api/v1/decks/{deckId}/flashcards")
 @RequiredArgsConstructor
 public class FlashcardController {
 
     private final FlashcardService flashcardService;
 
     /**
-     * Create a flashcard.
+     * Create a flashcard inside the requested deck scope.
      *
+     * @param deckId deck identifier
      * @param request flashcard payload
-     * @return created flashcard
+     * @return created flashcard snapshot
      */
     @Operation(summary = "Create flashcard")
     @ApiResponses({
@@ -51,50 +51,47 @@ public class FlashcardController {
     })
     @PostMapping
     public ResponseEntity<FlashcardDto> createFlashcard(
+        @PathVariable final Long deckId,
         @Valid @RequestBody final CreateFlashcardRequest request
     ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(flashcardService.createFlashcard(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(flashcardService.createFlashcard(deckId, request));
     }
 
     /**
-     * Get a flashcard by id.
+     * List flashcards for the requested deck using paging and search.
      *
-     * @param flashcardId flashcard identifier
-     * @return flashcard details
-     */
-    @Operation(summary = "Get flashcard by id")
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Flashcard found"),
-        @ApiResponse(responseCode = "404", description = "Flashcard not found")
-    })
-    @GetMapping("/{flashcardId}")
-    public ResponseEntity<FlashcardDto> getFlashcard(@PathVariable final Long flashcardId) {
-        return ResponseEntity.ok(flashcardService.getFlashcard(flashcardId));
-    }
-
-    /**
-     * List flashcards.
-     *
-     * @param deckId optional deck filter
-     * @return matching flashcards
+     * @param deckId deck identifier
+     * @param searchQuery optional search text
+     * @param sortBy optional sort field
+     * @param sortType optional sort direction
+     * @param page optional page index
+     * @param size optional page size
+     * @return paged flashcard response
      */
     @Operation(summary = "List flashcards")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Flashcards loaded")
+        @ApiResponse(responseCode = "200", description = "Flashcards loaded"),
+        @ApiResponse(responseCode = "404", description = "Deck not found")
     })
     @GetMapping
-    public ResponseEntity<List<FlashcardDto>> getFlashcards(
-        @RequestParam(required = false) final Long deckId
+    public ResponseEntity<FlashcardPageResponse> getFlashcards(
+        @PathVariable final Long deckId,
+        @RequestParam(required = false) final String searchQuery,
+        @RequestParam(required = false) final String sortBy,
+        @RequestParam(required = false) final String sortType,
+        @RequestParam(required = false) final Integer page,
+        @RequestParam(required = false) final Integer size
     ) {
-        return ResponseEntity.ok(flashcardService.getFlashcards(deckId));
+        return ResponseEntity.ok(flashcardService.getFlashcards(deckId, searchQuery, sortBy, sortType, page, size));
     }
 
     /**
-     * Update a flashcard.
+     * Update a flashcard inside the requested deck scope.
      *
+     * @param deckId deck identifier
      * @param flashcardId flashcard identifier
      * @param request updated flashcard payload
-     * @return updated flashcard
+     * @return updated flashcard snapshot
      */
     @Operation(summary = "Update flashcard")
     @ApiResponses({
@@ -104,26 +101,31 @@ public class FlashcardController {
     })
     @PutMapping("/{flashcardId}")
     public ResponseEntity<FlashcardDto> updateFlashcard(
+        @PathVariable final Long deckId,
         @PathVariable final Long flashcardId,
         @Valid @RequestBody final UpdateFlashcardRequest request
     ) {
-        return ResponseEntity.ok(flashcardService.updateFlashcard(flashcardId, request));
+        return ResponseEntity.ok(flashcardService.updateFlashcard(deckId, flashcardId, request));
     }
 
     /**
-     * Soft delete a flashcard.
+     * Soft delete a flashcard inside the requested deck scope.
      *
+     * @param deckId deck identifier
      * @param flashcardId flashcard identifier
      * @return empty response
      */
     @Operation(summary = "Delete flashcard")
     @ApiResponses({
         @ApiResponse(responseCode = "204", description = "Flashcard deleted"),
-        @ApiResponse(responseCode = "404", description = "Flashcard not found")
+        @ApiResponse(responseCode = "404", description = "Flashcard or deck not found")
     })
     @DeleteMapping("/{flashcardId}")
-    public ResponseEntity<Void> deleteFlashcard(@PathVariable final Long flashcardId) {
-        flashcardService.deleteFlashcard(flashcardId);
+    public ResponseEntity<Void> deleteFlashcard(
+        @PathVariable final Long deckId,
+        @PathVariable final Long flashcardId
+    ) {
+        flashcardService.deleteFlashcard(deckId, flashcardId);
         return ResponseEntity.noContent().build();
     }
 }

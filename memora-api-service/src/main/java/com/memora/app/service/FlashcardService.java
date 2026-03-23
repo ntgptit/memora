@@ -1,20 +1,24 @@
 package com.memora.app.service;
 
-import java.util.List;
-
 import com.memora.app.dto.CreateFlashcardRequest;
 import com.memora.app.dto.FlashcardDto;
+import com.memora.app.dto.FlashcardPageResponse;
 import com.memora.app.dto.UpdateFlashcardRequest;
 
 public interface FlashcardService {
 
-    FlashcardDto createFlashcard(CreateFlashcardRequest request);
+    FlashcardDto createFlashcard(Long deckId, CreateFlashcardRequest request);
 
-    FlashcardDto getFlashcard(Long flashcardId);
+    FlashcardPageResponse getFlashcards(
+        Long deckId,
+        String searchQuery,
+        String sortBy,
+        String sortType,
+        Integer page,
+        Integer size
+    );
 
-    List<FlashcardDto> getFlashcards(Long deckId);
+    FlashcardDto updateFlashcard(Long deckId, Long flashcardId, UpdateFlashcardRequest request);
 
-    FlashcardDto updateFlashcard(Long flashcardId, UpdateFlashcardRequest request);
-
-    void deleteFlashcard(Long flashcardId);
+    void deleteFlashcard(Long deckId, Long flashcardId);
 }

@@ -9,4 +9,9 @@ abstract final class AppKeys {
   static const localeStorageKey = StorageKeys.locale;
   static const onboardingSeenStorageKey = StorageKeys.onboardingSeen;
   static const lastKnownBaseUrlStorageKey = StorageKeys.lastKnownBaseUrl;
+  static const ttsEnabledStorageKey = StorageKeys.ttsEnabled;
+  static const reviewSoundsEnabledStorageKey = StorageKeys.reviewSoundsEnabled;
+  static const hapticsEnabledStorageKey = StorageKeys.hapticsEnabled;
+  static const cloudBackupEnabledStorageKey = StorageKeys.cloudBackupEnabled;
+  static const lastBackupAtStorageKey = StorageKeys.lastBackupAt;
 }

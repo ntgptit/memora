@@ -1,22 +1,29 @@
 package com.memora.app.service.impl;
 
 import java.time.OffsetDateTime;
-import java.util.List;
+import java.util.Objects;
 
 import com.memora.app.constant.ApiMessageKey;
 import com.memora.app.dto.CreateFlashcardRequest;
 import com.memora.app.dto.FlashcardDto;
+import com.memora.app.dto.FlashcardPageResponse;
 import com.memora.app.dto.UpdateFlashcardRequest;
 import com.memora.app.entity.DeckEntity;
 import com.memora.app.entity.FlashcardEntity;
+import com.memora.app.entity.UserAccountEntity;
+import com.memora.app.enums.AccountStatus;
 import com.memora.app.exception.ResourceNotFoundException;
-import com.memora.app.mapper.FlashcardMapper;
 import com.memora.app.repository.DeckRepository;
 import com.memora.app.repository.FlashcardLanguageRepository;
 import com.memora.app.repository.FlashcardRepository;
+import com.memora.app.repository.UserAccountRepository;
 import com.memora.app.service.FlashcardService;
 import com.memora.app.util.ServiceValidationUtils;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,90 +36,138 @@ public class FlashcardServiceImpl implements FlashcardService {
     private final DeckRepository deckRepository;
     private final FlashcardLanguageRepository flashcardLanguageRepository;
     private final FlashcardRepository flashcardRepository;
+    private final UserAccountRepository userAccountRepository;
 
     @Override
     @Transactional
-    public FlashcardDto createFlashcard(final CreateFlashcardRequest request) {
-        final DeckEntity deck = getActiveDeck(request.deckId());
+    public FlashcardDto createFlashcard(final Long deckId, final CreateFlashcardRequest request) {
+        final DeckEntity deck = getActiveDeck(deckId);
 
         final FlashcardEntity entity = new FlashcardEntity();
         entity.setDeckId(deck.getId());
-        entity.setTerm(ServiceValidationUtils.normalizeRequiredText(request.term(), ApiMessageKey.TERM_REQUIRED));
-        entity.setMeaning(ServiceValidationUtils.normalizeRequiredText(request.meaning(), ApiMessageKey.MEANING_REQUIRED));
-        entity.setNote(ServiceValidationUtils.normalizeOptionalText(request.note()));
-        entity.setBookmarked(request.bookmarked());
-        // Return the persisted flashcard.
-        return FlashcardMapper.toDto(flashcardRepository.save(entity));
+        entity.setTerm(ServiceValidationUtils.normalizeRequiredText(
+            request.frontText(),
+            ApiMessageKey.FLASHCARD_FRONT_TEXT_REQUIRED
+        ));
+        entity.setMeaning(ServiceValidationUtils.normalizeRequiredText(
+            request.backText(),
+            ApiMessageKey.FLASHCARD_BACK_TEXT_REQUIRED
+        ));
+        entity.setNote("");
+        entity.setBookmarked(false);
+
+        final FlashcardEntity saved = flashcardRepository.save(entity);
+        FlashcardQuerySupport.syncFlashcardLanguages(
+            saved.getId(),
+            request.frontLangCode(),
+            request.backLangCode(),
+            flashcardLanguageRepository
+        );
+        // Return the created flashcard snapshot after side-language synchronization.
+        return FlashcardQuerySupport.toResponse(saved, flashcardLanguageRepository);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public FlashcardDto getFlashcard(final Long flashcardId) {
-        // Return the requested active flashcard.
-        return FlashcardMapper.toDto(getActiveFlashcard(flashcardId));
-    }
+    public FlashcardPageResponse getFlashcards(
+        final Long deckId,
+        final String searchQuery,
+        final String sortBy,
+        final String sortType,
+        final Integer page,
+        final Integer size
+    ) {
+        final DeckEntity deck = getActiveDeck(deckId);
+        final Pageable pageable = PageRequest.of(
+            FlashcardQuerySupport.normalizePage(page),
+            FlashcardQuerySupport.normalizeSize(size),
+            FlashcardQuerySupport.buildSort(sortBy, sortType)
+        );
+        final Specification<FlashcardEntity> specification = Specification
+            .where(FlashcardQuerySupport.isActive())
+            .and(FlashcardQuerySupport.hasDeckId(deck.getId()))
+            .and(FlashcardQuerySupport.hasSearchQuery(searchQuery));
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<FlashcardDto> getFlashcards(final Long deckId) {
-        // Narrow the query when the caller requests flashcards for one deck.
-        if (deckId != null) {
-            // Return active flashcards for the requested deck.
-            return flashcardRepository.findAllByDeckIdAndDeletedAtIsNullOrderByIdAsc(
-                    ServiceValidationUtils.requirePositiveId(deckId, ApiMessageKey.DECK_ID_POSITIVE)
-                )
-                // Convert persisted flashcard rows into DTOs for the API layer.
-                .stream()
-                .map(FlashcardMapper::toDto)
-                .toList();
-        }
-
-        // Return every active flashcard when no deck filter is provided.
-        return flashcardRepository.findAllByDeletedAtIsNullOrderByIdAsc()
-            // Convert persisted flashcard rows into DTOs for the API layer.
-            .stream()
-            .map(FlashcardMapper::toDto)
-            .toList();
-    }
-
-    @Override
-    @Transactional
-    public FlashcardDto updateFlashcard(final Long flashcardId, final UpdateFlashcardRequest request) {
-        final FlashcardEntity entity = getActiveFlashcard(flashcardId);
-        final DeckEntity deck = getActiveDeck(request.deckId());
-
-        entity.setDeckId(deck.getId());
-        entity.setTerm(ServiceValidationUtils.normalizeRequiredText(request.term(), ApiMessageKey.TERM_REQUIRED));
-        entity.setMeaning(ServiceValidationUtils.normalizeRequiredText(request.meaning(), ApiMessageKey.MEANING_REQUIRED));
-        entity.setNote(ServiceValidationUtils.normalizeOptionalText(request.note()));
-        entity.setBookmarked(request.bookmarked());
-        // Return the updated flashcard snapshot.
-        return FlashcardMapper.toDto(flashcardRepository.save(entity));
+        final Page<FlashcardEntity> flashcards = flashcardRepository.findAll(specification, pageable);
+        final Page<FlashcardDto> responsePage = flashcards.map(
+            entity -> FlashcardQuerySupport.toResponse(entity, flashcardLanguageRepository)
+        );
+        // Return the paged response payload expected by the contract.
+        return new FlashcardPageResponse(
+            responsePage.getContent(),
+            responsePage.getNumber(),
+            responsePage.getSize(),
+            responsePage.getTotalElements(),
+            responsePage.getTotalPages(),
+            responsePage.hasNext(),
+            responsePage.hasPrevious()
+        );
     }
 
     @Override
     @Transactional
-    public void deleteFlashcard(final Long flashcardId) {
-        final FlashcardEntity entity = getActiveFlashcard(flashcardId);
+    public FlashcardDto updateFlashcard(
+        final Long deckId,
+        final Long flashcardId,
+        final UpdateFlashcardRequest request
+    ) {
+        final DeckEntity deck = getActiveDeck(deckId);
+        final FlashcardEntity entity = getActiveFlashcard(deck.getId(), flashcardId);
+
+        entity.setTerm(ServiceValidationUtils.normalizeRequiredText(
+            request.frontText(),
+            ApiMessageKey.FLASHCARD_FRONT_TEXT_REQUIRED
+        ));
+        entity.setMeaning(ServiceValidationUtils.normalizeRequiredText(
+            request.backText(),
+            ApiMessageKey.FLASHCARD_BACK_TEXT_REQUIRED
+        ));
+
+        final FlashcardEntity saved = flashcardRepository.save(entity);
+        FlashcardQuerySupport.syncFlashcardLanguages(
+            saved.getId(),
+            request.frontLangCode(),
+            request.backLangCode(),
+            flashcardLanguageRepository
+        );
+        // Return the updated flashcard snapshot after side-language synchronization.
+        return FlashcardQuerySupport.toResponse(saved, flashcardLanguageRepository);
+    }
+
+    @Override
+    @Transactional
+    public void deleteFlashcard(final Long deckId, final Long flashcardId) {
+        final DeckEntity deck = getActiveDeck(deckId);
+        final FlashcardEntity entity = getActiveFlashcard(deck.getId(), flashcardId);
         flashcardLanguageRepository.removeByFlashcardId(entity.getId());
         entity.setDeletedAt(OffsetDateTime.now());
+        // Persist the soft-delete marker after clearing dependent language rows.
         flashcardRepository.save(entity);
     }
 
     private DeckEntity getActiveDeck(final Long deckId) {
         final Long validatedId = ServiceValidationUtils.requirePositiveId(deckId, ApiMessageKey.DECK_ID_POSITIVE);
-        // Return the active deck that owns the flashcard.
+        final UserAccountEntity currentUser = resolveCurrentUserAccount();
+        // Return the active deck only when it belongs to the current workspace owner.
         return deckRepository.findByIdAndDeletedAtIsNull(validatedId)
+            .filter(deck -> Objects.equals(deck.getUserId(), currentUser.getId()))
             .orElseThrow(() -> new ResourceNotFoundException(ApiMessageKey.DECK_NOT_FOUND, validatedId));
     }
 
-    private FlashcardEntity getActiveFlashcard(final Long flashcardId) {
+    private FlashcardEntity getActiveFlashcard(final Long deckId, final Long flashcardId) {
         final Long validatedId = ServiceValidationUtils.requirePositiveId(
             flashcardId,
             ApiMessageKey.FLASHCARD_ID_POSITIVE
         );
-        // Return the active flashcard or fail when the row is missing or soft-deleted.
-        return flashcardRepository.findByIdAndDeletedAtIsNull(validatedId)
+        // Return the active flashcard only when it belongs to the requested deck.
+        return flashcardRepository.findByIdAndDeckIdAndDeletedAtIsNull(validatedId, deckId)
             .orElseThrow(() -> new ResourceNotFoundException(ApiMessageKey.FLASHCARD_NOT_FOUND, validatedId));
+    }
+
+    private UserAccountEntity resolveCurrentUserAccount() {
+        // Resolve the active demo account used as the current workspace owner.
+        return userAccountRepository.findFirstByAccountStatusAndDeletedAtIsNullOrderByIdAsc(AccountStatus.ACTIVE)
+            .or(() -> userAccountRepository.findFirstByDeletedAtIsNullOrderByIdAsc())
+            .orElseThrow(() -> new ResourceNotFoundException(ApiMessageKey.ACTIVE_USER_ACCOUNT_NOT_FOUND));
     }
 }

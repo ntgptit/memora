@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,15 +32,17 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Tag(name = "Decks", description = "CRUD APIs for Memora decks")
 @RestController
-@RequestMapping("/api/v1/decks")
+@Validated
+@RequestMapping("/api/v1/folders/{folderId}/decks")
 @RequiredArgsConstructor
 public class DeckController {
 
     private final DeckService deckService;
 
     /**
-     * Create a deck.
+     * Create a deck inside a folder.
      *
+     * @param folderId folder identifier
      * @param request deck payload
      * @return created deck
      */
@@ -48,16 +51,20 @@ public class DeckController {
         @ApiResponse(responseCode = "201", description = "Deck created"),
         @ApiResponse(responseCode = "400", description = "Request is invalid"),
         @ApiResponse(responseCode = "404", description = "Folder not found"),
-        @ApiResponse(responseCode = "409", description = "Deck name already exists")
+        @ApiResponse(responseCode = "409", description = "Deck name already exists or folder is not a leaf")
     })
     @PostMapping
-    public ResponseEntity<DeckDto> createDeck(@Valid @RequestBody final CreateDeckRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(deckService.createDeck(request));
+    public ResponseEntity<DeckDto> createDeck(
+        @PathVariable final Long folderId,
+        @Valid @RequestBody final CreateDeckRequest request
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(deckService.createDeck(folderId, request));
     }
 
     /**
-     * Get a deck by id.
+     * Get a deck inside a folder by id.
      *
+     * @param folderId folder identifier
      * @param deckId deck identifier
      * @return deck details
      */
@@ -67,15 +74,22 @@ public class DeckController {
         @ApiResponse(responseCode = "404", description = "Deck not found")
     })
     @GetMapping("/{deckId}")
-    public ResponseEntity<DeckDto> getDeck(@PathVariable final Long deckId) {
-        return ResponseEntity.ok(deckService.getDeck(deckId));
+    public ResponseEntity<DeckDto> getDeck(
+        @PathVariable final Long folderId,
+        @PathVariable final Long deckId
+    ) {
+        return ResponseEntity.ok(deckService.getDeck(folderId, deckId));
     }
 
     /**
-     * List decks.
+     * List decks under a folder.
      *
-     * @param userId optional owner filter
-     * @param folderId optional folder filter
+     * @param folderId folder identifier
+     * @param searchQuery optional search text
+     * @param sortBy optional sort field
+     * @param sortType optional sort direction
+     * @param page optional page index
+     * @param size optional page size
      * @return matching decks
      */
     @Operation(summary = "List decks")
@@ -84,15 +98,20 @@ public class DeckController {
     })
     @GetMapping
     public ResponseEntity<List<DeckDto>> getDecks(
-        @RequestParam(required = false) final Long userId,
-        @RequestParam(required = false) final Long folderId
+        @PathVariable final Long folderId,
+        @RequestParam(required = false) final String searchQuery,
+        @RequestParam(required = false, defaultValue = "NAME") final String sortBy,
+        @RequestParam(required = false, defaultValue = "ASC") final String sortType,
+        @RequestParam(required = false, defaultValue = "0") final Integer page,
+        @RequestParam(required = false, defaultValue = "20") final Integer size
     ) {
-        return ResponseEntity.ok(deckService.getDecks(userId, folderId));
+        return ResponseEntity.ok(deckService.getDecks(folderId, searchQuery, sortBy, sortType, page, size));
     }
 
     /**
-     * Update a deck.
+     * Update a deck inside a folder.
      *
+     * @param folderId folder identifier
      * @param deckId deck identifier
      * @param request updated deck payload
      * @return updated deck
@@ -106,15 +125,17 @@ public class DeckController {
     })
     @PutMapping("/{deckId}")
     public ResponseEntity<DeckDto> updateDeck(
+        @PathVariable final Long folderId,
         @PathVariable final Long deckId,
         @Valid @RequestBody final UpdateDeckRequest request
     ) {
-        return ResponseEntity.ok(deckService.updateDeck(deckId, request));
+        return ResponseEntity.ok(deckService.updateDeck(folderId, deckId, request));
     }
 
     /**
-     * Soft delete a deck and its flashcards.
+     * Delete a deck inside a folder.
      *
+     * @param folderId folder identifier
      * @param deckId deck identifier
      * @return empty response
      */
@@ -124,8 +145,11 @@ public class DeckController {
         @ApiResponse(responseCode = "404", description = "Deck not found")
     })
     @DeleteMapping("/{deckId}")
-    public ResponseEntity<Void> deleteDeck(@PathVariable final Long deckId) {
-        deckService.deleteDeck(deckId);
+    public ResponseEntity<Void> deleteDeck(
+        @PathVariable final Long folderId,
+        @PathVariable final Long deckId
+    ) {
+        deckService.deleteDeck(folderId, deckId);
         return ResponseEntity.noContent().build();
     }
 }

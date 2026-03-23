@@ -8,13 +8,13 @@ import com.memora.app.dto.UpdateDeckRequest;
 
 public interface DeckService {
 
-    DeckDto createDeck(CreateDeckRequest request);
+    DeckDto createDeck(Long folderId, CreateDeckRequest request);
 
-    DeckDto getDeck(Long deckId);
+    DeckDto getDeck(Long folderId, Long deckId);
 
-    List<DeckDto> getDecks(Long userId, Long folderId);
+    List<DeckDto> getDecks(Long folderId, String searchQuery, String sortBy, String sortType, Integer page, Integer size);
 
-    DeckDto updateDeck(Long deckId, UpdateDeckRequest request);
+    DeckDto updateDeck(Long folderId, Long deckId, UpdateDeckRequest request);
 
-    void deleteDeck(Long deckId);
+    void deleteDeck(Long folderId, Long deckId);
 }

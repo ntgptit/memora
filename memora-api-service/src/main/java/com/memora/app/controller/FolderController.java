@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.memora.app.dto.CreateFolderRequest;
 import com.memora.app.dto.FolderDto;
+import com.memora.app.dto.RenameFolderRequest;
 import com.memora.app.dto.UpdateFolderRequest;
 import com.memora.app.service.FolderService;
 
@@ -19,18 +20,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * REST endpoints for folder management.
  */
 @Tag(name = "Folders", description = "CRUD APIs for Memora folders")
 @RestController
+@Validated
 @RequestMapping("/api/v1/folders")
 @RequiredArgsConstructor
 public class FolderController {
@@ -47,7 +51,7 @@ public class FolderController {
     @ApiResponses({
         @ApiResponse(responseCode = "201", description = "Folder created"),
         @ApiResponse(responseCode = "400", description = "Request is invalid"),
-        @ApiResponse(responseCode = "404", description = "User or parent folder not found"),
+        @ApiResponse(responseCode = "404", description = "Parent folder not found"),
         @ApiResponse(responseCode = "409", description = "Folder name already exists or hierarchy is invalid")
     })
     @PostMapping
@@ -84,10 +88,36 @@ public class FolderController {
     })
     @GetMapping
     public ResponseEntity<List<FolderDto>> getFolders(
-        @RequestParam(required = false) final Long userId,
-        @RequestParam(required = false) final Long parentId
+        @RequestParam(required = false) final Long parentId,
+        @RequestParam(required = false) final String searchQuery,
+        @RequestParam(required = false, defaultValue = "NAME") final String sortBy,
+        @RequestParam(required = false, defaultValue = "ASC") final String sortType,
+        @RequestParam(required = false, defaultValue = "0") final Integer page,
+        @RequestParam(required = false, defaultValue = "20") final Integer size
     ) {
-        return ResponseEntity.ok(folderService.getFolders(userId, parentId));
+        return ResponseEntity.ok(folderService.getFolders(parentId, searchQuery, sortBy, sortType, page, size));
+    }
+
+    /**
+     * Rename a folder.
+     *
+     * @param folderId folder identifier
+     * @param request rename payload
+     * @return renamed folder
+     */
+    @Operation(summary = "Rename folder")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Folder renamed"),
+        @ApiResponse(responseCode = "400", description = "Request is invalid"),
+        @ApiResponse(responseCode = "404", description = "Folder not found"),
+        @ApiResponse(responseCode = "409", description = "Folder name already exists")
+    })
+    @PatchMapping("/{folderId}/rename")
+    public ResponseEntity<FolderDto> renameFolder(
+        @PathVariable final Long folderId,
+        @Valid @RequestBody final RenameFolderRequest request
+    ) {
+        return ResponseEntity.ok(folderService.renameFolder(folderId, request));
     }
 
     /**

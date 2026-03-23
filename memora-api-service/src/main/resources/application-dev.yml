@@ -23,6 +23,7 @@ app:
       - http://127.0.0.1:*
   security:
     public-paths:
+      - /api/v1/**
       - /actuator/health
       - /actuator/info
       - /v3/api-docs/**

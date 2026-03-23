@@ -10,7 +10,7 @@ abstract final class MemoraButtonThemes {
     return FilledButtonThemeData(
       style: ButtonStyle(
         minimumSize: WidgetStatePropertyAll(
-          Size.fromHeight(dims.componentSize.buttonHeight),
+          Size(0, dims.componentSize.buttonHeight),
         ),
         padding: WidgetStatePropertyAll(
           EdgeInsets.symmetric(horizontal: dims.spacing.lg),
@@ -37,7 +37,7 @@ abstract final class MemoraButtonThemes {
     return OutlinedButtonThemeData(
       style: ButtonStyle(
         minimumSize: WidgetStatePropertyAll(
-          Size.fromHeight(dims.componentSize.buttonHeight),
+          Size(0, dims.componentSize.buttonHeight),
         ),
         padding: WidgetStatePropertyAll(
           EdgeInsets.symmetric(horizontal: dims.spacing.lg),

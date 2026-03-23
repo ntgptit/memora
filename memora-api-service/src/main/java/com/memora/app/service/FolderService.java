@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.memora.app.dto.CreateFolderRequest;
 import com.memora.app.dto.FolderDto;
+import com.memora.app.dto.RenameFolderRequest;
 import com.memora.app.dto.UpdateFolderRequest;
 
 public interface FolderService {
@@ -12,7 +13,9 @@ public interface FolderService {
 
     FolderDto getFolder(Long folderId);
 
-    List<FolderDto> getFolders(Long userId, Long parentId);
+    List<FolderDto> getFolders(Long parentId, String searchQuery, String sortBy, String sortType, Integer page, Integer size);
+
+    FolderDto renameFolder(Long folderId, RenameFolderRequest request);
 
     FolderDto updateFolder(Long folderId, UpdateFolderRequest request);
 

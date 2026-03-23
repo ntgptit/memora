@@ -22,22 +22,31 @@ class AppLoadingState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: maxWidth ?? 320),
-        child: Padding(
-          padding: padding ?? EdgeInsets.all(context.spacing.lg),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              loader ?? const AppCircularLoader(),
-              SizedBox(height: context.spacing.md),
-              AppLabel(text: message, textAlign: TextAlign.center),
-              if (subtitle != null) ...[
-                SizedBox(height: context.spacing.xxs),
-                AppBodyText(text: subtitle!, textAlign: TextAlign.center),
-              ],
-            ],
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: constraints.hasBoundedHeight
+              ? BoxConstraints(minHeight: constraints.maxHeight)
+              : const BoxConstraints(),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: maxWidth ?? 320),
+              child: Padding(
+                padding: padding ?? EdgeInsets.all(context.spacing.lg),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    loader ?? const AppCircularLoader(),
+                    SizedBox(height: context.spacing.md),
+                    AppLabel(text: message, textAlign: TextAlign.center),
+                    if (subtitle != null) ...[
+                      SizedBox(height: context.spacing.xxs),
+                      AppBodyText(text: subtitle!, textAlign: TextAlign.center),
+                    ],
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ),

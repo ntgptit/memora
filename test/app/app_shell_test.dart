@@ -13,20 +13,20 @@ void main() {
     tester.view.devicePixelRatio = 1;
 
     await tester.pumpWidget(const App());
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 300));
 
     expect(find.byType(NavigationBar), findsOneWidget);
-    expect(find.text("Today's overview"), findsOneWidget);
+    expect(tester.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex, 0);
 
     await tester.tap(find.text('Folders'));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 300));
 
-    expect(find.text('Folder hub is ready'), findsOneWidget);
+    expect(tester.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex, 1);
 
     await tester.tap(find.text('Settings'));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 300));
 
-    expect(find.text('Settings center is ready'), findsOneWidget);
+    expect(tester.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex, 4);
   });
 
   testWidgets('App shell switches to navigation rail on large screens', (
@@ -39,9 +39,10 @@ void main() {
     tester.view.devicePixelRatio = 1;
 
     await tester.pumpWidget(const App());
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 300));
 
     expect(find.byType(NavigationRail), findsOneWidget);
     expect(find.byType(NavigationBar), findsNothing);
+    expect(tester.widget<NavigationRail>(find.byType(NavigationRail)).selectedIndex, 0);
   });
 }

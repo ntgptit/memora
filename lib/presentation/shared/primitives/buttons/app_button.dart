@@ -118,13 +118,11 @@ class _AppButtonContent extends StatelessWidget {
     final children = <Widget>[
       if (isLoading) indicator,
       if (!isLoading && leading != null) leading!,
-      Flexible(
-        child: Text(
-          text,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          textAlign: TextAlign.center,
-        ),
+      Text(
+        text,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+        textAlign: TextAlign.center,
       ),
       if (!isLoading && trailing != null) trailing!,
     ];

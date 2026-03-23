@@ -27,9 +27,12 @@ public class ApiMessageKey {
     public static final String PASSWORD_REQUIRED = "api.error.validation.password.required";
     public static final String TERM_REQUIRED = "api.error.validation.term.required";
     public static final String MEANING_REQUIRED = "api.error.validation.meaning.required";
+    public static final String FLASHCARD_FRONT_TEXT_REQUIRED = "api.error.validation.flashcard.front-text.required";
+    public static final String FLASHCARD_BACK_TEXT_REQUIRED = "api.error.validation.flashcard.back-text.required";
     public static final String LANGUAGE_CODE_REQUIRED = "api.error.validation.language-code.required";
 
     public static final String USER_ACCOUNT_NOT_FOUND = "api.error.user-account.not-found";
+    public static final String ACTIVE_USER_ACCOUNT_NOT_FOUND = "api.error.user-account.active.not-found";
     public static final String FOLDER_NOT_FOUND = "api.error.folder.not-found";
     public static final String DECK_NOT_FOUND = "api.error.deck.not-found";
     public static final String FLASHCARD_NOT_FOUND = "api.error.flashcard.not-found";
@@ -46,9 +49,11 @@ public class ApiMessageKey {
     public static final String FOLDER_DELETE_HAS_CHILD_FOLDERS = "api.error.folder.delete.has-child-folders";
     public static final String FOLDER_DELETE_HAS_ACTIVE_DECKS = "api.error.folder.delete.has-active-decks";
     public static final String FOLDER_PARENT_USER_MISMATCH = "api.error.folder.parent.user-mismatch";
+    public static final String FOLDER_PARENT_HAS_ACTIVE_DECKS = "api.error.folder.parent.has-active-decks";
     public static final String FOLDER_PARENT_SELF = "api.error.folder.parent.self";
     public static final String FOLDER_NAME_EXISTS = "api.error.folder.name.exists";
     public static final String FOLDER_CYCLE = "api.error.folder.cycle";
+    public static final String FOLDER_NOT_LEAF_FOR_DECK = "api.error.folder.not-leaf-for-deck";
     public static final String DECK_NAME_EXISTS = "api.error.deck.name.exists";
     public static final String FLASHCARD_LANGUAGE_SIDE_EXISTS = "api.error.flashcard-language.side.exists";
     public static final String REVIEW_PROFILE_SYSTEM_LOCKED = "api.error.review-profile.system.locked";

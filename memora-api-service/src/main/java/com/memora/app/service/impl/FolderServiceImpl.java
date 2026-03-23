@@ -7,18 +7,25 @@ import java.util.Objects;
 import com.memora.app.constant.ApiMessageKey;
 import com.memora.app.dto.CreateFolderRequest;
 import com.memora.app.dto.FolderDto;
+import com.memora.app.dto.RenameFolderRequest;
 import com.memora.app.dto.UpdateFolderRequest;
+import com.memora.app.entity.DeckEntity;
 import com.memora.app.entity.FolderEntity;
 import com.memora.app.entity.UserAccountEntity;
+import com.memora.app.enums.AccountStatus;
 import com.memora.app.exception.ConflictException;
 import com.memora.app.exception.ResourceNotFoundException;
-import com.memora.app.mapper.FolderMapper;
 import com.memora.app.repository.DeckRepository;
+import com.memora.app.repository.DeckReviewSettingsRepository;
+import com.memora.app.repository.FlashcardLanguageRepository;
+import com.memora.app.repository.FlashcardRepository;
 import com.memora.app.repository.FolderRepository;
 import com.memora.app.repository.UserAccountRepository;
 import com.memora.app.service.FolderService;
 import com.memora.app.util.ServiceValidationUtils;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,164 +36,177 @@ import lombok.RequiredArgsConstructor;
 public class FolderServiceImpl implements FolderService {
 
     private final DeckRepository deckRepository;
+    private final DeckReviewSettingsRepository deckReviewSettingsRepository;
+    private final FlashcardLanguageRepository flashcardLanguageRepository;
+    private final FlashcardRepository flashcardRepository;
     private final FolderRepository folderRepository;
     private final UserAccountRepository userAccountRepository;
 
     @Override
     @Transactional
     public FolderDto createFolder(final CreateFolderRequest request) {
-        final UserAccountEntity userAccount = getActiveUserAccount(request.userId());
-        final FolderEntity parentFolder = getOptionalParentFolder(request.parentId(), userAccount.getId(), null);
+        final UserAccountEntity currentUser = resolveCurrentUserAccount();
         final String name = ServiceValidationUtils.normalizeRequiredText(request.name(), ApiMessageKey.NAME_REQUIRED);
+        final FolderEntity parentFolder = getParentFolderOrNull(request.parentId(), currentUser.getId());
 
-        assertFolderNameAvailable(userAccount.getId(), request.parentId(), name, null);
+        assertFolderCanAcceptChildFolder(parentFolder);
+        assertFolderNameAvailable(currentUser.getId(), request.parentId(), name, null);
 
         final FolderEntity entity = new FolderEntity();
-        entity.setUserId(userAccount.getId());
-        entity.setParentId(request.parentId());
+        entity.setUserId(currentUser.getId());
+        entity.setParentId(parentFolder == null ? null : parentFolder.getId());
         entity.setName(name);
         entity.setDescription(ServiceValidationUtils.normalizeOptionalText(request.description()));
-        entity.setDepth(resolveDepth(parentFolder));
-        // Return the persisted folder.
-        return FolderMapper.toDto(folderRepository.save(entity));
+        entity.setDepth(parentFolder == null ? 0 : parentFolder.getDepth() + 1);
+        // Return the persisted folder snapshot.
+        return FolderQuerySupport.toResponse(folderRepository.save(entity), folderRepository);
     }
 
     @Override
     @Transactional(readOnly = true)
     public FolderDto getFolder(final Long folderId) {
-        // Return the requested active folder.
-        return FolderMapper.toDto(getActiveFolder(folderId));
+        final UserAccountEntity currentUser = resolveCurrentUserAccount();
+        // Return the active folder snapshot for the current user scope.
+        return FolderQuerySupport.toResponse(getActiveFolder(folderId, currentUser.getId()), folderRepository);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<FolderDto> getFolders(final Long userId, final Long parentId) {
-        // Prefer the narrowest query when both owner and parent filters are present.
-        if (userId != null && parentId != null) {
-            // Return folders that belong to the requested user under the requested parent.
-            return folderRepository.findAllByUserIdAndParentIdAndDeletedAtIsNullOrderByIdAsc(
-                    ServiceValidationUtils.requirePositiveId(userId, ApiMessageKey.USER_ID_POSITIVE),
-                    ServiceValidationUtils.requirePositiveId(parentId, ApiMessageKey.PARENT_ID_POSITIVE)
-                )
-                // Convert persisted folder rows into DTOs for the API layer.
-                .stream()
-                .map(FolderMapper::toDto)
-                .toList();
+    public List<FolderDto> getFolders(
+        final Long parentId,
+        final String searchQuery,
+        final String sortBy,
+        final String sortType,
+        final Integer page,
+        final Integer size
+    ) {
+        final UserAccountEntity currentUser = resolveCurrentUserAccount();
+        final Long normalizedParentId = FolderQuerySupport.normalizeParentId(parentId);
+        // Validate the parent folder before listing its children.
+        if (normalizedParentId != null) {
+            getActiveFolder(normalizedParentId, currentUser.getId());
         }
 
-        // Fall back to an owner-only query when only the user filter is provided.
-        if (userId != null) {
-            // Return every active folder for the requested user.
-            return folderRepository.findAllByUserIdAndDeletedAtIsNullOrderByIdAsc(
-                    ServiceValidationUtils.requirePositiveId(userId, ApiMessageKey.USER_ID_POSITIVE)
-                )
-                // Convert persisted folder rows into DTOs for the API layer.
-                .stream()
-                .map(FolderMapper::toDto)
-                .toList();
-        }
+        final Pageable pageable = PageRequest.of(
+            FolderQuerySupport.normalizePage(page),
+            FolderQuerySupport.normalizeSize(size),
+            FolderQuerySupport.buildSort(sortBy, sortType)
+        );
+        final var specification = org.springframework.data.jpa.domain.Specification
+            .where(FolderQuerySupport.hasUserId(currentUser.getId()))
+            .and(FolderQuerySupport.hasParentId(normalizedParentId))
+            .and(FolderQuerySupport.hasSearchQuery(searchQuery));
 
-        // Fall back to a parent-only query when only the parent filter is provided.
-        if (parentId != null) {
-            // Return every active child folder under the requested parent.
-            return folderRepository.findAllByParentIdAndDeletedAtIsNullOrderByIdAsc(
-                    ServiceValidationUtils.requirePositiveId(parentId, ApiMessageKey.PARENT_ID_POSITIVE)
-                )
-                // Convert persisted folder rows into DTOs for the API layer.
-                .stream()
-                .map(FolderMapper::toDto)
-                .toList();
-        }
+        // Return the requested page content after applying search and sort rules.
+        return folderRepository.findAll(specification, pageable)
+            .map(entity -> FolderQuerySupport.toResponse(entity, folderRepository))
+            .getContent();
+    }
 
-        // Return every active folder when no filter is provided.
-        return folderRepository.findAllByDeletedAtIsNullOrderByIdAsc()
-            // Convert persisted folder rows into DTOs for the API layer.
-            .stream()
-            .map(FolderMapper::toDto)
-            .toList();
+    @Override
+    @Transactional
+    public FolderDto renameFolder(final Long folderId, final RenameFolderRequest request) {
+        final UserAccountEntity currentUser = resolveCurrentUserAccount();
+        final FolderEntity entity = getActiveFolder(folderId, currentUser.getId());
+        final String name = ServiceValidationUtils.normalizeRequiredText(request.name(), ApiMessageKey.NAME_REQUIRED);
+
+        assertFolderNameAvailable(entity.getUserId(), entity.getParentId(), name, entity.getId());
+
+        entity.setName(name);
+        // Return the renamed folder snapshot.
+        return FolderQuerySupport.toResponse(folderRepository.save(entity), folderRepository);
     }
 
     @Override
     @Transactional
     public FolderDto updateFolder(final Long folderId, final UpdateFolderRequest request) {
-        final FolderEntity entity = getActiveFolder(folderId);
-        final FolderEntity parentFolder = getOptionalParentFolder(request.parentId(), entity.getUserId(), entity.getId());
+        final UserAccountEntity currentUser = resolveCurrentUserAccount();
+        final FolderEntity entity = getActiveFolder(folderId, currentUser.getId());
         final String name = ServiceValidationUtils.normalizeRequiredText(request.name(), ApiMessageKey.NAME_REQUIRED);
 
-        assertNoFolderCycle(entity.getId(), request.parentId());
-        assertFolderNameAvailable(entity.getUserId(), request.parentId(), name, entity.getId());
+        assertFolderNameAvailable(entity.getUserId(), entity.getParentId(), name, entity.getId());
 
-        entity.setParentId(request.parentId());
         entity.setName(name);
         entity.setDescription(ServiceValidationUtils.normalizeOptionalText(request.description()));
-        entity.setDepth(resolveDepth(parentFolder));
-        final FolderEntity savedEntity = folderRepository.save(entity);
-        updateChildDepths(savedEntity.getId(), savedEntity.getDepth());
-        // Return the updated folder after child depths have been synchronized.
-        return FolderMapper.toDto(savedEntity);
+        // Return the updated folder snapshot.
+        return FolderQuerySupport.toResponse(folderRepository.save(entity), folderRepository);
     }
 
     @Override
     @Transactional
     public void deleteFolder(final Long folderId) {
-        final FolderEntity entity = getActiveFolder(folderId);
-
-        // Block deletion while active child folders still exist.
-        if (folderRepository.existsByParentIdAndDeletedAtIsNull(entity.getId())) {
-            // Reject deletion when descendants would be orphaned.
-            throw new ConflictException(ApiMessageKey.FOLDER_DELETE_HAS_CHILD_FOLDERS);
-        }
-
-        // Block deletion while active decks still depend on the folder.
-        if (deckRepository.existsByFolderIdAndDeletedAtIsNull(entity.getId())) {
-            // Reject deletion when the folder still contains active decks.
-            throw new ConflictException(ApiMessageKey.FOLDER_DELETE_HAS_ACTIVE_DECKS);
-        }
-
-        entity.setDeletedAt(OffsetDateTime.now());
-        folderRepository.save(entity);
+        final UserAccountEntity currentUser = resolveCurrentUserAccount();
+        // Delete the requested folder tree in the active workspace.
+        deleteFolderTree(getActiveFolder(folderId, currentUser.getId()));
     }
 
-    private FolderEntity getActiveFolder(final Long folderId) {
+    private FolderEntity getActiveFolder(final Long folderId, final Long userId) {
         final Long validatedId = ServiceValidationUtils.requirePositiveId(folderId, ApiMessageKey.FOLDER_ID_POSITIVE);
-        // Return the active folder or fail when the row is missing or soft-deleted.
+        // Return the requested active folder only when it belongs to the current user scope.
         return folderRepository.findByIdAndDeletedAtIsNull(validatedId)
+            .filter(folder -> Objects.equals(folder.getUserId(), userId))
             .orElseThrow(() -> new ResourceNotFoundException(ApiMessageKey.FOLDER_NOT_FOUND, validatedId));
     }
 
-    private UserAccountEntity getActiveUserAccount(final Long userId) {
-        final Long validatedId = ServiceValidationUtils.requirePositiveId(userId, ApiMessageKey.USER_ID_POSITIVE);
-        // Return the active user that owns the folder tree.
-        return userAccountRepository.findByIdAndDeletedAtIsNull(validatedId)
-            .orElseThrow(() -> new ResourceNotFoundException(ApiMessageKey.USER_ACCOUNT_NOT_FOUND, validatedId));
-    }
-
-    private FolderEntity getOptionalParentFolder(
-        final Long parentId,
-        final Long userId,
-        final Long currentFolderId
-    ) {
-        // Return null when the folder is intended to live at the root level.
-        if (parentId == null) {
-            // Keep the folder at depth zero when no parent is provided.
+    private FolderEntity getParentFolderOrNull(final Long folderId, final Long currentUserId) {
+        // Keep root folders parentless.
+        if (folderId == null) {
+            // Return null when the folder is intended to live at the root level.
             return null;
         }
+        // Resolve the parent folder for a nested folder create request.
+        return getActiveFolder(folderId, currentUserId);
+    }
 
-        final FolderEntity parentFolder = getActiveFolder(parentId);
+    private UserAccountEntity resolveCurrentUserAccount() {
+        // Resolve the active demo account used as the current workspace owner.
+        return userAccountRepository.findFirstByAccountStatusAndDeletedAtIsNullOrderByIdAsc(AccountStatus.ACTIVE)
+            .orElseGet(() -> userAccountRepository.findFirstByDeletedAtIsNullOrderByIdAsc()
+                .orElseThrow(() -> new ResourceNotFoundException(ApiMessageKey.ACTIVE_USER_ACCOUNT_NOT_FOUND, 1L)));
+    }
 
-        // Reject parent folders that belong to another user.
-        if (!Objects.equals(parentFolder.getUserId(), userId)) {
-            // Stop cross-user folder parenting.
-            throw new ConflictException(ApiMessageKey.FOLDER_PARENT_USER_MISMATCH);
+    private void assertFolderCanAcceptChildFolder(final FolderEntity parentFolder) {
+        // Root folders can always accept child folders.
+        if (parentFolder == null) {
+            // Skip the leaf-folder constraint at the top level.
+            return;
+        }
+        // Reject creating a subfolder under a folder that already hosts decks.
+        if (deckRepository.existsByFolderIdAndDeletedAtIsNull(parentFolder.getId())) {
+            // Stop the write when the parent would violate the folder/deck exclusivity rule.
+            throw new ConflictException(ApiMessageKey.FOLDER_PARENT_HAS_ACTIVE_DECKS);
+        }
+    }
+
+    private void deleteFolderTree(final FolderEntity folder) {
+        // Delete child folders before touching the current folder row.
+        for (final FolderEntity childFolder : folderRepository.findAllByParentIdAndDeletedAtIsNullOrderByIdAsc(folder.getId())) {
+            deleteFolderTree(childFolder);
         }
 
-        // Reject a folder being assigned as its own direct parent.
-        if (currentFolderId != null && Objects.equals(parentFolder.getId(), currentFolderId)) {
-            // Stop immediate self-references in the folder tree.
-            throw new ConflictException(ApiMessageKey.FOLDER_PARENT_SELF);
+        // Delete decks in the current folder before soft-deleting the folder itself.
+        for (final DeckEntity deck : deckRepository.findAllByFolderIdAndDeletedAtIsNullOrderByIdAsc(folder.getId())) {
+            deleteDeckTree(deck);
         }
-        // Return the validated parent folder for depth calculation and persistence.
-        return parentFolder;
+
+        folder.setDeletedAt(OffsetDateTime.now());
+        // Persist the soft-delete marker on the current folder.
+        folderRepository.save(folder);
+    }
+
+    private void deleteDeckTree(final DeckEntity deck) {
+        // Remove deck-specific review settings before marking the deck deleted.
+        deckReviewSettingsRepository.removeByDeckId(deck.getId());
+        // Soft-delete each active flashcard attached to the deck.
+        for (final var flashcard : flashcardRepository.findAllByDeckIdAndDeletedAtIsNullOrderByIdAsc(deck.getId())) {
+            flashcardLanguageRepository.removeByFlashcardId(flashcard.getId());
+            flashcard.setDeletedAt(OffsetDateTime.now());
+            flashcardRepository.save(flashcard);
+        }
+
+        deck.setDeletedAt(OffsetDateTime.now());
+        // Persist the soft-delete marker on the deck.
+        deckRepository.save(deck);
     }
 
     private void assertFolderNameAvailable(
@@ -203,46 +223,10 @@ public class FolderServiceImpl implements FolderService {
                 name,
                 folderId
             );
-
         // Reject duplicate sibling names for the same owner and parent.
         if (alreadyExists) {
             // Stop the write when another active sibling already uses the same name.
             throw new ConflictException(ApiMessageKey.FOLDER_NAME_EXISTS);
-        }
-    }
-
-    private void assertNoFolderCycle(final Long folderId, final Long parentId) {
-        Long currentParentId = parentId;
-
-        // Walk the parent chain to ensure the update does not create a cycle.
-        while (currentParentId != null) {
-            // Reject any ancestor chain that loops back to the current folder.
-            if (Objects.equals(currentParentId, folderId)) {
-                // Stop the update when the folder would become its own ancestor.
-                throw new ConflictException(ApiMessageKey.FOLDER_CYCLE);
-            }
-            currentParentId = getActiveFolder(currentParentId).getParentId();
-        }
-    }
-
-    private int resolveDepth(final FolderEntity parentFolder) {
-        // Root folders always start at depth zero.
-        if (parentFolder == null) {
-            // Return the base depth for root folders.
-            return 0;
-        }
-        // Return the next depth level under the resolved parent.
-        return parentFolder.getDepth() + 1;
-    }
-
-    private void updateChildDepths(final Long parentFolderId, final Integer parentDepth) {
-        final List<FolderEntity> childFolders = folderRepository.findAllByParentIdAndDeletedAtIsNullOrderByIdAsc(parentFolderId);
-
-        // Cascade the new depth to each active child in the subtree.
-        for (final FolderEntity childFolder : childFolders) {
-            childFolder.setDepth(parentDepth + 1);
-            final FolderEntity savedChildFolder = folderRepository.save(childFolder);
-            updateChildDepths(savedChildFolder.getId(), savedChildFolder.getDepth());
         }
     }
 }

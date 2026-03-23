@@ -12,6 +12,10 @@ public interface UserAccountRepository extends JpaRepository<UserAccountEntity, 
 
     Optional<UserAccountEntity> findByIdAndDeletedAtIsNull(Long userAccountId);
 
+    Optional<UserAccountEntity> findFirstByAccountStatusAndDeletedAtIsNullOrderByIdAsc(AccountStatus accountStatus);
+
+    Optional<UserAccountEntity> findFirstByDeletedAtIsNullOrderByIdAsc();
+
     List<UserAccountEntity> findAllByDeletedAtIsNullOrderByIdAsc();
 
     List<UserAccountEntity> findAllByAccountStatusAndDeletedAtIsNullOrderByIdAsc(AccountStatus accountStatus);
