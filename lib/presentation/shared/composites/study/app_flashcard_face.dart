@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
-import 'package:memora/core/theme/tokens/motion_tokens.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 import 'package:memora/presentation/shared/primitives/displays/app_surface.dart';
 
 class AppFlashcardFace extends StatelessWidget {
@@ -50,14 +50,8 @@ class AppFlashcardFace extends StatelessWidget {
             child: Padding(
               padding: resolvedPadding,
               child: AnimatedCrossFade(
-                firstChild: Align(
-                  alignment: Alignment.topLeft,
-                  child: front,
-                ),
-                secondChild: Align(
-                  alignment: Alignment.topLeft,
-                  child: back,
-                ),
+                firstChild: Align(alignment: Alignment.topLeft, child: front),
+                secondChild: Align(alignment: Alignment.topLeft, child: back),
                 crossFadeState: isRevealed
                     ? CrossFadeState.showSecond
                     : CrossFadeState.showFirst,

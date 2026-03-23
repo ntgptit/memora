@@ -11,8 +11,6 @@ import com.memora.app.dto.RenameFolderRequest;
 import com.memora.app.dto.UpdateFolderRequest;
 import com.memora.app.entity.DeckEntity;
 import com.memora.app.entity.FolderEntity;
-import com.memora.app.entity.UserAccountEntity;
-import com.memora.app.enums.AccountStatus;
 import com.memora.app.exception.ConflictException;
 import com.memora.app.exception.ResourceNotFoundException;
 import com.memora.app.repository.DeckRepository;
@@ -20,7 +18,7 @@ import com.memora.app.repository.DeckReviewSettingsRepository;
 import com.memora.app.repository.FlashcardLanguageRepository;
 import com.memora.app.repository.FlashcardRepository;
 import com.memora.app.repository.FolderRepository;
-import com.memora.app.repository.UserAccountRepository;
+import com.memora.app.security.CurrentAuthenticatedUserService;
 import com.memora.app.service.FolderService;
 import com.memora.app.util.ServiceValidationUtils;
 
@@ -40,20 +38,20 @@ public class FolderServiceImpl implements FolderService {
     private final FlashcardLanguageRepository flashcardLanguageRepository;
     private final FlashcardRepository flashcardRepository;
     private final FolderRepository folderRepository;
-    private final UserAccountRepository userAccountRepository;
+    private final CurrentAuthenticatedUserService currentAuthenticatedUserService;
 
     @Override
     @Transactional
     public FolderDto createFolder(final CreateFolderRequest request) {
-        final UserAccountEntity currentUser = resolveCurrentUserAccount();
+        final Long currentUserId = currentAuthenticatedUserService.getCurrentUser().userId();
         final String name = ServiceValidationUtils.normalizeRequiredText(request.name(), ApiMessageKey.NAME_REQUIRED);
-        final FolderEntity parentFolder = getParentFolderOrNull(request.parentId(), currentUser.getId());
+        final FolderEntity parentFolder = getParentFolderOrNull(request.parentId(), currentUserId);
 
         assertFolderCanAcceptChildFolder(parentFolder);
-        assertFolderNameAvailable(currentUser.getId(), request.parentId(), name, null);
+        assertFolderNameAvailable(currentUserId, request.parentId(), name, null);
 
         final FolderEntity entity = new FolderEntity();
-        entity.setUserId(currentUser.getId());
+        entity.setUserId(currentUserId);
         entity.setParentId(parentFolder == null ? null : parentFolder.getId());
         entity.setName(name);
         entity.setDescription(ServiceValidationUtils.normalizeOptionalText(request.description()));
@@ -65,9 +63,9 @@ public class FolderServiceImpl implements FolderService {
     @Override
     @Transactional(readOnly = true)
     public FolderDto getFolder(final Long folderId) {
-        final UserAccountEntity currentUser = resolveCurrentUserAccount();
+        final Long currentUserId = currentAuthenticatedUserService.getCurrentUser().userId();
         // Return the active folder snapshot for the current user scope.
-        return FolderQuerySupport.toResponse(getActiveFolder(folderId, currentUser.getId()), folderRepository);
+        return FolderQuerySupport.toResponse(getActiveFolder(folderId, currentUserId), folderRepository);
     }
 
     @Override
@@ -80,11 +78,11 @@ public class FolderServiceImpl implements FolderService {
         final Integer page,
         final Integer size
     ) {
-        final UserAccountEntity currentUser = resolveCurrentUserAccount();
+        final Long currentUserId = currentAuthenticatedUserService.getCurrentUser().userId();
         final Long normalizedParentId = FolderQuerySupport.normalizeParentId(parentId);
         // Validate the parent folder before listing its children.
         if (normalizedParentId != null) {
-            getActiveFolder(normalizedParentId, currentUser.getId());
+            getActiveFolder(normalizedParentId, currentUserId);
         }
 
         final Pageable pageable = PageRequest.of(
@@ -93,7 +91,7 @@ public class FolderServiceImpl implements FolderService {
             FolderQuerySupport.buildSort(sortBy, sortType)
         );
         final var specification = org.springframework.data.jpa.domain.Specification
-            .where(FolderQuerySupport.hasUserId(currentUser.getId()))
+            .where(FolderQuerySupport.hasUserId(currentUserId))
             .and(FolderQuerySupport.hasParentId(normalizedParentId))
             .and(FolderQuerySupport.hasSearchQuery(searchQuery));
 
@@ -106,8 +104,8 @@ public class FolderServiceImpl implements FolderService {
     @Override
     @Transactional
     public FolderDto renameFolder(final Long folderId, final RenameFolderRequest request) {
-        final UserAccountEntity currentUser = resolveCurrentUserAccount();
-        final FolderEntity entity = getActiveFolder(folderId, currentUser.getId());
+        final Long currentUserId = currentAuthenticatedUserService.getCurrentUser().userId();
+        final FolderEntity entity = getActiveFolder(folderId, currentUserId);
         final String name = ServiceValidationUtils.normalizeRequiredText(request.name(), ApiMessageKey.NAME_REQUIRED);
 
         assertFolderNameAvailable(entity.getUserId(), entity.getParentId(), name, entity.getId());
@@ -120,8 +118,8 @@ public class FolderServiceImpl implements FolderService {
     @Override
     @Transactional
     public FolderDto updateFolder(final Long folderId, final UpdateFolderRequest request) {
-        final UserAccountEntity currentUser = resolveCurrentUserAccount();
-        final FolderEntity entity = getActiveFolder(folderId, currentUser.getId());
+        final Long currentUserId = currentAuthenticatedUserService.getCurrentUser().userId();
+        final FolderEntity entity = getActiveFolder(folderId, currentUserId);
         final String name = ServiceValidationUtils.normalizeRequiredText(request.name(), ApiMessageKey.NAME_REQUIRED);
 
         assertFolderNameAvailable(entity.getUserId(), entity.getParentId(), name, entity.getId());
@@ -135,9 +133,9 @@ public class FolderServiceImpl implements FolderService {
     @Override
     @Transactional
     public void deleteFolder(final Long folderId) {
-        final UserAccountEntity currentUser = resolveCurrentUserAccount();
+        final Long currentUserId = currentAuthenticatedUserService.getCurrentUser().userId();
         // Delete the requested folder tree in the active workspace.
-        deleteFolderTree(getActiveFolder(folderId, currentUser.getId()));
+        deleteFolderTree(getActiveFolder(folderId, currentUserId));
     }
 
     private FolderEntity getActiveFolder(final Long folderId, final Long userId) {
@@ -156,13 +154,6 @@ public class FolderServiceImpl implements FolderService {
         }
         // Resolve the parent folder for a nested folder create request.
         return getActiveFolder(folderId, currentUserId);
-    }
-
-    private UserAccountEntity resolveCurrentUserAccount() {
-        // Resolve the active demo account used as the current workspace owner.
-        return userAccountRepository.findFirstByAccountStatusAndDeletedAtIsNullOrderByIdAsc(AccountStatus.ACTIVE)
-            .orElseGet(() -> userAccountRepository.findFirstByDeletedAtIsNullOrderByIdAsc()
-                .orElseThrow(() -> new ResourceNotFoundException(ApiMessageKey.ACTIVE_USER_ACCOUNT_NOT_FOUND, 1L)));
     }
 
     private void assertFolderCanAcceptChildFolder(final FolderEntity parentFolder) {

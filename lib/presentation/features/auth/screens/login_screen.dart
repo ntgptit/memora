@@ -145,6 +145,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         return l10n.authRegisterSuccessMessage;
       case AuthNotice.signedOut:
         return l10n.authSignOutSuccessMessage;
+      case AuthNotice.sessionExpired:
+        return l10n.authSessionExpiredMessage;
       case AuthNotice.passwordResetSent:
         return l10n.authPasswordResetSuccessMessage;
       case AuthNotice.invalidCredentials:
@@ -167,6 +169,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       case AuthNotice.signedOut:
       case AuthNotice.passwordResetSent:
         return SnackbarType.success;
+      case AuthNotice.sessionExpired:
       case AuthNotice.invalidCredentials:
       case AuthNotice.duplicateAccount:
       case AuthNotice.invalidResetRequest:

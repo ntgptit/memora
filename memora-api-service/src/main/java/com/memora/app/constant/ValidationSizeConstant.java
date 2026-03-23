@@ -5,6 +5,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ValidationSizeConstant {
 
+    public static final int USERNAME_MIN_LENGTH = 3;
     public static final int USERNAME_MAX_LENGTH = 40;
     public static final int EMAIL_MAX_LENGTH = 120;
     public static final int PASSWORD_MIN_LENGTH = 8;

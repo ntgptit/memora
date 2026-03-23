@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
-import 'package:memora/core/theme/tokens/opacity_tokens.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 import 'package:memora/presentation/shared/composites/states/app_loading_state.dart';
 
 class AppFullscreenLoader extends StatelessWidget {

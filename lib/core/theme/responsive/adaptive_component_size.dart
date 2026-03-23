@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:memora/core/theme/responsive/screen_class.dart';
-import 'package:memora/core/theme/tokens/size_tokens.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 
 @immutable
 class AdaptiveComponentSize {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memora/core/theme/tokens/color_tokens.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 
 @immutable
 class ColorSchemeExt extends ThemeExtension<ColorSchemeExt> {

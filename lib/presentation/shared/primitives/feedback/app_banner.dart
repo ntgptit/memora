@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/enums/snackbar_type.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
-import 'package:memora/core/theme/tokens/opacity_tokens.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 
 class AppBanner extends StatelessWidget {
   const AppBanner({
@@ -31,7 +31,9 @@ class AppBanner extends StatelessWidget {
         border: Border.all(color: tone.border),
       ),
       child: Padding(
-        padding: EdgeInsets.all(dense ? context.spacing.sm : context.spacing.md),
+        padding: EdgeInsets.all(
+          dense ? context.spacing.sm : context.spacing.md,
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

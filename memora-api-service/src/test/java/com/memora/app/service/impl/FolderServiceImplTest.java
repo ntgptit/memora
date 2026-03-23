@@ -10,14 +10,13 @@ import java.util.Optional;
 
 import com.memora.app.dto.CreateFolderRequest;
 import com.memora.app.entity.FolderEntity;
-import com.memora.app.entity.UserAccountEntity;
-import com.memora.app.enums.AccountStatus;
 import com.memora.app.repository.DeckRepository;
 import com.memora.app.repository.DeckReviewSettingsRepository;
 import com.memora.app.repository.FlashcardLanguageRepository;
 import com.memora.app.repository.FlashcardRepository;
 import com.memora.app.repository.FolderRepository;
-import com.memora.app.repository.UserAccountRepository;
+import com.memora.app.security.AuthenticatedUser;
+import com.memora.app.security.CurrentAuthenticatedUserService;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,19 +43,16 @@ class FolderServiceImplTest {
     private FolderRepository folderRepository;
 
     @Mock
-    private UserAccountRepository userAccountRepository;
+    private CurrentAuthenticatedUserService currentAuthenticatedUserService;
 
     @InjectMocks
     private FolderServiceImpl folderService;
 
     @Test
     void createFolderUsesCurrentUserAndReturnsDerivedMetadata() {
-        final UserAccountEntity currentUser = new UserAccountEntity();
-        currentUser.setId(1L);
-        currentUser.setAccountStatus(AccountStatus.ACTIVE);
+        final AuthenticatedUser currentUser = new AuthenticatedUser(1L, "demo", "demo@memora.local", null);
 
-        when(userAccountRepository.findFirstByAccountStatusAndDeletedAtIsNullOrderByIdAsc(AccountStatus.ACTIVE))
-            .thenReturn(Optional.of(currentUser));
+        when(currentAuthenticatedUserService.getCurrentUser()).thenReturn(currentUser);
         when(folderRepository.existsByUserIdAndParentIdAndNameIgnoreCaseAndDeletedAtIsNull(1L, null, "Root"))
             .thenReturn(false);
         when(folderRepository.save(any(FolderEntity.class))).thenAnswer(invocation -> {

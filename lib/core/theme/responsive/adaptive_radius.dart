@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:memora/core/theme/responsive/responsive_scale.dart';
 import 'package:memora/core/theme/responsive/screen_class.dart';
-import 'package:memora/core/theme/tokens/radius_tokens.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 
 @immutable
 class AdaptiveRadius {

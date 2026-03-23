@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memora/core/theme/tokens/opacity_tokens.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
 import 'package:memora/domain/entities/folder.dart';
 import 'package:memora/l10n/l10n.dart';
@@ -48,11 +48,7 @@ class FolderListItem extends StatelessWidget {
               child: const Icon(Icons.folder_rounded),
             )
           else
-            AppChip(
-              label: Text(
-                context.l10n.folderLeafLabel,
-              ),
-            ),
+            AppChip(label: Text(context.l10n.folderLeafLabel)),
           SizedBox(width: context.spacing.xs),
           if (onRename != null && onEdit != null && onDelete != null)
             FolderActionMenu(
@@ -82,10 +78,7 @@ class _FolderLeading extends StatelessWidget {
         borderRadius: BorderRadius.circular(context.radius.md),
       ),
       alignment: Alignment.center,
-      child: Icon(
-        Icons.folder_rounded,
-        color: color,
-      ),
+      child: Icon(Icons.folder_rounded, color: color),
     );
   }
 

@@ -20,6 +20,5 @@ class ProgressController extends _$ProgressController {
 
   Future<void> refresh() async {
     ref.invalidateSelf();
-    await future;
   }
 }

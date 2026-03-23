@@ -11,8 +11,6 @@ import com.memora.app.dto.DeckDto;
 import com.memora.app.dto.UpdateDeckRequest;
 import com.memora.app.entity.DeckEntity;
 import com.memora.app.entity.FolderEntity;
-import com.memora.app.entity.UserAccountEntity;
-import com.memora.app.enums.AccountStatus;
 import com.memora.app.enums.DeckSortField;
 import com.memora.app.exception.ConflictException;
 import com.memora.app.exception.ResourceNotFoundException;
@@ -22,7 +20,7 @@ import com.memora.app.repository.DeckReviewSettingsRepository;
 import com.memora.app.repository.FlashcardLanguageRepository;
 import com.memora.app.repository.FlashcardRepository;
 import com.memora.app.repository.FolderRepository;
-import com.memora.app.repository.UserAccountRepository;
+import com.memora.app.security.CurrentAuthenticatedUserService;
 import com.memora.app.service.DeckService;
 import com.memora.app.util.ServiceValidationUtils;
 
@@ -51,13 +49,13 @@ public class DeckServiceImpl implements DeckService {
     private final FlashcardLanguageRepository flashcardLanguageRepository;
     private final FlashcardRepository flashcardRepository;
     private final FolderRepository folderRepository;
-    private final UserAccountRepository userAccountRepository;
+    private final CurrentAuthenticatedUserService currentAuthenticatedUserService;
 
     @Override
     @Transactional
     public DeckDto createDeck(final Long folderId, final CreateDeckRequest request) {
-        final UserAccountEntity currentUser = resolveCurrentUserAccount();
-        final FolderEntity folder = getActiveFolder(folderId, currentUser.getId());
+        final Long currentUserId = currentAuthenticatedUserService.getCurrentUser().userId();
+        final FolderEntity folder = getActiveFolder(folderId, currentUserId);
         final String name = ServiceValidationUtils.normalizeRequiredText(request.name(), ApiMessageKey.NAME_REQUIRED);
 
         assertFolderCanContainDecks(folder);
@@ -75,8 +73,8 @@ public class DeckServiceImpl implements DeckService {
     @Override
     @Transactional(readOnly = true)
     public DeckDto getDeck(final Long folderId, final Long deckId) {
-        final UserAccountEntity currentUser = resolveCurrentUserAccount();
-        getActiveFolder(folderId, currentUser.getId());
+        final Long currentUserId = currentAuthenticatedUserService.getCurrentUser().userId();
+        getActiveFolder(folderId, currentUserId);
         // Return the requested deck inside the current folder scope.
         return toResponse(getActiveDeck(deckId, folderId));
     }
@@ -91,8 +89,8 @@ public class DeckServiceImpl implements DeckService {
         final Integer page,
         final Integer size
     ) {
-        final UserAccountEntity currentUser = resolveCurrentUserAccount();
-        final FolderEntity folder = getActiveFolder(folderId, currentUser.getId());
+        final Long currentUserId = currentAuthenticatedUserService.getCurrentUser().userId();
+        final FolderEntity folder = getActiveFolder(folderId, currentUserId);
 
         final Specification<DeckEntity> specification = Specification
             .where(isActive())
@@ -112,8 +110,8 @@ public class DeckServiceImpl implements DeckService {
     @Override
     @Transactional
     public DeckDto updateDeck(final Long folderId, final Long deckId, final UpdateDeckRequest request) {
-        final UserAccountEntity currentUser = resolveCurrentUserAccount();
-        final FolderEntity folder = getActiveFolder(folderId, currentUser.getId());
+        final Long currentUserId = currentAuthenticatedUserService.getCurrentUser().userId();
+        final FolderEntity folder = getActiveFolder(folderId, currentUserId);
         final DeckEntity entity = getActiveDeck(deckId, folder.getId());
         final String name = ServiceValidationUtils.normalizeRequiredText(request.name(), ApiMessageKey.NAME_REQUIRED);
 
@@ -129,21 +127,14 @@ public class DeckServiceImpl implements DeckService {
     @Override
     @Transactional
     public void deleteDeck(final Long folderId, final Long deckId) {
-        final UserAccountEntity currentUser = resolveCurrentUserAccount();
-        getActiveFolder(folderId, currentUser.getId());
+        final Long currentUserId = currentAuthenticatedUserService.getCurrentUser().userId();
+        getActiveFolder(folderId, currentUserId);
         deleteDeckTree(getActiveDeck(deckId, folderId), OffsetDateTime.now());
     }
 
     private DeckDto toResponse(final DeckEntity entity) {
         // Map persistence fields to the API response and add derived values.
         return DeckMapper.toDto(entity, flashcardRepository.countByDeckIdAndDeletedAtIsNull(entity.getId()));
-    }
-
-    private UserAccountEntity resolveCurrentUserAccount() {
-        // Resolve the active demo account used as the current workspace owner.
-        return userAccountRepository.findFirstByAccountStatusAndDeletedAtIsNullOrderByIdAsc(AccountStatus.ACTIVE)
-            .or(() -> userAccountRepository.findFirstByDeletedAtIsNullOrderByIdAsc())
-            .orElseThrow(() -> new ResourceNotFoundException(ApiMessageKey.ACTIVE_USER_ACCOUNT_NOT_FOUND));
     }
 
     private FolderEntity getActiveFolder(final Long folderId, final Long userId) {

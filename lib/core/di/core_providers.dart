@@ -8,6 +8,8 @@ import 'package:memora/core/network/interceptors/auth_interceptor.dart';
 import 'package:memora/core/network/interceptors/connectivity_interceptor.dart';
 import 'package:memora/core/network/interceptors/logging_interceptor.dart';
 import 'package:memora/core/network/interceptors/retry_interceptor.dart';
+import 'package:memora/core/network/interceptors/session_refresh_interceptor.dart';
+import 'package:memora/core/services/auth_session_service.dart';
 import 'package:memora/core/storage/cache_manager.dart';
 import 'package:memora/core/storage/preferences_storage.dart';
 import 'package:memora/core/storage/secure_storage.dart';
@@ -38,6 +40,7 @@ ApiClient apiClient(Ref ref) {
   final envConfig = ref.watch(envConfigProvider);
   final networkInfo = ref.watch(networkInfoProvider);
   final secureStorage = ref.watch(secureStorageProvider);
+  final authSessionService = ref.watch(authSessionServiceProvider);
 
   return ApiClient(
     baseUrl: envConfig.baseUrl,
@@ -46,6 +49,11 @@ ApiClient apiClient(Ref ref) {
       (_) => ConnectivityInterceptor(networkInfo),
       (_) => AuthInterceptor(
         tokenReader: () => secureStorage.read(StorageKeys.authToken),
+      ),
+      (dio) => SessionRefreshInterceptor(
+        dio: dio,
+        secureStorage: secureStorage,
+        authSessionService: authSessionService,
       ),
       (dio) => RetryInterceptor(dio: dio),
       (_) => LoggingInterceptor(enabled: envConfig.enableNetworkLogs),
@@ -66,6 +74,13 @@ PreferencesStorage preferencesStorage(Ref ref) {
 @Riverpod(keepAlive: true)
 SecureStorage secureStorage(Ref ref) {
   return SecureStorage();
+}
+
+@Riverpod(keepAlive: true)
+AuthSessionService authSessionService(Ref ref) {
+  final service = AuthSessionService();
+  ref.onDispose(service.dispose);
+  return service;
 }
 
 @Riverpod(keepAlive: true)

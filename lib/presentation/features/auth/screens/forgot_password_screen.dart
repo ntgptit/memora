@@ -105,6 +105,12 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
           message: l10n.authNetworkFailureMessage,
           type: SnackbarType.error,
         );
+      case AuthNotice.sessionExpired:
+        return AppBanner(
+          title: l10n.authErrorBannerTitle,
+          message: l10n.authSessionExpiredMessage,
+          type: SnackbarType.error,
+        );
       case AuthNotice.loginSucceeded:
       case AuthNotice.registrationSucceeded:
       case AuthNotice.signedOut:

@@ -10,13 +10,11 @@ import com.memora.app.dto.FlashcardPageResponse;
 import com.memora.app.dto.UpdateFlashcardRequest;
 import com.memora.app.entity.DeckEntity;
 import com.memora.app.entity.FlashcardEntity;
-import com.memora.app.entity.UserAccountEntity;
-import com.memora.app.enums.AccountStatus;
 import com.memora.app.exception.ResourceNotFoundException;
 import com.memora.app.repository.DeckRepository;
 import com.memora.app.repository.FlashcardLanguageRepository;
 import com.memora.app.repository.FlashcardRepository;
-import com.memora.app.repository.UserAccountRepository;
+import com.memora.app.security.CurrentAuthenticatedUserService;
 import com.memora.app.service.FlashcardService;
 import com.memora.app.util.ServiceValidationUtils;
 
@@ -36,7 +34,7 @@ public class FlashcardServiceImpl implements FlashcardService {
     private final DeckRepository deckRepository;
     private final FlashcardLanguageRepository flashcardLanguageRepository;
     private final FlashcardRepository flashcardRepository;
-    private final UserAccountRepository userAccountRepository;
+    private final CurrentAuthenticatedUserService currentAuthenticatedUserService;
 
     @Override
     @Transactional
@@ -147,10 +145,10 @@ public class FlashcardServiceImpl implements FlashcardService {
 
     private DeckEntity getActiveDeck(final Long deckId) {
         final Long validatedId = ServiceValidationUtils.requirePositiveId(deckId, ApiMessageKey.DECK_ID_POSITIVE);
-        final UserAccountEntity currentUser = resolveCurrentUserAccount();
+        final Long currentUserId = currentAuthenticatedUserService.getCurrentUser().userId();
         // Return the active deck only when it belongs to the current workspace owner.
         return deckRepository.findByIdAndDeletedAtIsNull(validatedId)
-            .filter(deck -> Objects.equals(deck.getUserId(), currentUser.getId()))
+            .filter(deck -> Objects.equals(deck.getUserId(), currentUserId))
             .orElseThrow(() -> new ResourceNotFoundException(ApiMessageKey.DECK_NOT_FOUND, validatedId));
     }
 
@@ -164,10 +162,4 @@ public class FlashcardServiceImpl implements FlashcardService {
             .orElseThrow(() -> new ResourceNotFoundException(ApiMessageKey.FLASHCARD_NOT_FOUND, validatedId));
     }
 
-    private UserAccountEntity resolveCurrentUserAccount() {
-        // Resolve the active demo account used as the current workspace owner.
-        return userAccountRepository.findFirstByAccountStatusAndDeletedAtIsNullOrderByIdAsc(AccountStatus.ACTIVE)
-            .or(() -> userAccountRepository.findFirstByDeletedAtIsNullOrderByIdAsc())
-            .orElseThrow(() -> new ResourceNotFoundException(ApiMessageKey.ACTIVE_USER_ACCOUNT_NOT_FOUND));
-    }
 }

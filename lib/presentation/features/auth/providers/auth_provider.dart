@@ -1,7 +1,11 @@
 import 'dart:async';
 
+import 'package:memora/core/di/core_providers.dart';
+import 'package:memora/core/di/repository_providers.dart';
 import 'package:memora/core/enums/loading_status.dart';
-import 'package:memora/core/theme/tokens/motion_tokens.dart';
+import 'package:memora/core/services/auth_session_service.dart';
+import 'package:memora/domain/repositories/auth_repository.dart';
+import 'package:memora/presentation/features/auth/providers/auth_notice_mapper.dart';
 import 'package:memora/presentation/features/auth/providers/auth_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -9,22 +13,109 @@ part 'auth_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 class AuthController extends _$AuthController {
+  AuthRepository get _authRepository => ref.read(authRepositoryProvider);
+
   @override
   AuthState build() {
+    final authSessionService = ref.watch(authSessionServiceProvider);
+    final subscription = authSessionService.events.listen((event) {
+      if (event != AuthSessionEvent.expired) {
+        return;
+      }
+
+      unawaited(_handleSessionExpired());
+    });
+    ref.onDispose(subscription.cancel);
+
     Future<void>.microtask(_bootstrapSession);
     return const AuthState.initial();
   }
 
   Future<void> _bootstrapSession() async {
-    await Future<void>.delayed(AppMotionTokens.slow);
     if (state.sessionStatus != AuthSessionStatus.checking) {
+      return;
+    }
+
+    final storedTokens = await _authRepository.readStoredTokens();
+    if (storedTokens == null || !storedTokens.hasAnyToken) {
+      state = state.copyWith(
+        sessionStatus: AuthSessionStatus.unauthenticated,
+        submitStatus: LoadingStatus.idle,
+        clearNotice: true,
+        clearCurrentUser: true,
+      );
+      return;
+    }
+
+    try {
+      if (storedTokens.hasAccessToken) {
+        final currentUser = await _authRepository.getCurrentUser();
+        state = state.copyWith(
+          sessionStatus: AuthSessionStatus.authenticated,
+          submitStatus: LoadingStatus.idle,
+          currentUser: currentUser,
+          clearNotice: true,
+        );
+        return;
+      }
+
+      if (storedTokens.hasRefreshToken) {
+        await _restoreSession(storedTokens.refreshToken!);
+        return;
+      }
+    } catch (error, stackTrace) {
+      if (storedTokens.hasRefreshToken) {
+        try {
+          await _restoreSession(storedTokens.refreshToken!);
+          return;
+        } catch (_) {
+          // Fall through to clearing the broken session.
+        }
+      }
+
+      await _authRepository.clearPersistedSession();
+      state = state.copyWith(
+        sessionStatus: AuthSessionStatus.unauthenticated,
+        submitStatus: LoadingStatus.idle,
+        notice: AuthNoticeMapper.bootstrapNoticeFor(error, stackTrace),
+        clearCurrentUser: true,
+      );
+      return;
+    }
+
+    await _authRepository.clearPersistedSession();
+    state = state.copyWith(
+      sessionStatus: AuthSessionStatus.unauthenticated,
+      submitStatus: LoadingStatus.idle,
+      clearNotice: true,
+      clearCurrentUser: true,
+    );
+  }
+
+  Future<void> _restoreSession(String refreshToken) async {
+    final session = await _authRepository.refresh(refreshToken: refreshToken);
+    await _authRepository.persistSession(session);
+    state = state.copyWith(
+      sessionStatus: AuthSessionStatus.authenticated,
+      submitStatus: LoadingStatus.idle,
+      currentUser: session.user,
+      clearNotice: true,
+    );
+  }
+
+  Future<void> _handleSessionExpired() async {
+    await _authRepository.clearPersistedSession();
+
+    if (state.sessionStatus == AuthSessionStatus.unauthenticated &&
+        state.notice == AuthNotice.sessionExpired) {
       return;
     }
 
     state = state.copyWith(
       sessionStatus: AuthSessionStatus.unauthenticated,
+      activeMode: AuthViewMode.login,
       submitStatus: LoadingStatus.idle,
-      clearNotice: true,
+      notice: AuthNotice.sessionExpired,
       clearCurrentUser: true,
     );
   }
@@ -58,30 +149,31 @@ class AuthController extends _$AuthController {
       clearNotice: true,
     );
 
-    await Future<void>.delayed(AppMotionTokens.slow);
-
-    if (_looksLikeNetworkFailure(identifier)) {
-      state = state.copyWith(
-        submitStatus: LoadingStatus.error,
-        notice: AuthNotice.networkFailure,
+    try {
+      final session = await _authRepository.login(
+        identifier: identifier.trim(),
+        password: password,
       );
-      return;
-    }
+      await _authRepository.persistSession(session);
 
-    if (identifier.trim().isEmpty || password.trim().length < 8) {
       state = state.copyWith(
-        submitStatus: LoadingStatus.error,
-        notice: AuthNotice.invalidCredentials,
+        sessionStatus: AuthSessionStatus.authenticated,
+        submitStatus: LoadingStatus.success,
+        currentUser: session.user,
+        notice: AuthNotice.loginSucceeded,
       );
-      return;
+    } catch (error, stackTrace) {
+      state = state.copyWith(
+        sessionStatus: AuthSessionStatus.unauthenticated,
+        submitStatus: LoadingStatus.error,
+        notice: AuthNoticeMapper.noticeForError(
+          error,
+          stackTrace,
+          isRegister: false,
+        ),
+        clearCurrentUser: true,
+      );
     }
-
-    state = state.copyWith(
-      sessionStatus: AuthSessionStatus.authenticated,
-      submitStatus: LoadingStatus.success,
-      currentUserLabel: identifier.trim(),
-      notice: AuthNotice.loginSucceeded,
-    );
   }
 
   Future<void> registerAccount({
@@ -94,30 +186,32 @@ class AuthController extends _$AuthController {
       clearNotice: true,
     );
 
-    await Future<void>.delayed(AppMotionTokens.emphasized);
-
-    if (_looksLikeNetworkFailure(email)) {
-      state = state.copyWith(
-        submitStatus: LoadingStatus.error,
-        notice: AuthNotice.networkFailure,
+    try {
+      final session = await _authRepository.register(
+        username: username.trim(),
+        email: email.trim(),
+        password: password,
       );
-      return;
-    }
+      await _authRepository.persistSession(session);
 
-    if (_looksLikeDuplicateAccount(username, email)) {
       state = state.copyWith(
-        submitStatus: LoadingStatus.error,
-        notice: AuthNotice.duplicateAccount,
+        sessionStatus: AuthSessionStatus.authenticated,
+        submitStatus: LoadingStatus.success,
+        currentUser: session.user,
+        notice: AuthNotice.registrationSucceeded,
       );
-      return;
+    } catch (error, stackTrace) {
+      state = state.copyWith(
+        sessionStatus: AuthSessionStatus.unauthenticated,
+        submitStatus: LoadingStatus.error,
+        notice: AuthNoticeMapper.noticeForError(
+          error,
+          stackTrace,
+          isRegister: true,
+        ),
+        clearCurrentUser: true,
+      );
     }
-
-    state = state.copyWith(
-      sessionStatus: AuthSessionStatus.authenticated,
-      submitStatus: LoadingStatus.success,
-      currentUserLabel: username.trim(),
-      notice: AuthNotice.registrationSucceeded,
-    );
   }
 
   Future<void> requestPasswordReset({required String email}) async {
@@ -126,17 +220,8 @@ class AuthController extends _$AuthController {
       clearNotice: true,
     );
 
-    await Future<void>.delayed(AppMotionTokens.slow);
-
-    if (_looksLikeNetworkFailure(email)) {
-      state = state.copyWith(
-        submitStatus: LoadingStatus.error,
-        notice: AuthNotice.networkFailure,
-      );
-      return;
-    }
-
-    if (!_looksLikeEmail(email)) {
+    final trimmedEmail = email.trim();
+    if (!trimmedEmail.contains('@') || !trimmedEmail.contains('.')) {
       state = state.copyWith(
         submitStatus: LoadingStatus.error,
         notice: AuthNotice.invalidResetRequest,
@@ -156,7 +241,17 @@ class AuthController extends _$AuthController {
       clearNotice: true,
     );
 
-    await Future<void>.delayed(AppMotionTokens.medium);
+    final storedTokens = await _authRepository.readStoredTokens();
+    try {
+      final refreshToken = AuthNoticeMapper.extractRefreshToken(storedTokens);
+      if (refreshToken != null) {
+        await _authRepository.logout(refreshToken: refreshToken);
+      }
+    } catch (_) {
+      // Clearing local session data is the primary goal on sign-out.
+    }
+
+    await _authRepository.clearPersistedSession();
 
     state = state.copyWith(
       sessionStatus: AuthSessionStatus.unauthenticated,
@@ -165,19 +260,5 @@ class AuthController extends _$AuthController {
       notice: AuthNotice.signedOut,
       clearCurrentUser: true,
     );
-  }
-
-  bool _looksLikeNetworkFailure(String value) {
-    return value.trim().toLowerCase().contains('offline');
-  }
-
-  bool _looksLikeDuplicateAccount(String username, String email) {
-    return username.trim().toLowerCase().contains('taken') ||
-        email.trim().toLowerCase().contains('taken');
-  }
-
-  bool _looksLikeEmail(String value) {
-    final trimmed = value.trim();
-    return trimmed.contains('@') && trimmed.contains('.');
   }
 }

@@ -4,6 +4,11 @@ import java.util.List;
 
 import com.memora.app.properties.CorsProperties;
 import com.memora.app.properties.SecurityProperties;
+import com.memora.app.repository.UserAccountRepository;
+import com.memora.app.security.AuthTokenAuthenticationFilter;
+import com.memora.app.security.JwtAccessTokenService;
+import com.memora.app.security.RestAccessDeniedHandler;
+import com.memora.app.security.RestAuthenticationEntryPoint;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +22,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -27,10 +33,13 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(
+    SecurityFilterChain securityFilterChain(
         final HttpSecurity http,
         final CorsConfigurationSource corsConfigurationSource,
-        final SecurityProperties securityProperties
+        final SecurityProperties securityProperties,
+        final AuthTokenAuthenticationFilter authTokenAuthenticationFilter,
+        final RestAuthenticationEntryPoint restAuthenticationEntryPoint,
+        final RestAccessDeniedHandler restAccessDeniedHandler
     ) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
@@ -38,6 +47,10 @@ public class SecurityConfig {
             .httpBasic(AbstractHttpConfigurer::disable)
             .formLogin(AbstractHttpConfigurer::disable)
             .logout(AbstractHttpConfigurer::disable)
+            .exceptionHandling(exceptionHandling -> exceptionHandling
+                .authenticationEntryPoint(restAuthenticationEntryPoint)
+                .accessDeniedHandler(restAccessDeniedHandler)
+            )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> {
                 authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
@@ -52,13 +65,22 @@ public class SecurityConfig {
 
                 authorize.anyRequest().authenticated();
             })
-            .anonymous(Customizer.withDefaults());
+            .anonymous(Customizer.withDefaults())
+            .addFilterBefore(authTokenAuthenticationFilter, AnonymousAuthenticationFilter.class);
 
         return http.build();
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource(final CorsProperties corsProperties) {
+    AuthTokenAuthenticationFilter authTokenAuthenticationFilter(
+        final JwtAccessTokenService jwtAccessTokenService,
+        final UserAccountRepository userAccountRepository
+    ) {
+        return new AuthTokenAuthenticationFilter(jwtAccessTokenService, userAccountRepository);
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource(final CorsProperties corsProperties) {
         final CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(corsProperties.allowCredentials());
         configuration.setAllowedOrigins(corsProperties.allowedOrigins());
@@ -74,7 +96,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

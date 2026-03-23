@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memora/core/theme/tokens/border_tokens.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 
 abstract final class MemoraDividerTheme {
   static DividerThemeData build(ColorScheme colorScheme) {

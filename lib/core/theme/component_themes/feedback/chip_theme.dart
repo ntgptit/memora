@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memora/core/theme/extensions/dimension_theme_ext.dart';
 
 abstract final class MemoraChipTheme {
-  static ChipThemeData build(
-    ColorScheme colorScheme,
-    DimensionThemeExt dims,
-  ) {
+  static ChipThemeData build(ColorScheme colorScheme, DimensionThemeExt dims) {
     return ChipThemeData(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(dims.radius.pill),

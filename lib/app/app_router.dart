@@ -2,6 +2,10 @@ import 'package:go_router/go_router.dart';
 import 'package:memora/app/app_shell.dart';
 import 'package:memora/app/app_routes.dart';
 import 'package:memora/core/di/core_providers.dart';
+import 'package:memora/presentation/features/auth/providers/auth_provider.dart';
+import 'package:memora/presentation/features/auth/screens/forgot_password_screen.dart';
+import 'package:memora/presentation/features/auth/screens/login_screen.dart';
+import 'package:memora/presentation/features/auth/screens/register_screen.dart';
 import 'package:memora/presentation/features/deck/screens/deck_detail_screen.dart';
 import 'package:memora/presentation/features/deck/screens/deck_list_screen.dart';
 import 'package:memora/presentation/features/dashboard/screens/dashboard_screen.dart';
@@ -27,16 +31,67 @@ part 'app_router.g.dart';
 GoRouter appRouter(Ref ref) {
   final envConfig = ref.watch(envConfigProvider);
   final navigatorKey = ref.watch(rootNavigatorKeyProvider);
+  final authState = ref.watch(authControllerProvider);
 
   final router = GoRouter(
     navigatorKey: navigatorKey,
     debugLogDiagnostics: envConfig.enableRouterLogs,
-    initialLocation: AppRoutes.dashboard,
+    initialLocation: AppRoutes.splash,
+    redirect: (context, state) {
+      final location = state.uri.path;
+      final isCheckingSession = authState.isCheckingSession;
+      final isAuthenticated = authState.isAuthenticated;
+      final isAuthRoute = _isAuthRoute(location);
+      final isAlwaysPublicRoute = _isAlwaysPublicRoute(location);
+
+      if (isCheckingSession) {
+        if (location == AppRoutes.splash) {
+          return null;
+        }
+        return AppRoutes.splash;
+      }
+
+      if (!isAuthenticated) {
+        if (location == AppRoutes.auth) {
+          return AppRoutes.login;
+        }
+        if (isAuthRoute || isAlwaysPublicRoute) {
+          return null;
+        }
+        return AppRoutes.login;
+      }
+
+      if (location == AppRoutes.splash || isAuthRoute) {
+        return AppRoutes.dashboard;
+      }
+
+      return null;
+    },
     routes: [
       GoRoute(
         path: AppRoutes.splash,
         name: AppRouteNames.splash,
         builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.auth,
+        name: AppRouteNames.auth,
+        redirect: (context, state) => AppRoutes.login,
+      ),
+      GoRoute(
+        path: AppRoutes.login,
+        name: AppRouteNames.login,
+        builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.register,
+        name: AppRouteNames.register,
+        builder: (context, state) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.forgotPassword,
+        name: AppRouteNames.forgotPassword,
+        builder: (context, state) => const ForgotPasswordScreen(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
@@ -203,4 +258,17 @@ int _parseId(String? value) {
     return parsed;
   }
   throw const FormatException('Invalid route identifier');
+}
+
+bool _isAuthRoute(String location) {
+  return location == AppRoutes.auth ||
+      location == AppRoutes.login ||
+      location == AppRoutes.register ||
+      location == AppRoutes.forgotPassword;
+}
+
+bool _isAlwaysPublicRoute(String location) {
+  return location == AppRoutes.offline ||
+      location == AppRoutes.maintenance ||
+      location == AppRoutes.notFound;
 }

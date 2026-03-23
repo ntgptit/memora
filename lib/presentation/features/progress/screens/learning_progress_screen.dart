@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -17,8 +16,6 @@ import 'package:memora/presentation/features/progress/widgets/progress_summary_c
 import 'package:memora/presentation/features/progress/widgets/streak_calendar.dart';
 import 'package:memora/presentation/shared/layouts/app_list_page_layout.dart';
 import 'package:memora/presentation/shared/layouts/app_split_view_layout.dart';
-import 'package:memora/presentation/shared/composites/states/app_error_state.dart';
-import 'package:memora/presentation/shared/composites/states/app_loading_state.dart';
 import 'package:memora/presentation/shared/primitives/buttons/app_primary_button.dart';
 import 'package:memora/presentation/shared/primitives/buttons/app_text_button.dart';
 
@@ -28,7 +25,7 @@ class LearningProgressScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filter = ref.watch(progressFilterControllerProvider);
-    final asyncState = ref.watch(progressControllerProvider);
+    final state = ref.watch(progressControllerProvider);
     final filterController = ref.read(
       progressFilterControllerProvider.notifier,
     );
@@ -38,28 +35,14 @@ class LearningProgressScreen extends ConsumerWidget {
       title: Text(context.l10n.progressTitle),
       subtitle: Text(context.l10n.progressOverviewSubtitle),
       header: _ProgressActionsRow(
-        recommendation: asyncState.asData?.value.recommendation,
+        recommendation: state.recommendation,
       ),
       filters: ProgressFilterBar(
         period: filter.period,
         onPeriodChanged: filterController.setPeriod,
         onRefresh: progressController.refresh,
       ),
-      body: asyncState.when(
-        loading: () => AppLoadingState(
-          message: context.l10n.loading,
-          subtitle: context.l10n.progressLoadingMessage,
-        ),
-        error: (error, _) => AppErrorState(
-          title: context.l10n.progressErrorTitle,
-          message: context.l10n.progressLoadErrorMessage,
-          details: kDebugMode ? error.toString() : null,
-          primaryActionLabel: context.l10n.retry,
-          onPrimaryAction: progressController.refresh,
-        ),
-        data: (state) =>
-            SingleChildScrollView(child: _ProgressOverviewBody(state: state)),
-      ),
+      body: SingleChildScrollView(child: _ProgressOverviewBody(state: state)),
     );
   }
 }

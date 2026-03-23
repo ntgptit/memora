@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/theme/extensions/dimension_theme_ext.dart';
-import 'package:memora/core/theme/tokens/border_tokens.dart';
-import 'package:memora/core/theme/tokens/typography_tokens.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 
 abstract final class MemoraInputTheme {
   static InputDecorationTheme build(
@@ -22,8 +21,7 @@ abstract final class MemoraInputTheme {
       contentPadding: EdgeInsets.symmetric(
         horizontal: dims.spacing.md,
         vertical:
-            (dims.componentSize.inputHeight -
-                AppTypographyTokens.bodyLarge) /
+            (dims.componentSize.inputHeight - AppTypographyTokens.bodyLarge) /
             2,
       ),
       border: border,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
-import 'package:memora/core/theme/tokens/motion_tokens.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 
 class OnboardingIndicator extends StatelessWidget {
   const OnboardingIndicator({

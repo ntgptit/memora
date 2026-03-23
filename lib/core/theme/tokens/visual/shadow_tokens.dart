@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memora/core/theme/tokens/color_tokens.dart';
+import 'color_tokens.dart';
 
 abstract final class AppShadowTokens {
   static const soft = [

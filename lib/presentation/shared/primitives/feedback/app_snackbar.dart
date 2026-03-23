@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/enums/snackbar_type.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
-import 'package:memora/core/theme/tokens/opacity_tokens.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 
 class AppSnackbar extends StatelessWidget {
   const AppSnackbar({
@@ -24,12 +24,9 @@ class AppSnackbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tone = _tone(context);
-    final icon = leading ??
-        Icon(
-          _iconFor(type),
-          color: tone.foreground,
-          size: context.iconSize.lg,
-        );
+    final icon =
+        leading ??
+        Icon(_iconFor(type), color: tone.foreground, size: context.iconSize.lg);
 
     return DecoratedBox(
       decoration: BoxDecoration(

@@ -15,12 +15,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 public class JpaConfig {
 
     @Bean
-    public Clock auditClock() {
+    Clock auditClock() {
         return Clock.system(ZoneOffset.UTC);
     }
 
     @Bean
-    public DateTimeProvider auditDateTimeProvider(final Clock auditClock) {
+    DateTimeProvider auditDateTimeProvider(final Clock auditClock) {
         return () -> Optional.of(OffsetDateTime.now(auditClock));
     }
 }

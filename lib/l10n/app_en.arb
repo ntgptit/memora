@@ -678,6 +678,7 @@
   "authLoginSuccessMessage": "You are signed in and ready to continue learning.",
   "authRegisterSuccessMessage": "Your account is ready and your first learning workspace is unlocked.",
   "authSignOutSuccessMessage": "Your current session has been cleared from this device.",
+  "authSessionExpiredMessage": "Your session has expired. Please sign in again to continue.",
   "authPasswordResetSuccessMessage": "Password reset instructions have been sent to your email.",
   "authInvalidCredentialsMessage": "Your login details do not look right yet. Check the identifier and password.",
   "authDuplicateAccountMessage": "That username or email is already being used.",

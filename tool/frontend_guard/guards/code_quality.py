@@ -20,12 +20,19 @@ _SCAN_ROOTS = (
     "lib/core/theme",
     "tool/frontend_guard",
 )
+_NON_LOGIC_DIRECTIVE_PREFIXES = (
+    "import ",
+    "export ",
+    "part ",
+    "library ",
+)
 
 
 def run(root: Path) -> list[Violation]:
     violations: list[Violation] = []
     for source_file in collect_source_files(root, _SCAN_ROOTS):
-        if len(source_file.lines) > _MAX_LINES:
+        logical_line_count = _count_logical_lines(source_file.lines)
+        if logical_line_count > _MAX_LINES:
             violations.append(
                 Violation(
                     guard_id=GUARD_ID,
@@ -34,7 +41,7 @@ def run(root: Path) -> list[Violation]:
                     file=source_file.rel_path,
                     line=1,
                     reason=f"Keep files under {_MAX_LINES} lines to preserve readability and reviewability.",
-                    snippet=f"lines={len(source_file.lines)}",
+                    snippet=f"logical_lines={logical_line_count}",
                 )
             )
         violations.extend(_check_todo(source_file))
@@ -58,3 +65,48 @@ def _check_todo(source_file) -> list[Violation]:
             )
         )
     return violations
+
+
+def _count_logical_lines(lines: list[str]) -> int:
+    logical_line_count = 0
+    inside_block_comment = False
+
+    for raw_line in lines:
+        stripped_line = raw_line.strip()
+        if not stripped_line:
+            continue
+
+        if inside_block_comment:
+            if "*/" in stripped_line:
+                _, _, trailing = stripped_line.partition("*/")
+                stripped_line = trailing.strip()
+                inside_block_comment = False
+                if not stripped_line:
+                    continue
+            else:
+                continue
+
+        while stripped_line.startswith("/*"):
+            if "*/" in stripped_line:
+                _, _, trailing = stripped_line.partition("*/")
+                stripped_line = trailing.strip()
+                if not stripped_line:
+                    break
+                continue
+
+            inside_block_comment = True
+            stripped_line = ""
+            break
+
+        if not stripped_line:
+            continue
+
+        if stripped_line.startswith("//"):
+            continue
+
+        if stripped_line.startswith(_NON_LOGIC_DIRECTIVE_PREFIXES):
+            continue
+
+        logical_line_count += 1
+
+    return logical_line_count

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -14,8 +13,6 @@ import 'package:memora/presentation/features/progress/widgets/progress_history_l
 import 'package:memora/presentation/features/progress/widgets/progress_summary_card.dart';
 import 'package:memora/presentation/features/progress/widgets/streak_calendar.dart';
 import 'package:memora/presentation/shared/composites/cards/app_info_card.dart';
-import 'package:memora/presentation/shared/composites/states/app_error_state.dart';
-import 'package:memora/presentation/shared/composites/states/app_loading_state.dart';
 import 'package:memora/presentation/shared/layouts/app_detail_page_layout.dart';
 import 'package:memora/presentation/shared/primitives/buttons/app_text_button.dart';
 import 'package:memora/presentation/shared/primitives/displays/app_tag.dart';
@@ -28,7 +25,7 @@ class DeckProgressScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filter = ref.watch(progressFilterControllerProvider);
-    final asyncState = ref.watch(progressControllerProvider);
+    final state = ref.watch(progressControllerProvider);
     final filterController = ref.read(
       progressFilterControllerProvider.notifier,
     );
@@ -58,33 +55,20 @@ class DeckProgressScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: asyncState.when(
-        loading: () => AppLoadingState(
-          message: context.l10n.loading,
-          subtitle: context.l10n.progressLoadingMessage,
-        ),
-        error: (error, _) => AppErrorState(
-          title: context.l10n.progressErrorTitle,
-          message: context.l10n.progressLoadErrorMessage,
-          details: kDebugMode ? error.toString() : null,
-          primaryActionLabel: context.l10n.retry,
-          onPrimaryAction: progressController.refresh,
-        ),
-        data: (state) => SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _DeckFocusCard(deckId: deckId, state: state),
-              SizedBox(height: context.spacing.lg),
-              ProgressSummaryCard(state: state),
-              SizedBox(height: context.spacing.lg),
-              ProgressChartSection(state: state),
-              SizedBox(height: context.spacing.lg),
-              StreakCalendar(streakDays: state.streakDays),
-              SizedBox(height: context.spacing.lg),
-              ProgressHistoryList(state: state),
-            ],
-          ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _DeckFocusCard(deckId: deckId, state: state),
+            SizedBox(height: context.spacing.lg),
+            ProgressSummaryCard(state: state),
+            SizedBox(height: context.spacing.lg),
+            ProgressChartSection(state: state),
+            SizedBox(height: context.spacing.lg),
+            StreakCalendar(streakDays: state.streakDays),
+            SizedBox(height: context.spacing.lg),
+            ProgressHistoryList(state: state),
+          ],
         ),
       ),
     );

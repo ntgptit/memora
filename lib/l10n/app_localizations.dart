@@ -2486,6 +2486,12 @@ abstract class AppLocalizations {
   /// **'Your current session has been cleared from this device.'**
   String get authSignOutSuccessMessage;
 
+  /// No description provided for @authSessionExpiredMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session has expired. Please sign in again to continue.'**
+  String get authSessionExpiredMessage;
+
   /// No description provided for @authPasswordResetSuccessMessage.
   ///
   /// In en, this message translates to:

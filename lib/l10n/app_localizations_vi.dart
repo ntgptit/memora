@@ -1367,6 +1367,10 @@ class AppLocalizationsVi extends AppLocalizations {
       'Phiên hiện tại đã được xóa khỏi thiết bị này.';
 
   @override
+  String get authSessionExpiredMessage =>
+      'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại để tiếp tục.';
+
+  @override
   String get authPasswordResetSuccessMessage =>
       'Hướng dẫn đặt lại mật khẩu đã được gửi tới email của bạn.';
 

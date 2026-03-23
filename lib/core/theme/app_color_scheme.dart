@@ -1,6 +1,6 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
-import 'package:memora/core/theme/tokens/color_tokens.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 
 abstract final class AppColorScheme {
   static const FlexSchemeColor _lightFlexColors = FlexSchemeColor(

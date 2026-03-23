@@ -19,14 +19,14 @@ import com.memora.app.dto.UpdateFlashcardRequest;
 import com.memora.app.entity.DeckEntity;
 import com.memora.app.entity.FlashcardEntity;
 import com.memora.app.entity.FlashcardLanguageEntity;
-import com.memora.app.entity.UserAccountEntity;
 import com.memora.app.enums.AccountStatus;
 import com.memora.app.enums.FlashcardSide;
 import com.memora.app.exception.ResourceNotFoundException;
 import com.memora.app.repository.DeckRepository;
 import com.memora.app.repository.FlashcardLanguageRepository;
 import com.memora.app.repository.FlashcardRepository;
-import com.memora.app.repository.UserAccountRepository;
+import com.memora.app.security.AuthenticatedUser;
+import com.memora.app.security.CurrentAuthenticatedUserService;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,7 +53,7 @@ class FlashcardServiceImplTest {
     private FlashcardRepository flashcardRepository;
 
     @Mock
-    private UserAccountRepository userAccountRepository;
+    private CurrentAuthenticatedUserService currentAuthenticatedUserService;
 
     @InjectMocks
     private FlashcardServiceImpl flashcardService;
@@ -63,8 +63,7 @@ class FlashcardServiceImplTest {
         final DeckEntity deck = deckEntity(10L, 1L);
         final List<FlashcardLanguageEntity> storedLanguages = new ArrayList<>();
 
-        when(userAccountRepository.findFirstByAccountStatusAndDeletedAtIsNullOrderByIdAsc(AccountStatus.ACTIVE))
-            .thenReturn(Optional.of(currentUser(1L)));
+        when(currentAuthenticatedUserService.getCurrentUser()).thenReturn(currentUser(1L));
         when(deckRepository.findByIdAndDeletedAtIsNull(10L)).thenReturn(Optional.of(deck));
         when(flashcardRepository.save(any(FlashcardEntity.class))).thenAnswer(invocation -> {
             final FlashcardEntity entity = invocation.getArgument(0);
@@ -123,8 +122,7 @@ class FlashcardServiceImplTest {
             flashcardLanguageEntity(2L, 100L, FlashcardSide.MEANING, "vi", "")
         );
 
-        when(userAccountRepository.findFirstByAccountStatusAndDeletedAtIsNullOrderByIdAsc(AccountStatus.ACTIVE))
-            .thenReturn(Optional.of(currentUser(1L)));
+        when(currentAuthenticatedUserService.getCurrentUser()).thenReturn(currentUser(1L));
         when(deckRepository.findByIdAndDeletedAtIsNull(10L)).thenReturn(Optional.of(deck));
         when(flashcardRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(
             new PageImpl<>(List.of(flashcard), PageRequest.of(1, 7, Sort.by("updatedAt")), 8L)
@@ -162,8 +160,7 @@ class FlashcardServiceImplTest {
     void updateFlashcardRejectsFlashcardOutsideDeckScope() {
         final DeckEntity deck = deckEntity(10L, 1L);
 
-        when(userAccountRepository.findFirstByAccountStatusAndDeletedAtIsNullOrderByIdAsc(AccountStatus.ACTIVE))
-            .thenReturn(Optional.of(currentUser(1L)));
+        when(currentAuthenticatedUserService.getCurrentUser()).thenReturn(currentUser(1L));
         when(deckRepository.findByIdAndDeletedAtIsNull(10L)).thenReturn(Optional.of(deck));
         when(flashcardRepository.findByIdAndDeckIdAndDeletedAtIsNull(100L, 10L)).thenReturn(Optional.empty());
 
@@ -184,8 +181,7 @@ class FlashcardServiceImplTest {
             flashcardLanguageEntity(2L, 100L, FlashcardSide.MEANING, "vi", "")
         ));
 
-        when(userAccountRepository.findFirstByAccountStatusAndDeletedAtIsNullOrderByIdAsc(AccountStatus.ACTIVE))
-            .thenReturn(Optional.of(currentUser(1L)));
+        when(currentAuthenticatedUserService.getCurrentUser()).thenReturn(currentUser(1L));
         when(deckRepository.findByIdAndDeletedAtIsNull(10L)).thenReturn(Optional.of(deck));
         when(flashcardRepository.findByIdAndDeckIdAndDeletedAtIsNull(100L, 10L)).thenReturn(Optional.of(flashcard));
         when(flashcardLanguageRepository.removeByFlashcardId(100L)).thenAnswer(invocation -> {
@@ -204,8 +200,7 @@ class FlashcardServiceImplTest {
     void createFlashcardRejectsDeckOutsideCurrentUserScope() {
         final DeckEntity foreignDeck = deckEntity(10L, 2L);
 
-        when(userAccountRepository.findFirstByAccountStatusAndDeletedAtIsNullOrderByIdAsc(AccountStatus.ACTIVE))
-            .thenReturn(Optional.of(currentUser(1L)));
+        when(currentAuthenticatedUserService.getCurrentUser()).thenReturn(currentUser(1L));
         when(deckRepository.findByIdAndDeletedAtIsNull(10L)).thenReturn(Optional.of(foreignDeck));
 
         assertThatThrownBy(() -> flashcardService.createFlashcard(
@@ -226,11 +221,8 @@ class FlashcardServiceImplTest {
         return deck;
     }
 
-    private UserAccountEntity currentUser(final Long id) {
-        final UserAccountEntity user = new UserAccountEntity();
-        user.setId(id);
-        user.setAccountStatus(AccountStatus.ACTIVE);
-        return user;
+    private AuthenticatedUser currentUser(final Long id) {
+        return new AuthenticatedUser(id, "demo", "demo@memora.local", AccountStatus.ACTIVE);
     }
 
     private FlashcardEntity flashcardEntity(

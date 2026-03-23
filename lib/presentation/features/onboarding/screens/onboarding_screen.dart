@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:memora/app/app_routes.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
-import 'package:memora/core/theme/tokens/motion_tokens.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/features/onboarding/providers/onboarding_provider.dart';
 import 'package:memora/presentation/features/onboarding/widgets/onboarding_indicator.dart';

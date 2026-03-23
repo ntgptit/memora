@@ -5,6 +5,7 @@ import 'package:memora/app/app_providers.dart';
 import 'package:memora/app/app_routes.dart';
 import 'package:memora/core/enums/app_theme_type.dart';
 import 'package:memora/l10n/l10n.dart';
+import 'package:memora/presentation/features/auth/providers/auth_provider.dart';
 import 'package:memora/presentation/features/settings/providers/settings_provider.dart';
 import 'package:memora/presentation/features/settings/widgets/settings_navigation_tile.dart';
 import 'package:memora/presentation/features/settings/widgets/settings_section.dart';
@@ -95,6 +96,12 @@ class SettingsScreen extends ConsumerWidget {
                 subtitle: context.l10n.settingsAboutTileSubtitle,
                 leading: const Icon(Icons.info_outline_rounded),
                 onTap: () => context.push(AppRoutes.about),
+              ),
+              SettingsNavigationTile(
+                title: context.l10n.authSignOutAction,
+                subtitle: context.l10n.authSignOutSuccessMessage,
+                leading: const Icon(Icons.logout_rounded),
+                onTap: () => ref.read(authControllerProvider.notifier).signOut(),
               ),
             ],
           ),

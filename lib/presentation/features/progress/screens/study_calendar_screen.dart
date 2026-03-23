@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -11,8 +10,6 @@ import 'package:memora/presentation/features/progress/widgets/progress_chart_sec
 import 'package:memora/presentation/features/progress/widgets/progress_filter_bar.dart';
 import 'package:memora/presentation/features/progress/widgets/progress_history_list.dart';
 import 'package:memora/presentation/features/progress/widgets/streak_calendar.dart';
-import 'package:memora/presentation/shared/composites/states/app_error_state.dart';
-import 'package:memora/presentation/shared/composites/states/app_loading_state.dart';
 import 'package:memora/presentation/shared/layouts/app_detail_page_layout.dart';
 import 'package:memora/presentation/shared/primitives/buttons/app_text_button.dart';
 
@@ -22,7 +19,7 @@ class StudyCalendarScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filter = ref.watch(progressFilterControllerProvider);
-    final asyncState = ref.watch(progressControllerProvider);
+    final state = ref.watch(progressControllerProvider);
     final filterController = ref.read(
       progressFilterControllerProvider.notifier,
     );
@@ -34,8 +31,7 @@ class StudyCalendarScreen extends ConsumerWidget {
       header: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (asyncState.asData?.value.recommendation
-              case final recommendation?)
+          if (state.recommendation case final recommendation?)
             Wrap(
               spacing: context.spacing.sm,
               runSpacing: context.spacing.sm,
@@ -48,7 +44,7 @@ class StudyCalendarScreen extends ConsumerWidget {
                 ),
               ],
             ),
-          if (asyncState.asData?.value.recommendation != null)
+          if (state.recommendation != null)
             SizedBox(height: context.spacing.md),
           ProgressFilterBar(
             period: filter.period,
@@ -57,29 +53,16 @@ class StudyCalendarScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: asyncState.when(
-        loading: () => AppLoadingState(
-          message: context.l10n.loading,
-          subtitle: context.l10n.progressLoadingMessage,
-        ),
-        error: (error, _) => AppErrorState(
-          title: context.l10n.progressErrorTitle,
-          message: context.l10n.progressLoadErrorMessage,
-          details: kDebugMode ? error.toString() : null,
-          primaryActionLabel: context.l10n.retry,
-          onPrimaryAction: progressController.refresh,
-        ),
-        data: (state) => SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              StreakCalendar(streakDays: state.streakDays),
-              SizedBox(height: context.spacing.lg),
-              ProgressHistoryList(state: state),
-              SizedBox(height: context.spacing.lg),
-              ProgressChartSection(state: state),
-            ],
-          ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            StreakCalendar(streakDays: state.streakDays),
+            SizedBox(height: context.spacing.lg),
+            ProgressHistoryList(state: state),
+            SizedBox(height: context.spacing.lg),
+            ProgressChartSection(state: state),
+          ],
         ),
       ),
     );

@@ -678,6 +678,7 @@
   "authLoginSuccessMessage": "Bạn đã đăng nhập và sẵn sàng tiếp tục học.",
   "authRegisterSuccessMessage": "Tài khoản đã sẵn sàng và không gian học đầu tiên của bạn đã được mở.",
   "authSignOutSuccessMessage": "Phiên hiện tại đã được xóa khỏi thiết bị này.",
+  "authSessionExpiredMessage": "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại để tiếp tục.",
   "authPasswordResetSuccessMessage": "Hướng dẫn đặt lại mật khẩu đã được gửi tới email của bạn.",
   "authInvalidCredentialsMessage": "Thông tin đăng nhập chưa đúng. Hãy kiểm tra lại email/username và mật khẩu.",
   "authDuplicateAccountMessage": "Username hoặc email này đã được sử dụng.",

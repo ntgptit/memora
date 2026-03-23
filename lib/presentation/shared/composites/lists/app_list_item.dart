@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
-import 'package:memora/core/theme/tokens/opacity_tokens.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 import 'package:memora/presentation/shared/primitives/displays/app_surface.dart';
 
 class AppListItem extends StatelessWidget {
@@ -34,14 +34,16 @@ class AppListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final itemRadius = borderRadius ?? BorderRadius.circular(context.radius.md);
-    final itemPadding = padding ??
+    final itemPadding =
+        padding ??
         EdgeInsets.symmetric(
           horizontal: context.spacing.md,
           vertical: compact ? context.spacing.sm : context.spacing.md,
         );
 
     return AppSurface(
-      color: backgroundColor ??
+      color:
+          backgroundColor ??
           (selected
               ? context.colorScheme.secondaryContainer.withValues(
                   alpha: AppOpacityTokens.selected,

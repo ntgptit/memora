@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/theme/extensions/dimension_theme_ext.dart';
-import 'package:memora/core/theme/tokens/elevation_tokens.dart';
-import 'package:memora/core/theme/tokens/typography_tokens.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 
 abstract final class MemoraAppBarTheme {
   static AppBarTheme build({

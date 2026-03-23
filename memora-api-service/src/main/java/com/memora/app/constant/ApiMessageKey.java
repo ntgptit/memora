@@ -22,9 +22,11 @@ public class ApiMessageKey {
     public static final String REVIEW_PROFILE_BOX_ID_POSITIVE = "api.error.validation.review-profile-box-id.positive";
     public static final String DECK_REVIEW_SETTINGS_ID_POSITIVE = "api.error.validation.deck-review-settings-id.positive";
     public static final String NAME_REQUIRED = "api.error.validation.name.required";
+    public static final String IDENTIFIER_REQUIRED = "api.error.validation.identifier.required";
     public static final String USERNAME_REQUIRED = "api.error.validation.username.required";
     public static final String EMAIL_REQUIRED = "api.error.validation.email.required";
     public static final String PASSWORD_REQUIRED = "api.error.validation.password.required";
+    public static final String REFRESH_TOKEN_REQUIRED = "api.error.validation.refresh-token.required";
     public static final String TERM_REQUIRED = "api.error.validation.term.required";
     public static final String MEANING_REQUIRED = "api.error.validation.meaning.required";
     public static final String FLASHCARD_FRONT_TEXT_REQUIRED = "api.error.validation.flashcard.front-text.required";
@@ -33,6 +35,11 @@ public class ApiMessageKey {
 
     public static final String USER_ACCOUNT_NOT_FOUND = "api.error.user-account.not-found";
     public static final String ACTIVE_USER_ACCOUNT_NOT_FOUND = "api.error.user-account.active.not-found";
+    public static final String AUTHENTICATION_REQUIRED = "api.error.auth.required";
+    public static final String AUTH_INVALID_CREDENTIALS = "api.error.auth.invalid-credentials";
+    public static final String AUTH_REFRESH_TOKEN_INVALID = "api.error.auth.refresh-token.invalid";
+    public static final String AUTH_ACCOUNT_INACTIVE = "api.error.auth.account.inactive";
+    public static final String AUTH_ACCESS_DENIED = "api.error.auth.access-denied";
     public static final String FOLDER_NOT_FOUND = "api.error.folder.not-found";
     public static final String DECK_NOT_FOUND = "api.error.deck.not-found";
     public static final String FLASHCARD_NOT_FOUND = "api.error.flashcard.not-found";

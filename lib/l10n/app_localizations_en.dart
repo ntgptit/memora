@@ -1365,6 +1365,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your current session has been cleared from this device.';
 
   @override
+  String get authSessionExpiredMessage =>
+      'Your session has expired. Please sign in again to continue.';
+
+  @override
   String get authPasswordResetSuccessMessage =>
       'Password reset instructions have been sent to your email.';
 

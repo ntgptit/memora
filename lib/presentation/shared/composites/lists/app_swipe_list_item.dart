@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
-import 'package:memora/core/theme/tokens/opacity_tokens.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 import 'package:memora/presentation/shared/primitives/displays/app_icon.dart';
 
 class AppSwipeListItem extends StatelessWidget {
@@ -32,27 +32,31 @@ class AppSwipeListItem extends StatelessWidget {
     return Dismissible(
       key: key ?? ValueKey<Object>(Object.hash(runtimeType, child.hashCode)),
       direction: direction,
-      dismissThresholds: dismissThresholds ?? const <DismissDirection, double>{},
+      dismissThresholds:
+          dismissThresholds ?? const <DismissDirection, double>{},
       confirmDismiss: confirmDismiss,
       onDismissed: onDismissed!,
-      background: background ?? _buildBackground(context, alignment: Alignment.centerLeft),
-      secondaryBackground: secondaryBackground ??
+      background:
+          background ??
+          _buildBackground(context, alignment: Alignment.centerLeft),
+      secondaryBackground:
+          secondaryBackground ??
           _buildBackground(context, alignment: Alignment.centerRight),
       child: child,
     );
   }
 
-  Widget _buildBackground(BuildContext context, {required Alignment alignment}) {
+  Widget _buildBackground(
+    BuildContext context, {
+    required Alignment alignment,
+  }) {
     return Container(
       alignment: alignment,
       color: context.colorScheme.error.withValues(
         alpha: AppOpacityTokens.subtle,
       ),
       padding: EdgeInsets.symmetric(horizontal: context.spacing.md),
-      child: AppIcon(
-        Icons.delete_rounded,
-        color: context.colorScheme.error,
-      ),
+      child: AppIcon(Icons.delete_rounded, color: context.colorScheme.error),
     );
   }
 }

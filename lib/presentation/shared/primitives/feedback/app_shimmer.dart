@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
-import 'package:memora/core/theme/tokens/motion_tokens.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 
 class AppShimmer extends StatefulWidget {
   const AppShimmer({
@@ -31,10 +31,7 @@ class _AppShimmerState extends State<AppShimmer>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.duration,
-    );
+    _controller = AnimationController(vsync: this, duration: widget.duration);
     if (widget.enabled) {
       _controller.repeat();
     }
@@ -72,8 +69,7 @@ class _AppShimmerState extends State<AppShimmer>
 
     final baseColor =
         widget.baseColor ?? context.colorScheme.surfaceContainerHighest;
-    final highlightColor =
-        widget.highlightColor ?? context.colorScheme.surface;
+    final highlightColor = widget.highlightColor ?? context.colorScheme.surface;
     final shimmer = AnimatedBuilder(
       animation: _controller,
       builder: (context, _) {
@@ -85,11 +81,7 @@ class _AppShimmerState extends State<AppShimmer>
             return LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: [
-                baseColor,
-                highlightColor,
-                baseColor,
-              ],
+              colors: [baseColor, highlightColor, baseColor],
               stops: const [0.25, 0.5, 0.75],
               transform: _ShimmerGradientTransform(offset),
             ).createShader(bounds);
@@ -103,10 +95,7 @@ class _AppShimmerState extends State<AppShimmer>
       return shimmer;
     }
 
-    return ClipRRect(
-      borderRadius: widget.borderRadius!,
-      child: shimmer,
-    );
+    return ClipRRect(borderRadius: widget.borderRadius!, child: shimmer);
   }
 }
 

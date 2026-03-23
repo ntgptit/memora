@@ -2,24 +2,11 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:memora/core/theme/app_color_scheme.dart';
 import 'package:memora/core/theme/app_text_theme.dart';
-import 'package:memora/core/theme/component_themes/app_bar_theme.dart';
-import 'package:memora/core/theme/component_themes/bottom_sheet_theme.dart';
-import 'package:memora/core/theme/component_themes/button_theme.dart';
-import 'package:memora/core/theme/component_themes/card_theme.dart';
-import 'package:memora/core/theme/component_themes/checkbox_theme.dart';
-import 'package:memora/core/theme/component_themes/chip_theme.dart';
-import 'package:memora/core/theme/component_themes/dialog_theme.dart';
-import 'package:memora/core/theme/component_themes/divider_theme.dart';
-import 'package:memora/core/theme/component_themes/input_theme.dart';
-import 'package:memora/core/theme/component_themes/progress_indicator_theme.dart';
-import 'package:memora/core/theme/component_themes/radio_theme.dart';
-import 'package:memora/core/theme/component_themes/slider_theme.dart';
-import 'package:memora/core/theme/component_themes/switch_theme.dart';
-import 'package:memora/core/theme/extensions/dimension_theme_ext.dart';
+import 'package:memora/core/theme/component_themes/component_themes.dart';
 import 'package:memora/core/theme/app_theme_mode.dart';
 import 'package:memora/core/theme/responsive/responsive_theme_factory.dart';
 import 'package:memora/core/theme/responsive/screen_info.dart';
-import 'package:memora/core/theme/tokens/color_tokens.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 
 abstract final class AppTheme {
   static ThemeData light({required ScreenInfo screenInfo}) {
@@ -83,12 +70,12 @@ abstract final class AppTheme {
       sliderTheme: MemoraSliderTheme.build(colorScheme),
       progressIndicatorTheme: MemoraProgressIndicatorTheme.build(colorScheme),
       bottomSheetTheme: MemoraBottomSheetTheme.build(colorScheme, dimensions),
-      navigationBarTheme: _navigationBarTheme(
+      navigationBarTheme: MemoraNavigationTheme.bar(
         colorScheme: colorScheme,
         dimensions: dimensions,
         textTheme: textTheme,
       ),
-      navigationRailTheme: _navigationRailTheme(
+      navigationRailTheme: MemoraNavigationTheme.rail(
         colorScheme: colorScheme,
         dimensions: dimensions,
         textTheme: textTheme,
@@ -97,64 +84,6 @@ abstract final class AppTheme {
         screenClass: screenInfo.screenClass,
         brightness: brightness,
       ),
-    );
-  }
-
-  static NavigationBarThemeData _navigationBarTheme({
-    required ColorScheme colorScheme,
-    required DimensionThemeExt dimensions,
-    required TextTheme textTheme,
-  }) {
-    return NavigationBarThemeData(
-      height: dimensions.componentSize.bottomBarHeight,
-      backgroundColor: colorScheme.surface,
-      indicatorColor: colorScheme.secondaryContainer,
-      labelTextStyle: WidgetStateProperty.resolveWith((states) {
-        final isSelected = states.contains(WidgetState.selected);
-        return textTheme.labelMedium?.copyWith(
-          color: isSelected
-              ? colorScheme.onSurface
-              : colorScheme.onSurfaceVariant,
-        );
-      }),
-      iconTheme: WidgetStateProperty.resolveWith((states) {
-        final isSelected = states.contains(WidgetState.selected);
-        return IconThemeData(
-          size: dimensions.iconSize.lg,
-          color: isSelected
-              ? colorScheme.onSecondaryContainer
-              : colorScheme.onSurfaceVariant,
-        );
-      }),
-      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-    );
-  }
-
-  static NavigationRailThemeData _navigationRailTheme({
-    required ColorScheme colorScheme,
-    required DimensionThemeExt dimensions,
-    required TextTheme textTheme,
-  }) {
-    return NavigationRailThemeData(
-      backgroundColor: colorScheme.surface,
-      indicatorColor: colorScheme.secondaryContainer,
-      minWidth: dimensions.componentSize.navigationRailWidth,
-      minExtendedWidth: dimensions.componentSize.navigationRailWidth * 2.75,
-      selectedIconTheme: IconThemeData(
-        size: dimensions.iconSize.lg,
-        color: colorScheme.onSecondaryContainer,
-      ),
-      unselectedIconTheme: IconThemeData(
-        size: dimensions.iconSize.lg,
-        color: colorScheme.onSurfaceVariant,
-      ),
-      selectedLabelTextStyle: textTheme.labelMedium?.copyWith(
-        color: colorScheme.onSurface,
-      ),
-      unselectedLabelTextStyle: textTheme.labelMedium?.copyWith(
-        color: colorScheme.onSurfaceVariant,
-      ),
-      useIndicator: true,
     );
   }
 }
