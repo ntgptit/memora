@@ -1,6 +1,6 @@
 {
   "summary": {
-    "guards": 15,
+    "guards": 17,
     "total": 0,
     "errors": 0,
     "warnings": 0
@@ -55,6 +55,16 @@
       "id": "ui-constants",
       "file": "tool/frontend_guard/guards/ui_constants.py",
       "description": "Feature UI and shared shells must not inline raw UI constants that belong in core config or theme tokens."
+    },
+    {
+      "id": "hardcode-values",
+      "file": "tool/frontend_guard/guards/hardcode_values.py",
+      "description": "Inline numeric UI literals must route through tokens, theme extensions, or semantic named constants."
+    },
+    {
+      "id": "local-constants",
+      "file": "tool/frontend_guard/guards/local_constants.py",
+      "description": "Local presentation constants must not duplicate theme/token/l10n ownership."
     },
     {
       "id": "spacing-ownership",

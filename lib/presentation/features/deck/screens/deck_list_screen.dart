@@ -19,10 +19,7 @@ import 'package:memora/presentation/shared/primitives/feedback/app_banner.dart';
 import 'package:memora/presentation/shared/primitives/feedback/app_circular_loader.dart';
 
 class DeckListScreen extends ConsumerStatefulWidget {
-  const DeckListScreen({
-    super.key,
-    this.folderId,
-  });
+  const DeckListScreen({super.key, this.folderId});
 
   final int? folderId;
 
@@ -63,14 +60,22 @@ class _DeckListScreenState extends ConsumerState<DeckListScreen> {
         state: state,
         searchController: _searchController,
         searchFocusNode: _searchFocusNode,
-        onRefresh: ref.read(deckControllerProvider(widget.folderId!).notifier).refresh,
-        onSearchChanged: ref.read(deckFilterControllerProvider.notifier).setSearchQuery,
+        onRefresh: ref
+            .read(deckControllerProvider(widget.folderId!).notifier)
+            .refresh,
+        onSearchChanged: ref
+            .read(deckFilterControllerProvider.notifier)
+            .setSearchQuery,
         onClearSearch: () {
           _searchController.clear();
           ref.read(deckFilterControllerProvider.notifier).clearSearch();
         },
-        onSortByChanged: ref.read(deckFilterControllerProvider.notifier).setSortBy,
-        onToggleSortDirection: ref.read(deckFilterControllerProvider.notifier).toggleSortDirection,
+        onSortByChanged: ref
+            .read(deckFilterControllerProvider.notifier)
+            .setSortBy,
+        onToggleSortDirection: ref
+            .read(deckFilterControllerProvider.notifier)
+            .toggleSortDirection,
         onOpenHome: () => context.go(AppRoutes.folders),
         onOpenFolder: (folder) => context.go(AppRoutes.folderDetail(folder.id)),
         onCreateDeck: _openCreateDeckSheet,
@@ -88,7 +93,7 @@ class _DeckListScreenState extends ConsumerState<DeckListScreen> {
       body: AppEmptyState(
         title: context.l10n.deckShellTitle,
         message: context.l10n.deckShellMessage,
-        icon: const Icon(AppIcons.decks, size: 48),
+        icon: const Icon(AppIcons.decks),
         actions: [
           AppPrimaryButton(
             text: context.l10n.deckShellBrowseFoldersAction,
@@ -117,7 +122,8 @@ class _DeckListScreenState extends ConsumerState<DeckListScreen> {
           message: message,
           type: SnackbarType.error,
           actionLabel: context.l10n.retry,
-          onActionPressed: () => ref.refresh(deckControllerProvider(widget.folderId!)),
+          onActionPressed: () =>
+              ref.refresh(deckControllerProvider(widget.folderId!)),
         ),
       ),
     );
@@ -138,10 +144,7 @@ class _DeckListScreenState extends ConsumerState<DeckListScreen> {
             onSubmit: (name, description) {
               return ref
                   .read(deckControllerProvider(widget.folderId!).notifier)
-                  .createDeck(
-                    name: name,
-                    description: description,
-                  );
+                  .createDeck(name: name, description: description);
             },
           ),
         );

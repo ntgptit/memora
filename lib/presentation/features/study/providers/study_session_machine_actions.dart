@@ -6,8 +6,7 @@ extension StudySessionMachineActions on StudySessionMachine {
     _registerOutcome(mastered: true, retry: false);
     _feedback = const StudyModeFeedback(
       kind: StudyFeedbackKind.correct,
-      title: lockedInTitle,
-      message: lockedInMessage,
+      copy: StudyFeedbackCopy.lockedIn,
     );
     return _buildState(lifecycle: StudySessionLifecycle.waitingFeedback);
   }
@@ -17,8 +16,7 @@ extension StudySessionMachineActions on StudySessionMachine {
     _registerOutcome(mastered: false, retry: true);
     _feedback = const StudyModeFeedback(
       kind: StudyFeedbackKind.incorrect,
-      title: queuedTitle,
-      message: queuedMessage,
+      copy: StudyFeedbackCopy.queued,
     );
     return _buildState(lifecycle: StudySessionLifecycle.retryPending);
   }
@@ -28,8 +26,7 @@ extension StudySessionMachineActions on StudySessionMachine {
     _answerRevealed = true;
     _feedback = const StudyModeFeedback(
       kind: StudyFeedbackKind.neutral,
-      title: revealedTitle,
-      message: revealedMessage,
+      copy: StudyFeedbackCopy.revealed,
     );
     return state;
   }
@@ -41,14 +38,12 @@ extension StudySessionMachineActions on StudySessionMachine {
     }
     final isCorrect = _currentItem.correctChoiceId == choiceId;
     _registerOutcome(mastered: isCorrect, retry: !isCorrect);
-    final title = isCorrect ? 'Correct choice' : 'Not quite';
-    final message = isCorrect
-        ? 'You matched the prompt with the correct answer.'
-        : 'The correct answer is ${_currentItem.answer}.';
     _feedback = StudyModeFeedback(
       kind: isCorrect ? StudyFeedbackKind.correct : StudyFeedbackKind.incorrect,
-      title: title,
-      message: message,
+      copy: isCorrect
+          ? StudyFeedbackCopy.guessCorrect
+          : StudyFeedbackCopy.guessIncorrect,
+      answerText: isCorrect ? null : _currentItem.answer,
     );
     return _buildState(
       lifecycle: isCorrect
@@ -69,14 +64,11 @@ extension StudySessionMachineActions on StudySessionMachine {
         pairs.length == _currentItem.matchPairs.length &&
         pairs.every((pair) => expected[pair.leftId] == pair.rightId);
     _registerOutcome(mastered: isCorrect, retry: !isCorrect);
-    final title = isCorrect ? 'Clean match' : 'Some pairs slipped';
-    final message = isCorrect
-        ? 'Every pair lines up with the prompt set.'
-        : 'Review the pairings once before the next board.';
     _feedback = StudyModeFeedback(
       kind: isCorrect ? StudyFeedbackKind.correct : StudyFeedbackKind.incorrect,
-      title: title,
-      message: message,
+      copy: isCorrect
+          ? StudyFeedbackCopy.matchCorrect
+          : StudyFeedbackCopy.matchIncorrect,
     );
     return _buildState(
       lifecycle: isCorrect
@@ -95,17 +87,15 @@ extension StudySessionMachineActions on StudySessionMachine {
       _registerOutcome(mastered: true, retry: false);
       _feedback = const StudyModeFeedback(
         kind: StudyFeedbackKind.correct,
-        title: exactRecallTitle,
-        message: exactRecallMessage,
+        copy: StudyFeedbackCopy.exactRecall,
       );
       return _buildState(lifecycle: StudySessionLifecycle.waitingFeedback);
     }
     _retryMarkedItemIds.add(_currentItem.id);
-    final message = 'The expected answer is ${_currentItem.answer}.';
     _feedback = StudyModeFeedback(
       kind: StudyFeedbackKind.incorrect,
-      title: keepWorkingTitle,
-      message: message,
+      copy: StudyFeedbackCopy.keepWorking,
+      answerText: _currentItem.answer,
     );
     return _buildState(lifecycle: StudySessionLifecycle.retryPending);
   }

@@ -7,11 +7,10 @@ import 'package:memora/presentation/shared/composites/cards/app_stat_card.dart';
 import 'package:memora/presentation/shared/primitives/displays/app_label.dart';
 import 'package:memora/presentation/shared/primitives/displays/app_progress_bar.dart';
 
+const double _progressChartStatCardWidth = 168;
+
 class ProgressChartSection extends StatelessWidget {
-  const ProgressChartSection({
-    super.key,
-    required this.state,
-  });
+  const ProgressChartSection({super.key, required this.state});
 
   final ProgressState state;
 
@@ -34,14 +33,14 @@ class ProgressChartSection extends StatelessWidget {
             runSpacing: context.spacing.md,
             children: [
               SizedBox(
-                width: 168,
+                width: _progressChartStatCardWidth,
                 child: AppStatCard(
                   label: l10n.progressPassedAttemptsLabel,
                   value: state.passedAttempts.toString(),
                 ),
               ),
               SizedBox(
-                width: 168,
+                width: _progressChartStatCardWidth,
                 child: AppStatCard(
                   label: l10n.progressFailedAttemptsLabel,
                   value: state.failedAttempts.toString(),

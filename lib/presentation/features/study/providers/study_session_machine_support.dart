@@ -1,15 +1,5 @@
 import 'package:memora/presentation/features/study/providers/study_session_state.dart';
 
-const lockedInTitle = 'Locked in';
-const lockedInMessage = 'This item is ready to leave the active review queue.';
-const queuedTitle = 'Queued for another pass';
-const queuedMessage = 'This item will stay visible in the weak-memory lane.';
-const revealedTitle = 'Answer revealed';
-const revealedMessage = 'Compare what you remembered before you move on.';
-const exactRecallTitle = 'Exact recall';
-const exactRecallMessage = 'You typed the full answer accurately.';
-const keepWorkingTitle = 'Keep working this item';
-
 StudySessionState buildStudySessionMachineState({
   required StudySessionBlueprint blueprint,
   required int modeIndex,

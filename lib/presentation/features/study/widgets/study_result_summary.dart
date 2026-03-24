@@ -5,6 +5,8 @@ import 'package:memora/presentation/features/study/providers/study_session_state
 import 'package:memora/presentation/shared/composites/cards/app_progress_card.dart';
 import 'package:memora/presentation/shared/composites/cards/app_stat_card.dart';
 
+const double _studyResultStatCardWidth = 220;
+
 class StudyResultSummary extends StatelessWidget {
   const StudyResultSummary({super.key, required this.result});
 
@@ -27,11 +29,11 @@ class StudyResultSummary extends StatelessWidget {
         ),
         SizedBox(height: context.spacing.lg),
         Wrap(
-          spacing: 16,
-          runSpacing: 16,
+          spacing: context.spacing.md,
+          runSpacing: context.spacing.md,
           children: [
             SizedBox(
-              width: 220,
+              width: _studyResultStatCardWidth,
               child: AppStatCard(
                 label: l10n.studyResultMasteredLabel,
                 value: '${result.masteredItems}',
@@ -39,7 +41,7 @@ class StudyResultSummary extends StatelessWidget {
               ),
             ),
             SizedBox(
-              width: 220,
+              width: _studyResultStatCardWidth,
               child: AppStatCard(
                 label: l10n.studyResultRetryLabel,
                 value: '${result.retryItems}',
@@ -47,7 +49,7 @@ class StudyResultSummary extends StatelessWidget {
               ),
             ),
             SizedBox(
-              width: 220,
+              width: _studyResultStatCardWidth,
               child: AppStatCard(
                 label: l10n.studyResultFocusLabel,
                 value: l10n.studyMinutesShortLabel(result.focusMinutes),

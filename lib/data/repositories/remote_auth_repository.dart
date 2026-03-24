@@ -17,10 +17,7 @@ class RemoteAuthRepository implements AuthRepository {
   @override
   Future<void> clearPersistedSession() async {
     await _secureStorage.clear(
-      keys: <String>{
-        StorageKeys.authToken,
-        StorageKeys.refreshToken,
-      },
+      keys: <String>{StorageKeys.authToken, StorageKeys.refreshToken},
     );
   }
 
@@ -36,18 +33,13 @@ class RemoteAuthRepository implements AuthRepository {
     required String password,
   }) async {
     final session = await _authApi.login(
-      AuthLoginRequest(
-        identifier: identifier,
-        password: password,
-      ),
+      AuthLoginRequest(identifier: identifier, password: password),
     );
     return AuthMapper.toSessionEntity(session);
   }
 
   @override
-  Future<void> logout({
-    required String refreshToken,
-  }) {
+  Future<void> logout({required String refreshToken}) {
     return _authApi.logout(AuthLogoutRequest(refreshToken: refreshToken));
   }
 
@@ -60,10 +52,7 @@ class RemoteAuthRepository implements AuthRepository {
   @override
   Future<AuthTokens?> readStoredTokens() async {
     final values = await _secureStorage.readAll(
-      allowList: <String>{
-        StorageKeys.authToken,
-        StorageKeys.refreshToken,
-      },
+      allowList: <String>{StorageKeys.authToken, StorageKeys.refreshToken},
     );
     final tokens = AuthTokens(
       accessToken: values[StorageKeys.authToken],
@@ -76,9 +65,7 @@ class RemoteAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<AuthSession> refresh({
-    required String refreshToken,
-  }) async {
+  Future<AuthSession> refresh({required String refreshToken}) async {
     final session = await _authApi.refresh(
       AuthRefreshRequest(refreshToken: refreshToken),
     );
@@ -92,11 +79,7 @@ class RemoteAuthRepository implements AuthRepository {
     required String password,
   }) async {
     final session = await _authApi.register(
-      AuthRegisterRequest(
-        username: username,
-        email: email,
-        password: password,
-      ),
+      AuthRegisterRequest(username: username, email: email, password: password),
     );
     return AuthMapper.toSessionEntity(session);
   }

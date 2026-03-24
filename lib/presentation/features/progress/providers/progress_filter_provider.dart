@@ -3,26 +3,16 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'progress_filter_provider.g.dart';
 
-enum ProgressPeriod {
-  today,
-  week,
-  month,
-}
+enum ProgressPeriod { today, week, month }
 
 @immutable
 class ProgressFilterState {
-  const ProgressFilterState({
-    required this.period,
-  });
+  const ProgressFilterState({required this.period});
 
   final ProgressPeriod period;
 
-  ProgressFilterState copyWith({
-    ProgressPeriod? period,
-  }) {
-    return ProgressFilterState(
-      period: period ?? this.period,
-    );
+  ProgressFilterState copyWith({ProgressPeriod? period}) {
+    return ProgressFilterState(period: period ?? this.period);
   }
 }
 

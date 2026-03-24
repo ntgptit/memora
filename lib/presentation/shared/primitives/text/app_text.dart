@@ -64,23 +64,25 @@ class AppText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final baseStyle = context.textTheme.bodyMedium ?? const TextStyle();
-    final resolvedStyle = baseStyle.copyWith(
-      color: color,
-      fontSize: fontSize,
-      fontWeight: fontWeight,
-      fontStyle: fontStyle,
-      letterSpacing: letterSpacing,
-      height: height,
-      decoration: decoration,
-      decorationColor: decorationColor,
-      decorationStyle: decorationStyle,
-      decorationThickness: decorationThickness,
-      shadows: shadows,
-      fontFamily: fontFamily,
-      fontFamilyFallback: fontFamilyFallback,
-      textBaseline: textBaseline,
-      inherit: inherit,
-    ).merge(style);
+    final resolvedStyle = baseStyle
+        .copyWith(
+          color: color,
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          fontStyle: fontStyle,
+          letterSpacing: letterSpacing,
+          height: height,
+          decoration: decoration,
+          decorationColor: decorationColor,
+          decorationStyle: decorationStyle,
+          decorationThickness: decorationThickness,
+          shadows: shadows,
+          fontFamily: fontFamily,
+          fontFamilyFallback: fontFamilyFallback,
+          textBaseline: textBaseline,
+          inherit: inherit,
+        )
+        .merge(style);
 
     return Text(
       text,

@@ -30,7 +30,11 @@ class AppFilterBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final gap = spacing ?? context.spacing.sm;
     final lineGap = runSpacing ?? context.spacing.sm;
-    final hasHeader = title != null || leading != null || trailing != null || clearAction != null;
+    final hasHeader =
+        title != null ||
+        leading != null ||
+        trailing != null ||
+        clearAction != null;
 
     return AppSurface(
       color: backgroundColor ?? context.colorScheme.surface,
@@ -47,15 +51,9 @@ class AppFilterBar extends StatelessWidget {
             if (hasHeader) ...[
               Row(
                 children: [
-                  if (leading != null) ...[
-                    leading!,
-                    SizedBox(width: gap),
-                  ],
+                  if (leading != null) ...[leading!, SizedBox(width: gap)],
                   if (title != null) Expanded(child: title!),
-                  if (trailing != null) ...[
-                    SizedBox(width: gap),
-                    trailing!,
-                  ],
+                  if (trailing != null) ...[SizedBox(width: gap), trailing!],
                   if (clearAction != null) ...[
                     SizedBox(width: gap),
                     clearAction!,
@@ -64,11 +62,7 @@ class AppFilterBar extends StatelessWidget {
               ),
               SizedBox(height: lineGap),
             ],
-            Wrap(
-              spacing: gap,
-              runSpacing: lineGap,
-              children: filters,
-            ),
+            Wrap(spacing: gap, runSpacing: lineGap, children: filters),
           ],
         ),
       ),

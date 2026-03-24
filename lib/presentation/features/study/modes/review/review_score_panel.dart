@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/features/study/modes/review/review_mode_provider.dart';
+import 'package:memora/presentation/features/study/providers/study_l10n.dart';
 import 'package:memora/presentation/features/study/providers/study_session_state.dart';
 import 'package:memora/presentation/features/study/widgets/study_action_bar.dart';
 import 'package:memora/presentation/shared/composites/study/app_answer_result_banner.dart';
@@ -23,7 +24,7 @@ class ReviewScorePanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return StudyActionBar(
-      feedback: _buildFeedbackBanner(),
+      feedback: _buildFeedbackBanner(l10n),
       actions: [
         if (state.canRemember)
           StudyActionButton(
@@ -46,15 +47,15 @@ class ReviewScorePanel extends StatelessWidget {
     );
   }
 
-  AppAnswerResultBanner? _buildFeedbackBanner() {
+  AppAnswerResultBanner? _buildFeedbackBanner(AppLocalizations l10n) {
     final feedback = state.feedback;
     if (feedback == null) {
       return null;
     }
 
     return AppAnswerResultBanner(
-      title: feedback.title,
-      message: feedback.message,
+      title: feedback.titleText(l10n),
+      message: feedback.messageText(l10n),
       kind: switch (feedback.kind) {
         StudyFeedbackKind.correct => AppAnswerResultKind.correct,
         StudyFeedbackKind.incorrect => AppAnswerResultKind.incorrect,

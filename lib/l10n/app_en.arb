@@ -1015,6 +1015,34 @@
   "studyRememberedAction": "Remembered",
   "studyRetryItemAction": "Study again",
   "studyNextAction": "Next item",
+  "studyFeedbackLockedInTitle": "Locked in",
+  "studyFeedbackLockedInMessage": "This item is ready to leave the active review queue.",
+  "studyFeedbackQueuedTitle": "Queued for another pass",
+  "studyFeedbackQueuedMessage": "This item will stay visible in the weak-memory lane.",
+  "studyFeedbackRevealedTitle": "Answer revealed",
+  "studyFeedbackRevealedMessage": "Compare what you remembered before you move on.",
+  "studyFeedbackGuessCorrectTitle": "Correct choice",
+  "studyFeedbackGuessCorrectMessage": "You matched the prompt with the correct answer.",
+  "studyFeedbackGuessIncorrectTitle": "Not quite",
+  "@studyFeedbackGuessIncorrectMessage": {
+    "placeholders": {
+      "answer": {}
+    }
+  },
+  "studyFeedbackGuessIncorrectMessage": "The correct answer is {answer}.",
+  "studyFeedbackMatchCorrectTitle": "Clean match",
+  "studyFeedbackMatchCorrectMessage": "Every pair lines up with the prompt set.",
+  "studyFeedbackMatchIncorrectTitle": "Some pairs slipped",
+  "studyFeedbackMatchIncorrectMessage": "Review the pairings once before the next board.",
+  "studyFeedbackExactRecallTitle": "Exact recall",
+  "studyFeedbackExactRecallMessage": "You typed the full answer accurately.",
+  "studyFeedbackKeepWorkingTitle": "Keep working this item",
+  "@studyFeedbackKeepWorkingMessage": {
+    "placeholders": {
+      "answer": {}
+    }
+  },
+  "studyFeedbackKeepWorkingMessage": "The expected answer is {answer}.",
   "studyCheckAnswerAction": "Check answer",
   "studyMatchConfirmAction": "Confirm pairs",
   "studyMatchLeftColumnTitle": "Prompt side",

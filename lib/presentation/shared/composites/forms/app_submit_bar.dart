@@ -55,10 +55,7 @@ class AppSubmitBar extends StatelessWidget {
       return content;
     }
 
-    return SafeArea(
-      top: false,
-      child: content,
-    );
+    return SafeArea(top: false, child: content);
   }
 
   WrapAlignment _wrapAlignment(MainAxisAlignment alignment) {

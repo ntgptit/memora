@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memora/core/theme/extensions/theme_context_ext.dart';
 import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/composites/navigation/app_page_header.dart';
 import 'package:memora/presentation/shared/primitives/buttons/app_icon_button.dart';
@@ -40,12 +41,12 @@ class DashboardHeader extends StatelessWidget {
         ),
       ],
       bottom: Wrap(
-        spacing: 12,
-        runSpacing: 12,
+        spacing: context.spacing.sm,
+        runSpacing: context.spacing.sm,
         children: [
           AppTag(
             label: l10n.dashboardFocusChipLabel(focusLabel),
-            icon: const Icon(Icons.auto_awesome_rounded, size: 14),
+            icon: const Icon(Icons.auto_awesome_rounded),
           ),
           AppChip(label: Text(l10n.dashboardDueDeckChipLabel(dueDeckCount))),
           AppChip(label: Text(l10n.dashboardDueCardChipLabel(dueCardCount))),

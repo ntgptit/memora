@@ -67,7 +67,7 @@ class AppActionCard extends StatelessWidget {
                 SizedBox(width: context.spacing.sm),
                 trailing!,
               ] else if (onTap != null) ...[
-                const SizedBox(width: 4),
+                SizedBox(width: context.spacing.xxs),
                 const AppIcon(Icons.chevron_right_rounded),
               ],
             ],

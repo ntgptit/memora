@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 
 enum AppButtonVariant { primary, secondary, outline, text, danger }
 
@@ -110,7 +111,7 @@ class _AppButtonContent extends StatelessWidget {
     final indicator = SizedBox.square(
       dimension: context.iconSize.sm,
       child: CircularProgressIndicator(
-        strokeWidth: 2,
+        strokeWidth: AppBorderTokens.regular,
         valueColor: AlwaysStoppedAnimation<Color>(indicatorColor),
       ),
     );

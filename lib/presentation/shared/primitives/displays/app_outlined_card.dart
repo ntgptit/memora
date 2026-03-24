@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 
 class AppOutlinedCard extends StatelessWidget {
   const AppOutlinedCard({
@@ -17,7 +18,7 @@ class AppOutlinedCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: margin,
-      elevation: 0,
+      elevation: AppElevationTokens.level0,
       color: context.colorScheme.surface,
       surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(

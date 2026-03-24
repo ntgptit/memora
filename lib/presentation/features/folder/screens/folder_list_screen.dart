@@ -16,10 +16,7 @@ import 'package:memora/presentation/shared/primitives/feedback/app_banner.dart';
 import 'package:memora/presentation/shared/primitives/feedback/app_circular_loader.dart';
 
 class FolderListScreen extends ConsumerStatefulWidget {
-  const FolderListScreen({
-    super.key,
-    this.folderId,
-  });
+  const FolderListScreen({super.key, this.folderId});
 
   final int? folderId;
 
@@ -56,14 +53,22 @@ class _FolderListScreenState extends ConsumerState<FolderListScreen> {
         state: state,
         searchController: _searchController,
         searchFocusNode: _searchFocusNode,
-        onRefresh: ref.read(folderControllerProvider(widget.folderId).notifier).refresh,
-        onSearchChanged: ref.read(folderFilterControllerProvider.notifier).setSearchQuery,
+        onRefresh: ref
+            .read(folderControllerProvider(widget.folderId).notifier)
+            .refresh,
+        onSearchChanged: ref
+            .read(folderFilterControllerProvider.notifier)
+            .setSearchQuery,
         onClearSearch: () {
           _searchController.clear();
           ref.read(folderFilterControllerProvider.notifier).clearSearch();
         },
-        onSortByChanged: ref.read(folderFilterControllerProvider.notifier).setSortBy,
-        onToggleSortDirection: ref.read(folderFilterControllerProvider.notifier).toggleSortDirection,
+        onSortByChanged: ref
+            .read(folderFilterControllerProvider.notifier)
+            .setSortBy,
+        onToggleSortDirection: ref
+            .read(folderFilterControllerProvider.notifier)
+            .toggleSortDirection,
         onOpenHome: () => context.go(AppRoutes.folders),
         onOpenFolder: _openFolder,
         onCreateFolder: _openCreateFolderSheet,
@@ -94,7 +99,8 @@ class _FolderListScreenState extends ConsumerState<FolderListScreen> {
           message: message,
           type: SnackbarType.error,
           actionLabel: context.l10n.retry,
-          onActionPressed: () => ref.refresh(folderControllerProvider(widget.folderId)),
+          onActionPressed: () =>
+              ref.refresh(folderControllerProvider(widget.folderId)),
         ),
       ),
     );

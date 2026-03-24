@@ -8,6 +8,10 @@ import 'package:memora/presentation/shared/primitives/buttons/app_primary_button
 import 'package:memora/presentation/shared/primitives/displays/app_card.dart';
 import 'package:memora/presentation/shared/primitives/displays/app_chip.dart';
 
+const double _flashcardPreviewStripHeight = 240;
+const double _flashcardPreviewCardWidth = 320;
+const double _flashcardPreviewBreakpoint = 480;
+
 class FlashcardWorkspaceHeader extends StatelessWidget {
   const FlashcardWorkspaceHeader({
     super.key,
@@ -27,7 +31,8 @@ class FlashcardWorkspaceHeader extends StatelessWidget {
     return AppCard(
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final showPreviewStrip = constraints.maxWidth >= 480;
+          final showPreviewStrip =
+              constraints.maxWidth >= _flashcardPreviewBreakpoint;
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -82,7 +87,7 @@ class FlashcardWorkspaceHeader extends StatelessWidget {
               if (showPreviewStrip && previewCards.isNotEmpty) ...[
                 SizedBox(height: context.spacing.md),
                 SizedBox(
-                  height: 240,
+                  height: _flashcardPreviewStripHeight,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: previewCards.length,
@@ -91,7 +96,7 @@ class FlashcardWorkspaceHeader extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final flashcard = previewCards[index];
                       return SizedBox(
-                        width: 320,
+                        width: _flashcardPreviewCardWidth,
                         child: FlashcardCard(flashcard: flashcard),
                       );
                     },

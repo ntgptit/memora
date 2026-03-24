@@ -2032,6 +2032,71 @@ class AppLocalizationsEn extends AppLocalizations {
   String get studyNextAction => 'Next item';
 
   @override
+  String get studyFeedbackLockedInTitle => 'Locked in';
+
+  @override
+  String get studyFeedbackLockedInMessage =>
+      'This item is ready to leave the active review queue.';
+
+  @override
+  String get studyFeedbackQueuedTitle => 'Queued for another pass';
+
+  @override
+  String get studyFeedbackQueuedMessage =>
+      'This item will stay visible in the weak-memory lane.';
+
+  @override
+  String get studyFeedbackRevealedTitle => 'Answer revealed';
+
+  @override
+  String get studyFeedbackRevealedMessage =>
+      'Compare what you remembered before you move on.';
+
+  @override
+  String get studyFeedbackGuessCorrectTitle => 'Correct choice';
+
+  @override
+  String get studyFeedbackGuessCorrectMessage =>
+      'You matched the prompt with the correct answer.';
+
+  @override
+  String get studyFeedbackGuessIncorrectTitle => 'Not quite';
+
+  @override
+  String studyFeedbackGuessIncorrectMessage(Object answer) {
+    return 'The correct answer is $answer.';
+  }
+
+  @override
+  String get studyFeedbackMatchCorrectTitle => 'Clean match';
+
+  @override
+  String get studyFeedbackMatchCorrectMessage =>
+      'Every pair lines up with the prompt set.';
+
+  @override
+  String get studyFeedbackMatchIncorrectTitle => 'Some pairs slipped';
+
+  @override
+  String get studyFeedbackMatchIncorrectMessage =>
+      'Review the pairings once before the next board.';
+
+  @override
+  String get studyFeedbackExactRecallTitle => 'Exact recall';
+
+  @override
+  String get studyFeedbackExactRecallMessage =>
+      'You typed the full answer accurately.';
+
+  @override
+  String get studyFeedbackKeepWorkingTitle => 'Keep working this item';
+
+  @override
+  String studyFeedbackKeepWorkingMessage(Object answer) {
+    return 'The expected answer is $answer.';
+  }
+
+  @override
   String get studyCheckAnswerAction => 'Check answer';
 
   @override

@@ -45,7 +45,7 @@ def _check_inline_text_literals(source_file) -> list[Violation]:
                 severity=SEVERITY_ERROR,
                 file=source_file.rel_path,
                 line=index,
-                reason="User-facing text literals in Text/SelectableText are forbidden. Use AppStrings or localization resources.",
+                reason="User-facing text literals in Text/SelectableText are forbidden. Use AppLocalizations via context.l10n, and reserve AppStrings for non-localized system constants only.",
                 snippet=raw_line.strip(),
             )
         )
@@ -68,7 +68,7 @@ def _check_multiline_text_literals(source_file) -> list[Violation]:
                 severity=SEVERITY_ERROR,
                 file=source_file.rel_path,
                 line=index,
-                reason="User-facing text literals in Text/SelectableText are forbidden. Use AppStrings or localization resources.",
+                reason="User-facing text literals in Text/SelectableText are forbidden. Use AppLocalizations via context.l10n, and reserve AppStrings for non-localized system constants only.",
                 snippet=raw_line.strip(),
             )
         )
@@ -99,7 +99,7 @@ def _check_named_argument_literals(source_file) -> list[Violation]:
                 severity=SEVERITY_ERROR,
                 file=source_file.rel_path,
                 line=index,
-                reason="User-facing named argument literals are forbidden. Use AppStrings or localization resources.",
+                reason="User-facing named argument literals are forbidden. Use AppLocalizations via context.l10n for UI copy, not inline strings or AppStrings.",
                 snippet=raw_line.strip(),
             )
         )

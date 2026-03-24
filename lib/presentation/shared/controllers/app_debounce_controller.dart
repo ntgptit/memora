@@ -11,10 +11,7 @@ class AppDebounceController {
 
   bool get isActive => _timer?.isActive ?? false;
 
-  void run(
-    VoidCallback action, {
-    Duration? duration,
-  }) {
+  void run(VoidCallback action, {Duration? duration}) {
     cancel();
     _timer = Timer(duration ?? defaultDuration, action);
   }

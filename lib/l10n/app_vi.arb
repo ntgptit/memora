@@ -1015,6 +1015,34 @@
   "studyRememberedAction": "Remembered",
   "studyRetryItemAction": "Study again",
   "studyNextAction": "Next item",
+  "studyFeedbackLockedInTitle": "Đã nắm chắc",
+  "studyFeedbackLockedInMessage": "Thẻ này đã sẵn sàng rời khỏi hàng ôn tập hiện tại.",
+  "studyFeedbackQueuedTitle": "Xếp hàng để ôn lại",
+  "studyFeedbackQueuedMessage": "Thẻ này sẽ tiếp tục nằm trong nhóm cần củng cố.",
+  "studyFeedbackRevealedTitle": "Đã hiện đáp án",
+  "studyFeedbackRevealedMessage": "So sánh với phần bạn nhớ trước khi chuyển sang thẻ tiếp theo.",
+  "studyFeedbackGuessCorrectTitle": "Chọn đúng rồi",
+  "studyFeedbackGuessCorrectMessage": "Bạn đã ghép đúng câu hỏi với đáp án.",
+  "studyFeedbackGuessIncorrectTitle": "Chưa chính xác",
+  "@studyFeedbackGuessIncorrectMessage": {
+    "placeholders": {
+      "answer": {}
+    }
+  },
+  "studyFeedbackGuessIncorrectMessage": "Đáp án đúng là {answer}.",
+  "studyFeedbackMatchCorrectTitle": "Ghép chính xác",
+  "studyFeedbackMatchCorrectMessage": "Tất cả cặp ghép đều khớp với bộ câu hỏi.",
+  "studyFeedbackMatchIncorrectTitle": "Vẫn còn cặp chưa khớp",
+  "studyFeedbackMatchIncorrectMessage": "Hãy xem lại các cặp một lần nữa trước khi sang bảng tiếp theo.",
+  "studyFeedbackExactRecallTitle": "Nhớ chính xác",
+  "studyFeedbackExactRecallMessage": "Bạn đã nhập đúng toàn bộ đáp án.",
+  "studyFeedbackKeepWorkingTitle": "Tiếp tục luyện thẻ này",
+  "@studyFeedbackKeepWorkingMessage": {
+    "placeholders": {
+      "answer": {}
+    }
+  },
+  "studyFeedbackKeepWorkingMessage": "Đáp án mong đợi là {answer}.",
   "studyCheckAnswerAction": "Check answer",
   "studyMatchConfirmAction": "Confirm pairs",
   "studyMatchLeftColumnTitle": "Prompt side",

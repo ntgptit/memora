@@ -7,10 +7,7 @@ import 'package:memora/presentation/shared/composites/lists/app_list_item.dart';
 import 'package:memora/presentation/shared/primitives/displays/app_icon.dart';
 
 class ProgressHistoryList extends StatelessWidget {
-  const ProgressHistoryList({
-    super.key,
-    required this.state,
-  });
+  const ProgressHistoryList({super.key, required this.state});
 
   final ProgressState state;
 

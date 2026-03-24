@@ -101,7 +101,8 @@ class SettingsScreen extends ConsumerWidget {
                 title: context.l10n.authSignOutAction,
                 subtitle: context.l10n.authSignOutSuccessMessage,
                 leading: const Icon(Icons.logout_rounded),
-                onTap: () => ref.read(authControllerProvider.notifier).signOut(),
+                onTap: () =>
+                    ref.read(authControllerProvider.notifier).signOut(),
               ),
             ],
           ),

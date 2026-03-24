@@ -38,10 +38,7 @@ class AppRetryPanel extends StatelessWidget {
           SizedBox(height: context.spacing.xxs),
           AppBodyText(text: message),
           SizedBox(height: context.spacing.md),
-          AppOutlineButton(
-            text: retryLabel,
-            onPressed: onRetry,
-          ),
+          AppOutlineButton(text: retryLabel, onPressed: onRetry),
         ],
       ),
     );

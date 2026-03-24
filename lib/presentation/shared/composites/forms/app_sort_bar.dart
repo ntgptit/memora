@@ -31,7 +31,10 @@ class AppSortBar extends StatelessWidget {
     final gap = spacing ?? context.spacing.sm;
     final lineGap = runSpacing ?? context.spacing.sm;
     final hasHeader =
-        title != null || leading != null || trailing != null || directionToggle != null;
+        title != null ||
+        leading != null ||
+        trailing != null ||
+        directionToggle != null;
 
     return AppSurface(
       color: backgroundColor ?? context.colorScheme.surface,
@@ -48,15 +51,9 @@ class AppSortBar extends StatelessWidget {
             if (hasHeader) ...[
               Row(
                 children: [
-                  if (leading != null) ...[
-                    leading!,
-                    SizedBox(width: gap),
-                  ],
+                  if (leading != null) ...[leading!, SizedBox(width: gap)],
                   if (title != null) Expanded(child: title!),
-                  if (trailing != null) ...[
-                    SizedBox(width: gap),
-                    trailing!,
-                  ],
+                  if (trailing != null) ...[SizedBox(width: gap), trailing!],
                   if (directionToggle != null) ...[
                     SizedBox(width: gap),
                     directionToggle!,
@@ -65,11 +62,7 @@ class AppSortBar extends StatelessWidget {
               ),
               SizedBox(height: lineGap),
             ],
-            Wrap(
-              spacing: gap,
-              runSpacing: lineGap,
-              children: sortOptions,
-            ),
+            Wrap(spacing: gap, runSpacing: lineGap, children: sortOptions),
           ],
         ),
       ),

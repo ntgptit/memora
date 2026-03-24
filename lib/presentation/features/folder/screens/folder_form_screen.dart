@@ -86,7 +86,7 @@ class _FolderFormScreenState extends State<FolderFormScreen> {
                 Row(
                   children: [
                     Expanded(
-                    child: AppOutlineButton(
+                      child: AppOutlineButton(
                         text: l10n.cancelLabel,
                         onPressed: _isSubmitting ? null : () => context.pop(),
                       ),
@@ -122,10 +122,7 @@ class _FolderFormScreenState extends State<FolderFormScreen> {
     });
 
     try {
-      await widget.onSubmit(
-        name,
-        description.isEmpty ? null : description,
-      );
+      await widget.onSubmit(name, description.isEmpty ? null : description);
       if (mounted) {
         context.pop();
       }

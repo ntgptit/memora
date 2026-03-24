@@ -10,9 +10,7 @@ class OfflineScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppScaffold(
       title: context.l10n.offlineTitle,
-      body: AppOfflineState(
-        message: context.l10n.offlineMessage,
-      ),
+      body: AppOfflineState(message: context.l10n.offlineMessage),
       constrainBody: true,
     );
   }

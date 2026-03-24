@@ -34,9 +34,7 @@ class LearningProgressScreen extends ConsumerWidget {
     return AppListPageLayout(
       title: Text(context.l10n.progressTitle),
       subtitle: Text(context.l10n.progressOverviewSubtitle),
-      header: _ProgressActionsRow(
-        recommendation: state.recommendation,
-      ),
+      header: _ProgressActionsRow(recommendation: state.recommendation),
       filters: ProgressFilterBar(
         period: filter.period,
         onPeriodChanged: filterController.setPeriod,

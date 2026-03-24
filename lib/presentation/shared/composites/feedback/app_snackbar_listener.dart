@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/enums/snackbar_type.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 import 'package:memora/presentation/shared/primitives/feedback/app_snackbar.dart';
 
 class AppSnackbarListener extends StatefulWidget {
@@ -69,7 +70,7 @@ class _AppSnackbarListenerState extends State<AppSnackbarListener> {
         SnackBar(
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
-          elevation: 0,
+          elevation: AppElevationTokens.level0,
           content: AppSnackbar(
             message: message,
             title: widget.title,

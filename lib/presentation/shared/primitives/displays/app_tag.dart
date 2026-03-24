@@ -19,31 +19,37 @@ class AppTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final foregroundColor = textColor ?? context.colorScheme.onSurface;
+    final resolvedIconSize =
+        context.textTheme.labelSmall?.fontSize ?? context.iconSize.xs;
+
     return Container(
-      padding: padding ?? EdgeInsets.symmetric(
-        horizontal: context.spacing.sm,
-        vertical: context.spacing.xxs,
-      ),
+      padding:
+          padding ??
+          EdgeInsets.symmetric(
+            horizontal: context.spacing.sm,
+            vertical: context.spacing.xxs,
+          ),
       decoration: BoxDecoration(
         color: backgroundColor ?? context.colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(context.radius.pill),
         border: Border.all(color: context.colorScheme.outlineVariant),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (icon != null) ...[
-            icon!,
-            SizedBox(width: context.spacing.xxs),
-          ],
-          Text(
-            label,
-            style: context.textTheme.labelSmall?.copyWith(
-              color: textColor ?? context.colorScheme.onSurface,
-              fontWeight: FontWeight.w600,
+      child: IconTheme.merge(
+        data: IconThemeData(size: resolvedIconSize, color: foregroundColor),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[icon!, SizedBox(width: context.spacing.xxs)],
+            Text(
+              label,
+              style: context.textTheme.labelSmall?.copyWith(
+                color: foregroundColor,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -41,14 +41,12 @@ class AppFormPageLayout extends StatelessWidget {
             const AppSpacing(size: AppSpacingSize.lg),
             header!,
           ],
-          if (title != null || subtitle != null || breadcrumb != null || header != null)
+          if (title != null ||
+              subtitle != null ||
+              breadcrumb != null ||
+              header != null)
             const AppSpacing(size: AppSpacingSize.lg),
-          Expanded(
-            child: AppSectionList(
-              sections: sections,
-              scrollable: true,
-            ),
-          ),
+          Expanded(child: AppSectionList(sections: sections, scrollable: true)),
         ],
       ),
       footer: submitBar,

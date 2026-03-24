@@ -6,11 +6,10 @@ import 'package:memora/presentation/shared/composites/cards/app_info_card.dart';
 import 'package:memora/presentation/shared/composites/cards/app_stat_card.dart';
 import 'package:memora/presentation/shared/primitives/displays/app_tag.dart';
 
+const double _progressSummaryStatCardWidth = 168;
+
 class ProgressSummaryCard extends StatelessWidget {
-  const ProgressSummaryCard({
-    super.key,
-    required this.state,
-  });
+  const ProgressSummaryCard({super.key, required this.state});
 
   final ProgressState state;
 
@@ -30,7 +29,7 @@ class ProgressSummaryCard extends StatelessWidget {
             runSpacing: context.spacing.md,
             children: [
               SizedBox(
-                width: 168,
+                width: _progressSummaryStatCardWidth,
                 child: AppStatCard(
                   label: l10n.progressDueLabel,
                   value: state.dueCount.toString(),
@@ -38,7 +37,7 @@ class ProgressSummaryCard extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: 168,
+                width: _progressSummaryStatCardWidth,
                 child: AppStatCard(
                   label: l10n.progressOverdueLabel,
                   value: state.overdueCount.toString(),
@@ -46,7 +45,7 @@ class ProgressSummaryCard extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: 168,
+                width: _progressSummaryStatCardWidth,
                 child: AppStatCard(
                   label: l10n.progressLearnedLabel,
                   value: state.totalLearnedItems.toString(),
@@ -54,7 +53,7 @@ class ProgressSummaryCard extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: 168,
+                width: _progressSummaryStatCardWidth,
                 child: AppStatCard(
                   label: l10n.progressAccuracyLabel,
                   value: '$successRate%',
@@ -69,9 +68,7 @@ class ProgressSummaryCard extends StatelessWidget {
               spacing: context.spacing.xs,
               runSpacing: context.spacing.xs,
               children: [
-                AppTag(
-                  label: escalationLabel(context, state.escalationLevel),
-                ),
+                AppTag(label: escalationLabel(context, state.escalationLevel)),
                 for (final reminderType in state.reminderTypes)
                   AppTag(label: reminderType),
               ],

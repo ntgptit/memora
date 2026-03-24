@@ -32,9 +32,6 @@ class AppLoader extends StatelessWidget {
       return content;
     }
 
-    return Semantics(
-      label: semanticsLabel,
-      child: content,
-    );
+    return Semantics(label: semanticsLabel, child: content);
   }
 }

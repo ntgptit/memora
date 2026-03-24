@@ -12,6 +12,7 @@ class AdaptiveIconSize {
     required this.lg,
     required this.xl,
     required this.xxl,
+    required this.xxxl,
   });
 
   factory AdaptiveIconSize.fromScreen(ScreenClass screenClass) {
@@ -24,6 +25,7 @@ class AdaptiveIconSize {
       lg: AppIconTokens.lg * scale,
       xl: AppIconTokens.xl * scale,
       xxl: AppIconTokens.xxl * scale,
+      xxxl: AppIconTokens.xxxl * scale,
     );
   }
 
@@ -33,4 +35,5 @@ class AdaptiveIconSize {
   final double lg;
   final double xl;
   final double xxl;
+  final double xxxl;
 }

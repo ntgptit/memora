@@ -78,10 +78,7 @@ class _AppScoreInputDialogState extends State<AppScoreInputDialog> {
         ),
       ),
       actions: [
-        AppTextButton(
-          text: widget.cancelLabel,
-          onPressed: widget.onCancelled,
-        ),
+        AppTextButton(text: widget.cancelLabel, onPressed: widget.onCancelled),
         AppPrimaryButton(
           text: widget.confirmLabel,
           onPressed: widget.onConfirmed == null

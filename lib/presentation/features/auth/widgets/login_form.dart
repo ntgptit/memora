@@ -12,6 +12,8 @@ import 'package:memora/presentation/shared/primitives/selections/app_segmented_c
 import 'package:memora/presentation/shared/primitives/text/app_body_text.dart';
 import 'package:memora/presentation/shared/primitives/text/app_title_text.dart';
 
+const double _loginFormMaxWidth = 560;
+
 class LoginForm extends StatelessWidget {
   const LoginForm({
     super.key,
@@ -49,7 +51,7 @@ class LoginForm extends StatelessWidget {
     final l10n = context.l10n;
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 560),
+        constraints: const BoxConstraints(maxWidth: _loginFormMaxWidth),
         child: AppCard(
           padding: EdgeInsets.all(context.spacing.xl),
           child: Form(

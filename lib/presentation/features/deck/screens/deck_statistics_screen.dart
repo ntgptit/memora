@@ -4,10 +4,7 @@ import 'package:memora/presentation/features/deck/widgets/deck_progress_summary.
 import 'package:memora/presentation/shared/layouts/app_detail_page_layout.dart';
 
 class DeckStatisticsScreen extends StatelessWidget {
-  const DeckStatisticsScreen({
-    super.key,
-    required this.deck,
-  });
+  const DeckStatisticsScreen({super.key, required this.deck});
 
   final Deck deck;
 

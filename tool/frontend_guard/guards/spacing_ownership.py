@@ -32,7 +32,7 @@ def run(root: Path) -> list[Violation]:
                 source_file,
                 _RAW_EDGE_INSETS_PATTERN,
                 RULE_NO_RAW_EDGE_INSETS,
-                "Use context.spacing or shared layout helpers instead of raw EdgeInsets literals.",
+                "Use context.spacing, context.layout, or shared layout helpers instead of raw EdgeInsets literals. If the inset is feature-specific, extract a semantic named constant rather than leaving the number inline.",
             )
         )
         violations.extend(
@@ -40,7 +40,7 @@ def run(root: Path) -> list[Violation]:
                 source_file,
                 _RAW_SIZED_BOX_PATTERN,
                 RULE_NO_RAW_SIZED_BOX,
-                "Use spacing tokens for vertical and horizontal rhythm instead of raw SizedBox numbers.",
+                "Use context.spacing or shared spacing primitives for layout rhythm instead of raw SizedBox numbers. If the gap is intentionally feature-specific, extract a semantic named constant.",
             )
         )
         violations.extend(
@@ -48,7 +48,7 @@ def run(root: Path) -> list[Violation]:
                 source_file,
                 _RAW_BORDER_RADIUS_PATTERN,
                 RULE_NO_RAW_BORDER_RADIUS,
-                "Use context.radius or radius tokens instead of raw BorderRadius values.",
+                "Use context.radius or radius tokens instead of raw BorderRadius values. Only extract a semantic named constant when the radius is intentionally local to one feature.",
             )
         )
     return violations

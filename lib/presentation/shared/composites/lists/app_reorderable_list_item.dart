@@ -61,7 +61,11 @@ class AppReorderableListItem extends StatelessWidget {
                 ? dragHandle
                 : Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: [trailing!, SizedBox(width: context.spacing.xs), dragHandle],
+                    children: [
+                      trailing!,
+                      SizedBox(width: context.spacing.xs),
+                      dragHandle,
+                    ],
                   )),
       onTap: onTap,
       onLongPress: onLongPress,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memora/core/theme/extensions/theme_context_ext.dart';
 import 'package:memora/presentation/shared/composites/lists/app_list_item.dart';
 import 'package:memora/presentation/shared/primitives/selections/app_checkbox.dart';
 
@@ -39,10 +40,10 @@ class AppSelectableListItem extends StatelessWidget {
       title: title,
       subtitle: subtitle,
       leading: controlPlacement == AppSelectionControlPlacement.leading
-          ? _composeLeading(control)
+          ? _composeLeading(context, control)
           : leading,
       trailing: controlPlacement == AppSelectionControlPlacement.trailing
-          ? _composeTrailing(control)
+          ? _composeTrailing(context, control)
           : trailing,
       selected: selected,
       compact: compact,
@@ -50,23 +51,31 @@ class AppSelectableListItem extends StatelessWidget {
     );
   }
 
-  Widget _composeLeading(Widget control) {
+  Widget _composeLeading(BuildContext context, Widget control) {
     if (leading == null) {
       return control;
     }
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: [control, const SizedBox(width: 8), leading!],
+      children: [
+        control,
+        SizedBox(width: context.spacing.xs),
+        leading!,
+      ],
     );
   }
 
-  Widget _composeTrailing(Widget control) {
+  Widget _composeTrailing(BuildContext context, Widget control) {
     if (trailing == null) {
       return control;
     }
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: [trailing!, const SizedBox(width: 8), control],
+      children: [
+        trailing!,
+        SizedBox(width: context.spacing.xs),
+        control,
+      ],
     );
   }
 }

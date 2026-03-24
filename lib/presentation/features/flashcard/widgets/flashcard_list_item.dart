@@ -27,8 +27,8 @@ class FlashcardListItem extends StatelessWidget {
     return AppListItem(
       onTap: onTap,
       leading: Container(
-        width: 44,
-        height: 44,
+        width: context.component.listItemLeadingSize,
+        height: context.component.listItemLeadingSize,
         decoration: BoxDecoration(
           color: context.colorScheme.primaryContainer,
           borderRadius: BorderRadius.circular(context.radius.md),

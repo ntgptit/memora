@@ -18,6 +18,8 @@ import 'package:memora/presentation/shared/primitives/feedback/app_banner.dart';
 import 'package:memora/presentation/shared/primitives/feedback/app_circular_loader.dart';
 import 'package:memora/presentation/shared/primitives/layout/app_spacing.dart';
 
+const double _flashcardLoadMoreThreshold = 240;
+
 class FlashcardListView extends StatelessWidget {
   const FlashcardListView({
     super.key,
@@ -116,7 +118,7 @@ class FlashcardListView extends StatelessWidget {
       body: NotificationListener<ScrollNotification>(
         onNotification: (notification) {
           if (notification.metrics.axis == Axis.vertical &&
-              notification.metrics.extentAfter < 240 &&
+              notification.metrics.extentAfter < _flashcardLoadMoreThreshold &&
               state.canLoadMore) {
             onLoadMore();
           }
@@ -129,7 +131,7 @@ class FlashcardListView extends StatelessWidget {
                   physics: const AlwaysScrollableScrollPhysics(),
                   children: [
                     SizedBox(
-                      height: 320,
+                      height: context.component.emptyStateMinHeight,
                       child: FlashcardEmptyView(
                         isSearching: state.searchQuery.isNotEmpty,
                         onCreatePressed: onCreateFlashcard,
@@ -145,8 +147,10 @@ class FlashcardListView extends StatelessWidget {
                       const AppSpacing(size: AppSpacingSize.sm),
                   itemBuilder: (context, index) {
                     if (index >= state.flashcards.length) {
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16),
+                      return Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: context.spacing.md,
+                        ),
                         child: Center(child: AppCircularLoader()),
                       );
                     }

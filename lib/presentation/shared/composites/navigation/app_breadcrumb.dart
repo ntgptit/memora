@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
+import 'package:memora/presentation/shared/primitives/displays/app_icon.dart';
 import 'package:memora/presentation/shared/primitives/text/app_link_text.dart';
 import 'package:memora/presentation/shared/primitives/text/app_text.dart';
 
@@ -19,12 +20,12 @@ class AppBreadcrumb extends StatelessWidget {
   const AppBreadcrumb({
     super.key,
     required this.items,
-    this.separator = const Icon(Icons.chevron_right_rounded, size: 16),
+    this.separator,
     this.spacing,
   });
 
   final List<AppBreadcrumbItem> items;
-  final Widget separator;
+  final Widget? separator;
   final double? spacing;
 
   @override
@@ -33,6 +34,13 @@ class AppBreadcrumb extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
+    final resolvedSeparator =
+        separator ??
+        AppIcon(
+          Icons.chevron_right_rounded,
+          size: context.iconSize.xs,
+          color: context.colorScheme.onSurfaceVariant,
+        );
     final children = <Widget>[];
     for (var index = 0; index < items.length; index++) {
       final item = items[index];
@@ -42,7 +50,7 @@ class AppBreadcrumb extends StatelessWidget {
             padding: EdgeInsets.symmetric(
               horizontal: spacing ?? context.spacing.xs,
             ),
-            child: separator,
+            child: resolvedSeparator,
           ),
         );
       }

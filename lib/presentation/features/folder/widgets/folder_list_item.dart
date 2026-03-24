@@ -71,8 +71,8 @@ class _FolderLeading extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = _parseColor(colorHex) ?? context.colorScheme.primary;
     return Container(
-      width: 44,
-      height: 44,
+      width: context.component.listItemLeadingSize,
+      height: context.component.listItemLeadingSize,
       decoration: BoxDecoration(
         color: color.withValues(alpha: AppOpacityTokens.subtle),
         borderRadius: BorderRadius.circular(context.radius.md),

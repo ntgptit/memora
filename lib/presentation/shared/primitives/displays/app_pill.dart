@@ -23,17 +23,19 @@ class AppPill extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor ?? context.colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(context.radius.pill),
-        border: borderColor == null
-            ? null
-            : Border.all(color: borderColor!),
+        border: borderColor == null ? null : Border.all(color: borderColor!),
       ),
       child: Padding(
-        padding: padding ?? EdgeInsets.symmetric(
-          horizontal: context.spacing.md,
-          vertical: context.spacing.xs,
-        ),
+        padding:
+            padding ??
+            EdgeInsets.symmetric(
+              horizontal: context.spacing.md,
+              vertical: context.spacing.xs,
+            ),
         child: DefaultTextStyle.merge(
-          style: TextStyle(color: foregroundColor ?? context.colorScheme.onSurface),
+          style: TextStyle(
+            color: foregroundColor ?? context.colorScheme.onSurface,
+          ),
           child: child,
         ),
       ),

@@ -25,7 +25,8 @@ class AppSplitViewLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final spacing = gap ?? context.layout.gutter;
-    final shouldCollapse = collapseWhenCompact && !context.screenClass.canUseSplitView;
+    final shouldCollapse =
+        collapseWhenCompact && !context.screenClass.canUseSplitView;
     if (shouldCollapse) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

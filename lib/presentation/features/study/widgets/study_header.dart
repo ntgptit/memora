@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memora/core/theme/extensions/theme_context_ext.dart';
 import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/features/study/providers/study_l10n.dart';
 import 'package:memora/presentation/features/study/providers/study_session_state.dart';
@@ -43,8 +44,8 @@ class StudyHeader extends StatelessWidget {
           ),
       ],
       bottom: Wrap(
-        spacing: 8,
-        runSpacing: 8,
+        spacing: context.spacing.xs,
+        runSpacing: context.spacing.xs,
         children: [
           AppChip(label: Text(activeMode.label(l10n))),
           AppChip(label: Text(lifecycle.label(l10n))),

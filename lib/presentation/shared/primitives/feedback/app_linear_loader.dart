@@ -36,9 +36,6 @@ class AppLinearLoader extends StatelessWidget {
       ),
     );
 
-    return AppLoader(
-      semanticsLabel: semanticsLabel ?? 'Loading',
-      child: bar,
-    );
+    return AppLoader(semanticsLabel: semanticsLabel ?? 'Loading', child: bar);
   }
 }

@@ -30,7 +30,8 @@ class AppCircularLoader extends StatelessWidget {
         valueColor: AlwaysStoppedAnimation<Color>(
           color ?? context.colorScheme.primary,
         ),
-        backgroundColor: backgroundColor ?? context.colorScheme.surfaceContainerHighest,
+        backgroundColor:
+            backgroundColor ?? context.colorScheme.surfaceContainerHighest,
       ),
     );
 

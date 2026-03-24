@@ -2034,6 +2034,71 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studyNextAction => 'Next item';
 
   @override
+  String get studyFeedbackLockedInTitle => 'Đã nắm chắc';
+
+  @override
+  String get studyFeedbackLockedInMessage =>
+      'Thẻ này đã sẵn sàng rời khỏi hàng ôn tập hiện tại.';
+
+  @override
+  String get studyFeedbackQueuedTitle => 'Xếp hàng để ôn lại';
+
+  @override
+  String get studyFeedbackQueuedMessage =>
+      'Thẻ này sẽ tiếp tục nằm trong nhóm cần củng cố.';
+
+  @override
+  String get studyFeedbackRevealedTitle => 'Đã hiện đáp án';
+
+  @override
+  String get studyFeedbackRevealedMessage =>
+      'So sánh với phần bạn nhớ trước khi chuyển sang thẻ tiếp theo.';
+
+  @override
+  String get studyFeedbackGuessCorrectTitle => 'Chọn đúng rồi';
+
+  @override
+  String get studyFeedbackGuessCorrectMessage =>
+      'Bạn đã ghép đúng câu hỏi với đáp án.';
+
+  @override
+  String get studyFeedbackGuessIncorrectTitle => 'Chưa chính xác';
+
+  @override
+  String studyFeedbackGuessIncorrectMessage(Object answer) {
+    return 'Đáp án đúng là $answer.';
+  }
+
+  @override
+  String get studyFeedbackMatchCorrectTitle => 'Ghép chính xác';
+
+  @override
+  String get studyFeedbackMatchCorrectMessage =>
+      'Tất cả cặp ghép đều khớp với bộ câu hỏi.';
+
+  @override
+  String get studyFeedbackMatchIncorrectTitle => 'Vẫn còn cặp chưa khớp';
+
+  @override
+  String get studyFeedbackMatchIncorrectMessage =>
+      'Hãy xem lại các cặp một lần nữa trước khi sang bảng tiếp theo.';
+
+  @override
+  String get studyFeedbackExactRecallTitle => 'Nhớ chính xác';
+
+  @override
+  String get studyFeedbackExactRecallMessage =>
+      'Bạn đã nhập đúng toàn bộ đáp án.';
+
+  @override
+  String get studyFeedbackKeepWorkingTitle => 'Tiếp tục luyện thẻ này';
+
+  @override
+  String studyFeedbackKeepWorkingMessage(Object answer) {
+    return 'Đáp án mong đợi là $answer.';
+  }
+
+  @override
   String get studyCheckAnswerAction => 'Check answer';
 
   @override

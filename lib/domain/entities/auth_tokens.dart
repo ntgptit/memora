@@ -2,10 +2,7 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 class AuthTokens {
-  const AuthTokens({
-    this.accessToken,
-    this.refreshToken,
-  });
+  const AuthTokens({this.accessToken, this.refreshToken});
 
   final String? accessToken;
   final String? refreshToken;

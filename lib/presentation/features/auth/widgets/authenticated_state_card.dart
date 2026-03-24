@@ -7,6 +7,8 @@ import 'package:memora/presentation/shared/primitives/displays/app_card.dart';
 import 'package:memora/presentation/shared/primitives/text/app_body_text.dart';
 import 'package:memora/presentation/shared/primitives/text/app_title_text.dart';
 
+const double _authenticatedStateCardMaxWidth = 520;
+
 class AuthenticatedStateCard extends StatelessWidget {
   const AuthenticatedStateCard({
     super.key,
@@ -23,7 +25,9 @@ class AuthenticatedStateCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 520),
+        constraints: const BoxConstraints(
+          maxWidth: _authenticatedStateCardMaxWidth,
+        ),
         child: AppCard(
           padding: EdgeInsets.all(context.spacing.xl),
           child: Column(

@@ -86,6 +86,41 @@ extension StudySessionLifecycleL10n on StudySessionLifecycle {
   }
 }
 
+extension StudyModeFeedbackL10n on StudyModeFeedback {
+  String titleText(AppLocalizations l10n) {
+    return switch (copy) {
+      StudyFeedbackCopy.lockedIn => l10n.studyFeedbackLockedInTitle,
+      StudyFeedbackCopy.queued => l10n.studyFeedbackQueuedTitle,
+      StudyFeedbackCopy.revealed => l10n.studyFeedbackRevealedTitle,
+      StudyFeedbackCopy.guessCorrect => l10n.studyFeedbackGuessCorrectTitle,
+      StudyFeedbackCopy.guessIncorrect => l10n.studyFeedbackGuessIncorrectTitle,
+      StudyFeedbackCopy.matchCorrect => l10n.studyFeedbackMatchCorrectTitle,
+      StudyFeedbackCopy.matchIncorrect => l10n.studyFeedbackMatchIncorrectTitle,
+      StudyFeedbackCopy.exactRecall => l10n.studyFeedbackExactRecallTitle,
+      StudyFeedbackCopy.keepWorking => l10n.studyFeedbackKeepWorkingTitle,
+    };
+  }
+
+  String messageText(AppLocalizations l10n) {
+    final resolvedAnswer = answerText ?? '';
+    return switch (copy) {
+      StudyFeedbackCopy.lockedIn => l10n.studyFeedbackLockedInMessage,
+      StudyFeedbackCopy.queued => l10n.studyFeedbackQueuedMessage,
+      StudyFeedbackCopy.revealed => l10n.studyFeedbackRevealedMessage,
+      StudyFeedbackCopy.guessCorrect => l10n.studyFeedbackGuessCorrectMessage,
+      StudyFeedbackCopy.guessIncorrect =>
+        l10n.studyFeedbackGuessIncorrectMessage(resolvedAnswer),
+      StudyFeedbackCopy.matchCorrect => l10n.studyFeedbackMatchCorrectMessage,
+      StudyFeedbackCopy.matchIncorrect =>
+        l10n.studyFeedbackMatchIncorrectMessage,
+      StudyFeedbackCopy.exactRecall => l10n.studyFeedbackExactRecallMessage,
+      StudyFeedbackCopy.keepWorking => l10n.studyFeedbackKeepWorkingMessage(
+        resolvedAnswer,
+      ),
+    };
+  }
+}
+
 extension StudyHistoryStatusL10n on StudyHistoryStatus {
   String label(AppLocalizations l10n) {
     switch (this) {

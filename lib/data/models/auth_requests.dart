@@ -2,19 +2,13 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 class AuthLoginRequest {
-  const AuthLoginRequest({
-    required this.identifier,
-    required this.password,
-  });
+  const AuthLoginRequest({required this.identifier, required this.password});
 
   final String identifier;
   final String password;
 
   Map<String, Object?> toJson() {
-    return <String, Object?>{
-      'identifier': identifier,
-      'password': password,
-    };
+    return <String, Object?>{'identifier': identifier, 'password': password};
   }
 }
 
@@ -41,30 +35,22 @@ class AuthRegisterRequest {
 
 @immutable
 class AuthRefreshRequest {
-  const AuthRefreshRequest({
-    required this.refreshToken,
-  });
+  const AuthRefreshRequest({required this.refreshToken});
 
   final String refreshToken;
 
   Map<String, Object?> toJson() {
-    return <String, Object?>{
-      'refreshToken': refreshToken,
-    };
+    return <String, Object?>{'refreshToken': refreshToken};
   }
 }
 
 @immutable
 class AuthLogoutRequest {
-  const AuthLogoutRequest({
-    required this.refreshToken,
-  });
+  const AuthLogoutRequest({required this.refreshToken});
 
   final String refreshToken;
 
   Map<String, Object?> toJson() {
-    return <String, Object?>{
-      'refreshToken': refreshToken,
-    };
+    return <String, Object?>{'refreshToken': refreshToken};
   }
 }

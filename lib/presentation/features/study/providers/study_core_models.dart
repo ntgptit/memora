@@ -23,6 +23,18 @@ enum StudyActionType {
 
 enum StudyFeedbackKind { correct, incorrect, neutral }
 
+enum StudyFeedbackCopy {
+  lockedIn,
+  queued,
+  revealed,
+  guessCorrect,
+  guessIncorrect,
+  matchCorrect,
+  matchIncorrect,
+  exactRecall,
+  keepWorking,
+}
+
 enum StudyHistoryStatus { completed, resumed, interrupted }
 
 @immutable
@@ -115,13 +127,13 @@ class StudySessionItem {
 class StudyModeFeedback {
   const StudyModeFeedback({
     required this.kind,
-    required this.title,
-    required this.message,
+    required this.copy,
+    this.answerText,
     this.actionLabel,
   });
 
   final StudyFeedbackKind kind;
-  final String title;
-  final String message;
+  final StudyFeedbackCopy copy;
+  final String? answerText;
   final String? actionLabel;
 }

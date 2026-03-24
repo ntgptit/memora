@@ -17,6 +17,9 @@ import 'package:memora/presentation/shared/layouts/app_form_page_layout.dart';
 import 'package:memora/presentation/shared/primitives/buttons/app_primary_button.dart';
 import 'package:memora/presentation/shared/primitives/buttons/app_text_button.dart';
 
+const double _studySetupMetricCardWidth = 210;
+const double _studySetupActionCardWidth = 280;
+
 class StudySetupScreen extends ConsumerWidget {
   const StudySetupScreen({
     super.key,
@@ -47,7 +50,7 @@ class StudySetupScreen extends ConsumerWidget {
             runSpacing: context.spacing.md,
             children: [
               SizedBox(
-                width: 210,
+                width: _studySetupMetricCardWidth,
                 child: AppProgressCard(
                   title: l10n.studyDeckReadinessTitle,
                   subtitle: l10n.studyDeckReadinessSubtitle,
@@ -55,7 +58,7 @@ class StudySetupScreen extends ConsumerWidget {
                 ),
               ),
               SizedBox(
-                width: 210,
+                width: _studySetupMetricCardWidth,
                 child: AppStatCard(
                   label: l10n.studyDueCountTitle,
                   value: '${state.deck.dueCards}',
@@ -63,7 +66,7 @@ class StudySetupScreen extends ConsumerWidget {
                 ),
               ),
               SizedBox(
-                width: 210,
+                width: _studySetupMetricCardWidth,
                 child: AppStatCard(
                   label: l10n.studySetupEstimateTitle,
                   value: l10n.studyMinutesShortLabel(
@@ -81,7 +84,7 @@ class StudySetupScreen extends ConsumerWidget {
           children: [
             for (final sessionType in StudySessionType.values)
               SizedBox(
-                width: 280,
+                width: _studySetupActionCardWidth,
                 child: AppActionCard(
                   title: sessionType.label(l10n),
                   subtitle: sessionType.subtitle(l10n),

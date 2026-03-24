@@ -5,4 +5,5 @@ abstract final class AppIconTokens {
   static const double lg = 24;
   static const double xl = 28;
   static const double xxl = 36;
+  static const double xxxl = 48;
 }

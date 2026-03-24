@@ -20,8 +20,10 @@ class OnboardingIndicator extends StatelessWidget {
         for (var index = 0; index < count; index++) ...[
           AnimatedContainer(
             duration: AppMotionTokens.fast,
-            width: index == currentIndex ? 28 : 8,
-            height: 8,
+            width: index == currentIndex
+                ? context.iconSize.xl
+                : context.spacing.xs,
+            height: context.spacing.xs,
             decoration: BoxDecoration(
               color: index == currentIndex
                   ? context.colorScheme.primary

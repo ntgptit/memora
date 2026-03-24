@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:memora/app/app_routes.dart';
 import 'package:memora/core/enums/snackbar_type.dart';
+import 'package:memora/core/theme/extensions/theme_context_ext.dart';
 import 'package:memora/domain/entities/deck.dart';
 import 'package:memora/domain/entities/folder.dart';
 import 'package:memora/l10n/l10n.dart';
@@ -93,7 +94,7 @@ class DeckListView extends StatelessWidget {
                 physics: const AlwaysScrollableScrollPhysics(),
                 children: [
                   SizedBox(
-                    height: 320,
+                    height: context.component.emptyStateMinHeight,
                     child: DeckEmptyView(onCreatePressed: onCreateDeck),
                   ),
                 ],
@@ -108,10 +109,7 @@ class DeckListView extends StatelessWidget {
                   return DeckCard(
                     deck: deck,
                     onTap: () => context.go(
-                      AppRoutes.deckDetail(
-                        folderId: folderId,
-                        deckId: deck.id,
-                      ),
+                      AppRoutes.deckDetail(folderId: folderId, deckId: deck.id),
                     ),
                     onEdit: () => onEditDeck(deck),
                     onDelete: () => onDeleteDeck(deck),

@@ -20,7 +20,7 @@ class FlashcardEmptyView extends StatelessWidget {
     return AppEmptyState(
       title: isSearching ? l10n.noResultsTitle : l10n.flashcardEmptyTitle,
       message: isSearching ? l10n.noResultsMessage : l10n.flashcardEmptyMessage,
-      icon: const Icon(AppIcons.flashcards, size: 48),
+      icon: const Icon(AppIcons.flashcards),
       actions: [
         AppPrimaryButton(
           text: l10n.flashcardCreateAction,

@@ -33,12 +33,14 @@ class AppTooltip extends StatelessWidget {
       waitDuration: waitDuration,
       showDuration: showDuration,
       verticalOffset: verticalOffset ?? context.spacing.sm,
-      padding: padding ??
+      padding:
+          padding ??
           EdgeInsets.symmetric(
             horizontal: context.spacing.md,
             vertical: context.spacing.xs,
           ),
-      margin: margin ??
+      margin:
+          margin ??
           EdgeInsets.symmetric(
             horizontal: context.spacing.md,
             vertical: context.spacing.sm,

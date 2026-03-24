@@ -3619,6 +3619,114 @@ abstract class AppLocalizations {
   /// **'Next item'**
   String get studyNextAction;
 
+  /// No description provided for @studyFeedbackLockedInTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Locked in'**
+  String get studyFeedbackLockedInTitle;
+
+  /// No description provided for @studyFeedbackLockedInMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This item is ready to leave the active review queue.'**
+  String get studyFeedbackLockedInMessage;
+
+  /// No description provided for @studyFeedbackQueuedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Queued for another pass'**
+  String get studyFeedbackQueuedTitle;
+
+  /// No description provided for @studyFeedbackQueuedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This item will stay visible in the weak-memory lane.'**
+  String get studyFeedbackQueuedMessage;
+
+  /// No description provided for @studyFeedbackRevealedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer revealed'**
+  String get studyFeedbackRevealedTitle;
+
+  /// No description provided for @studyFeedbackRevealedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare what you remembered before you move on.'**
+  String get studyFeedbackRevealedMessage;
+
+  /// No description provided for @studyFeedbackGuessCorrectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct choice'**
+  String get studyFeedbackGuessCorrectTitle;
+
+  /// No description provided for @studyFeedbackGuessCorrectMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You matched the prompt with the correct answer.'**
+  String get studyFeedbackGuessCorrectMessage;
+
+  /// No description provided for @studyFeedbackGuessIncorrectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Not quite'**
+  String get studyFeedbackGuessIncorrectTitle;
+
+  /// No description provided for @studyFeedbackGuessIncorrectMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The correct answer is {answer}.'**
+  String studyFeedbackGuessIncorrectMessage(Object answer);
+
+  /// No description provided for @studyFeedbackMatchCorrectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clean match'**
+  String get studyFeedbackMatchCorrectTitle;
+
+  /// No description provided for @studyFeedbackMatchCorrectMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Every pair lines up with the prompt set.'**
+  String get studyFeedbackMatchCorrectMessage;
+
+  /// No description provided for @studyFeedbackMatchIncorrectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Some pairs slipped'**
+  String get studyFeedbackMatchIncorrectTitle;
+
+  /// No description provided for @studyFeedbackMatchIncorrectMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Review the pairings once before the next board.'**
+  String get studyFeedbackMatchIncorrectMessage;
+
+  /// No description provided for @studyFeedbackExactRecallTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exact recall'**
+  String get studyFeedbackExactRecallTitle;
+
+  /// No description provided for @studyFeedbackExactRecallMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You typed the full answer accurately.'**
+  String get studyFeedbackExactRecallMessage;
+
+  /// No description provided for @studyFeedbackKeepWorkingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep working this item'**
+  String get studyFeedbackKeepWorkingTitle;
+
+  /// No description provided for @studyFeedbackKeepWorkingMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The expected answer is {answer}.'**
+  String studyFeedbackKeepWorkingMessage(Object answer);
+
   /// No description provided for @studyCheckAnswerAction.
   ///
   /// In en, this message translates to:

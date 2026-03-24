@@ -24,17 +24,15 @@ class AppAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final tone = _tone(context);
     return AlertDialog(
-      icon: icon ??
-          Icon(
-            tone.icon,
-            color: tone.foreground,
-          ),
+      icon: icon ?? Icon(tone.icon, color: tone.foreground),
       iconPadding: EdgeInsets.only(top: context.spacing.xs),
       title: Text(title),
       content: content,
       actions: actions,
       insetPadding: EdgeInsets.all(context.spacing.lg),
-      constraints: constraints ?? BoxConstraints(maxWidth: context.layout.dialogMaxWidth),
+      constraints:
+          constraints ??
+          BoxConstraints(maxWidth: context.layout.dialogMaxWidth),
       backgroundColor: tone.background,
       surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(

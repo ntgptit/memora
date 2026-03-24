@@ -34,7 +34,8 @@ class AppChip extends StatelessWidget {
       isEnabled: enabled,
       onSelected: onSelected,
       onDeleted: onDeleted,
-      backgroundColor: backgroundColor ?? context.colorScheme.surfaceContainerLow,
+      backgroundColor:
+          backgroundColor ?? context.colorScheme.surfaceContainerLow,
       selectedColor: selectedColor ?? context.colorScheme.secondaryContainer,
       labelStyle: labelStyle ?? context.textTheme.labelMedium,
       shape: RoundedRectangleBorder(

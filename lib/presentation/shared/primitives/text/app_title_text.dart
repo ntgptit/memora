@@ -36,10 +36,12 @@ class AppTitleText extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppText(
       text: text,
-      style: context.textTheme.titleLarge?.copyWith(
-        color: color ?? context.colorScheme.onSurface,
-        fontWeight: FontWeight.w600,
-      ).merge(style),
+      style: context.textTheme.titleLarge
+          ?.copyWith(
+            color: color ?? context.colorScheme.onSurface,
+            fontWeight: FontWeight.w600,
+          )
+          .merge(style),
       textAlign: textAlign,
       maxLines: maxLines,
       overflow: overflow,

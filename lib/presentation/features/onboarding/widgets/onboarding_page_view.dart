@@ -4,6 +4,8 @@ import 'package:memora/presentation/shared/primitives/displays/app_card.dart';
 import 'package:memora/presentation/shared/primitives/text/app_body_text.dart';
 import 'package:memora/presentation/shared/primitives/text/app_title_text.dart';
 
+const double _onboardingIllustrationSize = 88;
+
 @immutable
 class OnboardingPageContent {
   const OnboardingPageContent({
@@ -45,8 +47,8 @@ class OnboardingPageView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 88,
-                height: 88,
+                width: _onboardingIllustrationSize,
+                height: _onboardingIllustrationSize,
                 decoration: BoxDecoration(
                   color: context.colorScheme.primaryContainer,
                   borderRadius: BorderRadius.circular(context.radius.xl),

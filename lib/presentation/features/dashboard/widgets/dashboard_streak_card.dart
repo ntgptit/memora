@@ -39,7 +39,7 @@ class DashboardStreakCard extends StatelessWidget {
         children: [
           AppTag(
             label: l10n.dashboardStreakValue(currentStreak),
-            icon: const Icon(Icons.whatshot_rounded, size: 14),
+            icon: const Icon(Icons.whatshot_rounded),
             backgroundColor: context.colorScheme.errorContainer,
             textColor: context.colorScheme.onErrorContainer,
           ),

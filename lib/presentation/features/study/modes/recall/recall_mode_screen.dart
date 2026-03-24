@@ -5,6 +5,7 @@ import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/features/study/modes/recall/recall_answer_view.dart';
 import 'package:memora/presentation/features/study/modes/recall/recall_mode_provider.dart';
 import 'package:memora/presentation/features/study/modes/recall/recall_prompt_view.dart';
+import 'package:memora/presentation/features/study/providers/study_l10n.dart';
 import 'package:memora/presentation/features/study/providers/study_session_state.dart';
 import 'package:memora/presentation/features/study/widgets/study_action_bar.dart';
 import 'package:memora/presentation/shared/composites/study/app_answer_result_banner.dart';
@@ -36,7 +37,7 @@ class RecallModeScreen extends ConsumerWidget {
         ),
         SizedBox(height: context.spacing.lg),
         StudyActionBar(
-          feedback: _feedbackBanner(state.feedback),
+          feedback: _feedbackBanner(context, state.feedback),
           actions: [
             if (state.canReveal)
               StudyActionButton(
@@ -66,14 +67,17 @@ class RecallModeScreen extends ConsumerWidget {
     );
   }
 
-  AppAnswerResultBanner? _feedbackBanner(StudyModeFeedback? feedback) {
+  AppAnswerResultBanner? _feedbackBanner(
+    BuildContext context,
+    StudyModeFeedback? feedback,
+  ) {
     if (feedback == null) {
       return null;
     }
 
     return AppAnswerResultBanner(
-      title: feedback.title,
-      message: feedback.message,
+      title: feedback.titleText(context.l10n),
+      message: feedback.messageText(context.l10n),
       kind: switch (feedback.kind) {
         StudyFeedbackKind.correct => AppAnswerResultKind.correct,
         StudyFeedbackKind.incorrect => AppAnswerResultKind.incorrect,

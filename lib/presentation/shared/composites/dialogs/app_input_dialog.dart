@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:memora/core/enums/dialog_type.dart';
+import 'package:memora/core/theme/extensions/theme_context_ext.dart';
 import 'package:memora/presentation/shared/composites/dialogs/app_alert_dialog.dart';
 import 'package:memora/presentation/shared/primitives/buttons/app_outline_button.dart';
 import 'package:memora/presentation/shared/primitives/buttons/app_primary_button.dart';
@@ -61,7 +62,7 @@ class _AppInputDialogState extends State<AppInputDialog> {
         children: [
           if (widget.content != null) ...[
             widget.content!,
-            const SizedBox(height: 16),
+            SizedBox(height: context.spacing.md),
           ],
           AppTextField(
             controller: _controller,

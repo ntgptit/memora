@@ -114,9 +114,7 @@ class FolderListView extends StatelessWidget {
                 padding: EdgeInsets.all(context.spacing.md),
                 child: Row(
                   children: [
-                    Expanded(
-                      child: Text(context.l10n.folderLeafHint),
-                    ),
+                    Expanded(child: Text(context.l10n.folderLeafHint)),
                     AppPrimaryButton(
                       text: context.l10n.manageDecksLabel,
                       onPressed: onManageDecks,
@@ -135,7 +133,7 @@ class FolderListView extends StatelessWidget {
                 physics: const AlwaysScrollableScrollPhysics(),
                 children: [
                   SizedBox(
-                    height: 320,
+                    height: context.component.emptyStateMinHeight,
                     child: FolderEmptyView(
                       isRoot: state.isRoot,
                       onCreatePressed: onCreateFolder,

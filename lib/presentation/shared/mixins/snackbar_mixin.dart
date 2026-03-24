@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memora/core/enums/snackbar_type.dart';
+import 'package:memora/core/theme/tokens/tokens.dart';
 import 'package:memora/presentation/shared/primitives/feedback/app_snackbar.dart';
 
 mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
@@ -25,7 +26,7 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
       SnackBar(
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
-        elevation: 0,
+        elevation: AppElevationTokens.level0,
         duration: duration ?? type.defaultDuration,
         content: AppSnackbar(
           message: message,

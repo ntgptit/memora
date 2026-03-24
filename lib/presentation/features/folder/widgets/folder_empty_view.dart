@@ -23,7 +23,7 @@ class FolderEmptyView extends StatelessWidget {
       message: isRoot
           ? context.l10n.folderRootEmptyMessage
           : context.l10n.folderLevelEmptyMessage,
-      icon: const Icon(AppIcons.folders, size: 48),
+      icon: const Icon(AppIcons.folders),
       actions: [
         if (onCreatePressed != null)
           AppPrimaryButton(

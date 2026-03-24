@@ -38,12 +38,15 @@ class AppBodyText extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppText(
       text: text,
-      style: context.textTheme.bodyLarge?.copyWith(
-        color: color ??
-            (isSecondary
-                ? context.colorScheme.onSurfaceVariant
-                : context.colorScheme.onSurface),
-      ).merge(style),
+      style: context.textTheme.bodyLarge
+          ?.copyWith(
+            color:
+                color ??
+                (isSecondary
+                    ? context.colorScheme.onSurfaceVariant
+                    : context.colorScheme.onSurface),
+          )
+          .merge(style),
       textAlign: textAlign,
       maxLines: maxLines,
       overflow: overflow,

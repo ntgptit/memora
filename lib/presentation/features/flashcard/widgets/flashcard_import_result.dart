@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memora/core/theme/extensions/theme_context_ext.dart';
 import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/shared/primitives/displays/app_card.dart';
 import 'package:memora/presentation/shared/primitives/displays/app_chip.dart';
@@ -17,8 +18,8 @@ class FlashcardImportResult extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard(
       child: Wrap(
-        spacing: 8,
-        runSpacing: 8,
+        spacing: context.spacing.xs,
+        runSpacing: context.spacing.xs,
         children: [
           AppChip(
             label: Text(context.l10n.flashcardImportCreatedLabel(createdCount)),

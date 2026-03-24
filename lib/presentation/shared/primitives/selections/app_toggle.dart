@@ -35,7 +35,8 @@ class AppToggle extends StatelessWidget {
       isSelected: isSelected,
       onPressed: enabled ? onPressed : null,
       borderRadius: borderRadius ?? BorderRadius.circular(context.radius.md),
-      constraints: constraints ??
+      constraints:
+          constraints ??
           BoxConstraints.tightFor(
             width: context.component.buttonHeight,
             height: context.component.buttonHeight,

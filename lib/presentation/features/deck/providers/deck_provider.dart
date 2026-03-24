@@ -29,10 +29,7 @@ class DeckController extends _$DeckController {
     await _reload();
   }
 
-  Future<void> createDeck({
-    required String name,
-    String? description,
-  }) async {
+  Future<void> createDeck({required String name, String? description}) async {
     final folderId = _requireFolderId();
     await _runMutation(() async {
       await _deckRepository.createDeck(
@@ -62,10 +59,7 @@ class DeckController extends _$DeckController {
   Future<void> deleteDeck(int deckId) async {
     final folderId = _requireFolderId();
     await _runMutation(() async {
-      await _deckRepository.deleteDeck(
-        folderId: folderId,
-        deckId: deckId,
-      );
+      await _deckRepository.deleteDeck(folderId: folderId, deckId: deckId);
     });
   }
 

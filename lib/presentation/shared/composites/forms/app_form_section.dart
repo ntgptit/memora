@@ -32,7 +32,11 @@ class AppFormSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasHeader = title != null || subtitle != null || leading != null || trailing != null;
+    final hasHeader =
+        title != null ||
+        subtitle != null ||
+        leading != null ||
+        trailing != null;
     final sectionPadding = padding ?? EdgeInsets.all(context.spacing.md);
 
     return Padding(
@@ -42,7 +46,8 @@ class AppFormSection extends StatelessWidget {
         elevation: elevation,
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: borderRadius ?? BorderRadius.circular(context.radius.lg),
+          borderRadius:
+              borderRadius ?? BorderRadius.circular(context.radius.lg),
         ),
         clipBehavior: Clip.antiAlias,
         child: Padding(
@@ -66,9 +71,12 @@ class AppFormSection extends StatelessWidget {
                               ? [
                                   SizedBox(height: context.spacing.xxs),
                                   DefaultTextStyle.merge(
-                                    style: context.textTheme.bodyMedium?.copyWith(
-                                      color: context.colorScheme.onSurfaceVariant,
-                                    ),
+                                    style: context.textTheme.bodyMedium
+                                        ?.copyWith(
+                                          color: context
+                                              .colorScheme
+                                              .onSurfaceVariant,
+                                        ),
                                     child: subtitle!,
                                   ),
                                 ]

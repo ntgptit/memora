@@ -5,10 +5,7 @@ import 'package:memora/presentation/shared/composites/states/app_empty_state.dar
 import 'package:memora/presentation/shared/primitives/buttons/app_primary_button.dart';
 
 class DeckEmptyView extends StatelessWidget {
-  const DeckEmptyView({
-    super.key,
-    this.onCreatePressed,
-  });
+  const DeckEmptyView({super.key, this.onCreatePressed});
 
   final VoidCallback? onCreatePressed;
 
@@ -17,7 +14,7 @@ class DeckEmptyView extends StatelessWidget {
     return AppEmptyState(
       title: context.l10n.deckEmptyTitle,
       message: context.l10n.deckEmptyMessage,
-      icon: const Icon(AppIcons.decks, size: 48),
+      icon: const Icon(AppIcons.decks),
       actions: [
         if (onCreatePressed != null)
           AppPrimaryButton(

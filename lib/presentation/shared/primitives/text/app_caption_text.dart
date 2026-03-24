@@ -36,9 +36,9 @@ class AppCaptionText extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppText(
       text: text,
-      style: context.textTheme.labelMedium?.copyWith(
-        color: color ?? context.colorScheme.onSurfaceVariant,
-      ).merge(style),
+      style: context.textTheme.labelMedium
+          ?.copyWith(color: color ?? context.colorScheme.onSurfaceVariant)
+          .merge(style),
       textAlign: textAlign,
       maxLines: maxLines,
       overflow: overflow,

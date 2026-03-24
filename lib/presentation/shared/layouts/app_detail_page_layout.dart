@@ -38,7 +38,10 @@ class AppDetailPageLayout extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (title != null || subtitle != null || breadcrumb != null || actions.isNotEmpty)
+          if (title != null ||
+              subtitle != null ||
+              breadcrumb != null ||
+              actions.isNotEmpty)
             AppPageHeader(
               breadcrumb: breadcrumb,
               title: title,
@@ -49,7 +52,11 @@ class AppDetailPageLayout extends StatelessWidget {
             const AppSpacing(size: AppSpacingSize.lg),
             header!,
           ],
-          if (title != null || subtitle != null || breadcrumb != null || actions.isNotEmpty || header != null)
+          if (title != null ||
+              subtitle != null ||
+              breadcrumb != null ||
+              actions.isNotEmpty ||
+              header != null)
             const AppSpacing(size: AppSpacingSize.lg),
           Expanded(child: content),
         ],

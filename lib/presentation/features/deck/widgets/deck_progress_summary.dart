@@ -19,9 +19,7 @@ class DeckProgressSummary extends StatelessWidget {
       spacing: context.spacing.sm,
       runSpacing: context.spacing.sm,
       children: [
-        AppChip(
-          label: Text(context.l10n.deckSummaryDeckCount(deckCount)),
-        ),
+        AppChip(label: Text(context.l10n.deckSummaryDeckCount(deckCount))),
         AppChip(
           label: Text(context.l10n.deckSummaryFlashcardCount(flashcardCount)),
         ),

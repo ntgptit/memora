@@ -23,7 +23,8 @@ class AppBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sheetPadding = padding ??
+    final sheetPadding =
+        padding ??
         EdgeInsets.fromLTRB(
           context.spacing.md,
           context.spacing.sm,
@@ -53,11 +54,13 @@ class AppBottomSheet extends StatelessWidget {
                 if (showDragHandle) ...[
                   Center(
                     child: Container(
-                      width: 40,
-                      height: 4,
+                      width: context.component.bottomSheetHandleWidth,
+                      height: context.component.bottomSheetHandleHeight,
                       decoration: BoxDecoration(
                         color: context.colorScheme.outlineVariant,
-                        borderRadius: BorderRadius.circular(context.radius.pill),
+                        borderRadius: BorderRadius.circular(
+                          context.radius.pill,
+                        ),
                       ),
                     ),
                   ),

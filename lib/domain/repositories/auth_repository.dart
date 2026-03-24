@@ -14,13 +14,9 @@ abstract interface class AuthRepository {
     required String password,
   });
 
-  Future<AuthSession> refresh({
-    required String refreshToken,
-  });
+  Future<AuthSession> refresh({required String refreshToken});
 
-  Future<void> logout({
-    required String refreshToken,
-  });
+  Future<void> logout({required String refreshToken});
 
   Future<AuthUser> getCurrentUser();
 

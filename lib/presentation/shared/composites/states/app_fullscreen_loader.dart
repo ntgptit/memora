@@ -23,7 +23,7 @@ class AppFullscreenLoader extends StatelessWidget {
   Widget build(BuildContext context) {
     final loader = ColoredBox(
       color: backgroundColor ?? context.colorScheme.surface,
-      child: AppLoadingState(message: message ?? 'Loading', subtitle: subtitle),
+      child: AppLoadingState(message: message, subtitle: subtitle),
     );
 
     if (child == null) {

@@ -4,6 +4,9 @@ import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/features/progress/providers/progress_state.dart';
 import 'package:memora/presentation/shared/composites/cards/app_info_card.dart';
 
+const double _streakCalendarCellWidth = 44;
+const double _streakCalendarChipSize = 40;
+
 class StreakCalendar extends StatelessWidget {
   const StreakCalendar({super.key, required this.streakDays});
 
@@ -22,12 +25,12 @@ class StreakCalendar extends StatelessWidget {
         children: [
           for (final day in streakDays)
             SizedBox(
-              width: 44,
+              width: _streakCalendarCellWidth,
               child: Column(
                 children: [
                   Container(
-                    width: 40,
-                    height: 40,
+                    width: _streakCalendarChipSize,
+                    height: _streakCalendarChipSize,
                     decoration: BoxDecoration(
                       color: day.completed
                           ? context.colorScheme.primaryContainer
@@ -54,7 +57,7 @@ class StreakCalendar extends StatelessWidget {
                   SizedBox(height: context.spacing.xxs),
                   Icon(
                     day.completed ? Icons.check_rounded : Icons.close_rounded,
-                    size: 16,
+                    size: context.iconSize.xs,
                     color: day.completed
                         ? context.colorScheme.primary
                         : context.colorScheme.onSurfaceVariant,

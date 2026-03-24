@@ -27,10 +27,7 @@ class FolderController extends _$FolderController {
     await _reload();
   }
 
-  Future<void> createFolder({
-    required String name,
-    String? description,
-  }) async {
+  Future<void> createFolder({required String name, String? description}) async {
     await _runMutation(() async {
       await _folderRepository.createFolder(
         name: name,

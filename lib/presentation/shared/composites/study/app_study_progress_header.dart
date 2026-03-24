@@ -66,13 +66,8 @@ class AppStudyProgressHeader extends StatelessWidget {
           const AppSpacing(size: AppSpacingSize.sm),
           Row(
             children: [
-              Expanded(
-                child: AppProgressBar(value: resolvedProgress),
-              ),
-              const AppSpacing(
-                size: AppSpacingSize.sm,
-                axis: Axis.horizontal,
-              ),
+              Expanded(child: AppProgressBar(value: resolvedProgress)),
+              const AppSpacing(size: AppSpacingSize.sm, axis: Axis.horizontal),
               AppBodyText(
                 text: resolvedProgressLabel,
                 color: context.colorScheme.onSurfaceVariant,

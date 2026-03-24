@@ -26,8 +26,8 @@ class DeckListItem extends StatelessWidget {
     return AppListItem(
       onTap: onTap,
       leading: Container(
-        width: 44,
-        height: 44,
+        width: context.component.listItemLeadingSize,
+        height: context.component.listItemLeadingSize,
         decoration: BoxDecoration(
           color: context.colorScheme.secondaryContainer,
           borderRadius: BorderRadius.circular(context.radius.md),
@@ -55,10 +55,7 @@ class DeckListItem extends StatelessWidget {
             child: const Icon(Icons.style_rounded),
           ),
           SizedBox(width: context.spacing.xs),
-          DeckActionMenu(
-            onEdit: onEdit,
-            onDelete: onDelete,
-          ),
+          DeckActionMenu(onEdit: onEdit, onDelete: onDelete),
         ],
       ),
     );

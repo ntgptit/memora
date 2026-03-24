@@ -32,7 +32,7 @@ def run(root: Path) -> list[Violation]:
                 source_file,
                 _RAW_DURATION_PATTERN,
                 RULE_NO_RAW_DURATION,
-                "Use AppDuration, motion tokens, or named constants instead of inline Duration literals.",
+                _duration_reason(source_file.rel_path),
             )
         )
         violations.extend(
@@ -40,7 +40,7 @@ def run(root: Path) -> list[Violation]:
                 source_file,
                 _RAW_COLOR_PATTERN,
                 RULE_NO_RAW_COLOR,
-                "Use theme colors, color tokens, or semantic context extensions instead of raw color literals.",
+                _color_reason(source_file.rel_path),
             )
         )
         violations.extend(
@@ -48,7 +48,7 @@ def run(root: Path) -> list[Violation]:
                 source_file,
                 _RAW_FONT_SIZE_PATTERN,
                 RULE_NO_RAW_FONT_SIZE,
-                "Use centralized text theme and typography tokens instead of inline fontSize values.",
+                _font_size_reason(source_file.rel_path),
             )
         )
     return violations
@@ -71,3 +71,21 @@ def _check_pattern(source_file, pattern: re.Pattern[str], rule: str, reason: str
             )
         )
     return violations
+
+
+def _duration_reason(rel_path: str) -> str:
+    if rel_path.startswith("lib/core/theme/"):
+        return "Move animation duration values into AppDuration or AppMotionTokens instead of leaving Duration literals inline in theme code."
+    return "Use AppDuration or AppMotionTokens instead of inline Duration literals. If the duration is intentionally local to one feature, extract a semantic named constant."
+
+
+def _color_reason(rel_path: str) -> str:
+    if rel_path.startswith("lib/core/theme/"):
+        return "Use AppColorTokens, ColorScheme, or theme extensions instead of raw color literals in theme foundation code."
+    return "Use context.colorScheme, shared theme extensions, or color tokens instead of raw color literals in UI code."
+
+
+def _font_size_reason(rel_path: str) -> str:
+    if rel_path.startswith("lib/core/theme/"):
+        return "Use AppTypographyTokens instead of inline fontSize values in theme foundation code."
+    return "Use shared text primitives, context.textTheme, or typography tokens instead of inline fontSize values in UI code."

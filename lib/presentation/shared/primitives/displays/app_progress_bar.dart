@@ -20,7 +20,8 @@ class AppProgressBar extends StatelessWidget {
     return LinearProgressIndicator(
       value: value,
       minHeight: minHeight ?? context.spacing.xs,
-      backgroundColor: backgroundColor ?? context.colorScheme.surfaceContainerHighest,
+      backgroundColor:
+          backgroundColor ?? context.colorScheme.surfaceContainerHighest,
       valueColor: valueColor,
     );
   }

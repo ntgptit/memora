@@ -27,7 +27,9 @@ class AppEmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: maxWidth ?? 520),
+        constraints: BoxConstraints(
+          maxWidth: maxWidth ?? context.layout.panelMaxWidth,
+        ),
         child: Padding(
           padding: padding ?? EdgeInsets.all(context.spacing.lg),
           child: Column(
@@ -35,7 +37,13 @@ class AppEmptyState extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               if (icon != null) ...[
-                icon!,
+                IconTheme.merge(
+                  data: IconThemeData(
+                    size: context.iconSize.xxxl,
+                    color: context.colorScheme.primary,
+                  ),
+                  child: icon!,
+                ),
                 SizedBox(height: context.spacing.md),
               ],
               AppTitleText(text: title, textAlign: TextAlign.center),

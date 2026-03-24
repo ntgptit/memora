@@ -22,7 +22,9 @@ from frontend_guard.guards import (
     common_widget_boundaries,
     component_theme,
     feature_surface,
+    hardcode_values,
     l10n_usage,
+    local_constants,
     navigation,
     opacity_contract,
     riverpod_annotation,
@@ -98,6 +100,18 @@ def _build_tasks() -> list[GuardTask]:
             run=ui_constants.run,
         ),
         GuardTask(
+            id=hardcode_values.GUARD_ID,
+            file_name=hardcode_values.FILE_NAME,
+            description=hardcode_values.DESCRIPTION,
+            run=hardcode_values.run,
+        ),
+        GuardTask(
+            id=local_constants.GUARD_ID,
+            file_name=local_constants.FILE_NAME,
+            description=local_constants.DESCRIPTION,
+            run=local_constants.run,
+        ),
+        GuardTask(
             id=spacing_ownership.GUARD_ID,
             file_name=spacing_ownership.FILE_NAME,
             description=spacing_ownership.DESCRIPTION,
@@ -155,6 +169,8 @@ def _group_aliases() -> dict[str, set[str]]:
             common_widget_boundaries.GUARD_ID,
             component_theme.GUARD_ID,
             ui_constants.GUARD_ID,
+            hardcode_values.GUARD_ID,
+            local_constants.GUARD_ID,
         },
         "class3": {
             spacing_ownership.GUARD_ID,
@@ -175,11 +191,13 @@ def _group_aliases() -> dict[str, set[str]]:
             ui_design.GUARD_ID,
         },
         "navigation": {navigation.GUARD_ID},
-        "l10n": {l10n_usage.GUARD_ID},
+        "l10n": {l10n_usage.GUARD_ID, local_constants.GUARD_ID},
         "theme": {
             feature_surface.GUARD_ID,
             component_theme.GUARD_ID,
             ui_constants.GUARD_ID,
+            hardcode_values.GUARD_ID,
+            local_constants.GUARD_ID,
             opacity_contract.GUARD_ID,
         },
         "quality": {
