@@ -82,10 +82,10 @@ class AppButton extends StatelessWidget {
       backgroundColor: context.colorScheme.error,
       foregroundColor: context.colorScheme.onError,
       disabledBackgroundColor: context.colorScheme.onSurface.withValues(
-        alpha: 0.12,
+        alpha: AppOpacityTokens.disabledContainer,
       ),
       disabledForegroundColor: context.colorScheme.onSurface.withValues(
-        alpha: 0.38,
+        alpha: AppOpacityTokens.disabledForeground,
       ),
     );
   }

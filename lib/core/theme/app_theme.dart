@@ -81,7 +81,7 @@ abstract final class AppTheme {
         textTheme: textTheme,
       ),
       extensions: ResponsiveThemeFactory.extensions(
-        screenClass: screenInfo.screenClass,
+        dimensions: dimensions,
         brightness: brightness,
       ),
     );
