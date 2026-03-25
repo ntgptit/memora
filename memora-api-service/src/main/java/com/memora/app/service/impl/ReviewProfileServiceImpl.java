@@ -16,6 +16,7 @@ import com.memora.app.repository.UserAccountRepository;
 import com.memora.app.service.ReviewProfileService;
 import com.memora.app.util.ServiceValidationUtils;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ReviewProfileServiceImpl implements ReviewProfileService {
+
+    private static final Sort ID_ASC_SORT = Sort.by(Sort.Order.asc("id"));
 
     private final ReviewProfileRepository reviewProfileRepository;
     private final UserAccountRepository userAccountRepository;
@@ -63,7 +66,7 @@ public class ReviewProfileServiceImpl implements ReviewProfileService {
     @Transactional(readOnly = true)
     public List<ReviewProfileResponse> getReviewProfiles(final Long ownerUserId, final Boolean systemProfile) {
         // Return review profiles after applying optional owner and system filters in memory.
-        return reviewProfileRepository.findAllByOrderByIdAsc()
+        return reviewProfileRepository.findAll(ID_ASC_SORT)
             // Convert persisted profiles into DTOs after the filter chain completes.
             .stream()
             .filter(reviewProfile -> ownerUserId == null || ownerUserId.equals(reviewProfile.getOwnerUserId()))

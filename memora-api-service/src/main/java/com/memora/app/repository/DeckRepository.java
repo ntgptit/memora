@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.memora.app.entity.DeckEntity;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -14,13 +15,13 @@ public interface DeckRepository extends JpaRepository<DeckEntity, Long>, JpaSpec
 
     Optional<DeckEntity> findByIdAndFolderIdAndDeletedAtIsNull(Long deckId, Long folderId);
 
-    List<DeckEntity> findAllByDeletedAtIsNullOrderByIdAsc();
+    List<DeckEntity> findAllByDeletedAtIsNull(Sort sort);
 
-    List<DeckEntity> findAllByUserIdAndDeletedAtIsNullOrderByIdAsc(Long userId);
+    List<DeckEntity> findAllByUserIdAndDeletedAtIsNull(Long userId, Sort sort);
 
-    List<DeckEntity> findAllByFolderIdAndDeletedAtIsNullOrderByIdAsc(Long folderId);
+    List<DeckEntity> findAllByFolderIdAndDeletedAtIsNull(Long folderId, Sort sort);
 
-    List<DeckEntity> findAllByUserIdAndFolderIdAndDeletedAtIsNullOrderByIdAsc(Long userId, Long folderId);
+    List<DeckEntity> findAllByUserIdAndFolderIdAndDeletedAtIsNull(Long userId, Long folderId, Sort sort);
 
     boolean existsByFolderIdAndNameIgnoreCaseAndDeletedAtIsNull(Long folderId, String name);
 

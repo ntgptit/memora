@@ -6,19 +6,16 @@ import java.util.Optional;
 import com.memora.app.entity.UserAccountEntity;
 import com.memora.app.enums.user_account.AccountStatus;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserAccountRepository extends JpaRepository<UserAccountEntity, Long> {
 
     Optional<UserAccountEntity> findByIdAndDeletedAtIsNull(Long userAccountId);
 
-    Optional<UserAccountEntity> findFirstByAccountStatusAndDeletedAtIsNullOrderByIdAsc(AccountStatus accountStatus);
+    List<UserAccountEntity> findAllByDeletedAtIsNull(Sort sort);
 
-    Optional<UserAccountEntity> findFirstByDeletedAtIsNullOrderByIdAsc();
-
-    List<UserAccountEntity> findAllByDeletedAtIsNullOrderByIdAsc();
-
-    List<UserAccountEntity> findAllByAccountStatusAndDeletedAtIsNullOrderByIdAsc(AccountStatus accountStatus);
+    List<UserAccountEntity> findAllByAccountStatusAndDeletedAtIsNull(AccountStatus accountStatus, Sort sort);
 
     boolean existsByUsernameIgnoreCaseAndDeletedAtIsNull(String username);
 

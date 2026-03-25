@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.memora.app.entity.FlashcardEntity;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -15,9 +16,9 @@ public interface FlashcardRepository
 
     Optional<FlashcardEntity> findByIdAndDeckIdAndDeletedAtIsNull(Long flashcardId, Long deckId);
 
-    List<FlashcardEntity> findAllByDeletedAtIsNullOrderByIdAsc();
+    List<FlashcardEntity> findAllByDeletedAtIsNull(Sort sort);
 
-    List<FlashcardEntity> findAllByDeckIdAndDeletedAtIsNullOrderByIdAsc(Long deckId);
+    List<FlashcardEntity> findAllByDeckIdAndDeletedAtIsNull(Long deckId, Sort sort);
 
     boolean existsByDeckIdAndDeletedAtIsNull(Long deckId);
 

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.memora.app.entity.FolderEntity;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -12,13 +13,13 @@ public interface FolderRepository extends JpaRepository<FolderEntity, Long>, Jpa
 
     Optional<FolderEntity> findByIdAndDeletedAtIsNull(Long folderId);
 
-    List<FolderEntity> findAllByDeletedAtIsNullOrderByIdAsc();
+    List<FolderEntity> findAllByDeletedAtIsNull(Sort sort);
 
-    List<FolderEntity> findAllByUserIdAndDeletedAtIsNullOrderByIdAsc(Long userId);
+    List<FolderEntity> findAllByUserIdAndDeletedAtIsNull(Long userId, Sort sort);
 
-    List<FolderEntity> findAllByParentIdAndDeletedAtIsNullOrderByIdAsc(Long parentId);
+    List<FolderEntity> findAllByParentIdAndDeletedAtIsNull(Long parentId, Sort sort);
 
-    List<FolderEntity> findAllByUserIdAndParentIdAndDeletedAtIsNullOrderByIdAsc(Long userId, Long parentId);
+    List<FolderEntity> findAllByUserIdAndParentIdAndDeletedAtIsNull(Long userId, Long parentId, Sort sort);
 
     boolean existsByUserIdAndParentIdAndNameIgnoreCaseAndDeletedAtIsNull(Long userId, Long parentId, String name);
 

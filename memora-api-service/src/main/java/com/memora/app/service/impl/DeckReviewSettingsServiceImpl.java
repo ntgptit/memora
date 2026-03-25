@@ -19,6 +19,7 @@ import com.memora.app.repository.ReviewProfileRepository;
 import com.memora.app.service.DeckReviewSettingsService;
 import com.memora.app.util.ServiceValidationUtils;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class DeckReviewSettingsServiceImpl implements DeckReviewSettingsService {
+
+    private static final Sort ID_ASC_SORT = Sort.by(Sort.Order.asc("id"));
 
     private final DeckRepository deckRepository;
     private final DeckReviewSettingsRepository deckReviewSettingsRepository;
@@ -80,7 +83,7 @@ public class DeckReviewSettingsServiceImpl implements DeckReviewSettingsService 
         }
 
         // Return every deck settings row when no deck filter is provided.
-        return deckReviewSettingsRepository.findAllByOrderByIdAsc()
+        return deckReviewSettingsRepository.findAll(ID_ASC_SORT)
             // Convert persisted settings rows into DTOs for the API contract.
             .stream()
             .map(deckReviewSettingsMapper::toDto)

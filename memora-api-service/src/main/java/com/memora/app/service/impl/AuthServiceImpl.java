@@ -242,8 +242,10 @@ public class AuthServiceImpl implements AuthService {
 
     private String generateRefreshToken() {
         // Return a high-entropy opaque refresh token value for the client session.
-        return UUID.randomUUID().toString().replace("-", "")
-            + UUID.randomUUID().toString().replace("-", "");
+        return new StringBuilder(64)
+            .append(UUID.randomUUID().toString().replace("-", ""))
+            .append(UUID.randomUUID().toString().replace("-", ""))
+            .toString();
     }
 
     private UserAccountEntity resolveUserAccountByIdentifier(final String identifier) {

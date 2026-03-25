@@ -16,6 +16,8 @@ from typing import Iterable
 
 RULE_CLASS_MAX_LINES = "CLASS_MAX_LINES"
 RULE_PROPERTIES_PACKAGE = "CONFIGURATION_PROPERTIES_IN_PROPERTIES_PACKAGE"
+RULE_PROPERTIES_NO_INTERNAL_DEFAULT = "CONFIGURATION_PROPERTIES_NO_INTERNAL_DEFAULTS"
+RULE_PROPERTIES_DEFINED_IN_APPLICATION_YML = "CONFIGURATION_PROPERTIES_KEYS_DEFINED_IN_APPLICATION_YML"
 RULE_CONSTANT_PACKAGE_EXISTS = "CONSTANT_PACKAGE_EXISTS"
 RULE_MESSAGE_BUNDLE_EXISTS = "MESSAGE_BUNDLE_EXISTS"
 RULE_CONTROLLER_REST = "CONTROLLER_REST_CONTROLLER"
@@ -44,6 +46,11 @@ RULE_JAVADOC_SERVICE_REQUIRED = "JAVADOC_REQUIRED_FOR_SERVICE_METHODS"
 RULE_REPOSITORY_EXTENDS_JPA = "REPOSITORY_EXTENDS_JPA_REPOSITORY"
 RULE_QUERY_NATIVE_SQL_ONLY = "QUERY_MUST_USE_NATIVE_SQL"
 RULE_QUERY_KEYWORD_UPPERCASE = "QUERY_SQL_KEYWORDS_MUST_BE_UPPERCASE"
+RULE_REPOSITORY_NO_ORDERBY_DERIVED_QUERY = "REPOSITORY_NO_ORDERBY_DERIVED_QUERY"
+RULE_JPA_SPECIFICATION_ONLY_IN_REPOSITORY_SPECIFICATION = (
+    "JPA_SPECIFICATION_ONLY_IN_REPOSITORY_SPECIFICATION_PACKAGE"
+)
+RULE_NO_DEPRECATED_SPECIFICATION_WHERE = "NO_DEPRECATED_SPECIFICATION_WHERE"
 RULE_ENTITY_NO_DATA = "ENTITY_NO_LOMBOK_DATA"
 RULE_ENTITY_HAS_ID = "ENTITY_HAS_ID"
 RULE_ENTITY_NO_LAYER_DEP = "ENTITY_NO_SERVICE_REPOSITORY_DEP"
@@ -116,6 +123,7 @@ VERSION_PATTERN = re.compile(r"@\s*Version\b")
 EXTENDS_PATTERN = re.compile(r"\bextends\s+(\w+)")
 LOMBOK_DATA_PATTERN = re.compile(r"@\s*Data\b")
 CONFIGURATION_PROPERTIES_PATTERN = re.compile(r"@\s*ConfigurationProperties\b")
+CONFIGURATION_PROPERTIES_PREFIX_PATTERN = re.compile(r'@\s*ConfigurationProperties\s*\(\s*prefix\s*=\s*"([^"]+)"')
 REST_CONTROLLER_PATTERN = re.compile(r"^\s*@\s*RestController\b", re.MULTILINE)
 REST_CONTROLLER_ANNOTATION_PATTERN = re.compile(r"^\s*@\s*RestController\b")
 TRANSACTIONAL_PATTERN = re.compile(r"^\s*@\s*Transactional\b")
@@ -124,6 +132,14 @@ OPERATION_ANNOTATION_PATTERN = re.compile(r"^\s*@\s*Operation\b")
 INTERFACE_PATTERN = re.compile(r"\binterface\s+\w+")
 EXTENDS_JPA_PATTERN = re.compile(r"\bextends\s+[^{;]*JpaRepository<")
 QUERY_ANNOTATION_PATTERN = re.compile(r"^\s*@\s*Query\b")
+DERIVED_QUERY_ORDERBY_PATTERN = re.compile(
+    r"\b(?:find|read|get|query|search|stream|count|exists|delete|remove)[A-Za-z0-9_]*OrderBy[A-Z][A-Za-z0-9_]*\s*\("
+)
+SPECIFICATION_IMPORT_PATTERN = re.compile(r"^import\s+org\.springframework\.data\.jpa\.domain\.Specification\s*;$", re.MULTILINE)
+CRITERIA_IMPORT_PATTERN = re.compile(r"^import\s+jakarta\.persistence\.criteria\.", re.MULTILINE)
+SPECIFICATION_WHERE_PATTERN = re.compile(r"\bSpecification\s*\.\s*where\s*\(")
+SPECIFICATION_FACTORY_METHOD_PATTERN = re.compile(r"\bSpecification\s*<[^>]+>\s+\w+\s*\(")
+SPECIFICATION_LAMBDA_PATTERN = re.compile(r"\(\s*root\s*,\s*query\s*,\s*builder\s*\)\s*->")
 PUBLIC_METHOD_START_PATTERN = re.compile(r"^\s*public\s+.+\(.+\).*")
 VALIDATION_ANNOTATION_PATTERN = re.compile(r"^\s*@\s*(NotBlank|NotNull|NotEmpty|Positive|PositiveOrZero|Size|Email)\b")
 MESSAGE_ATTRIBUTE_PATTERN = re.compile(r"\bmessage\s*=")
@@ -199,6 +215,13 @@ LOGGER_FACTORY_PATTERN = re.compile(r"\bLoggerFactory\.getLogger\s*\(")
 LOGGER_FIELD_PATTERN = re.compile(r"\bLogger\s+[A-Za-z_][A-Za-z0-9_]*\s*=")
 UTILITY_CLASS_PATTERN = re.compile(r"@\s*UtilityClass\b")
 MAPPER_ANNOTATION_PATTERN = re.compile(r"^\s*@\s*Mapper\b", re.MULTILINE)
+PROPERTIES_INTERNAL_CONSTANT_PATTERN = re.compile(r"^\s*private\s+static\s+final\b")
+PROPERTIES_INTERNAL_FALLBACK_PATTERN = re.compile(
+    r"defaultIfBlank\s*\(|defaultIfEmpty\s*\(|defaultString\s*\(|"
+    r"Objects\.requireNonNullElse(?:Get)?\s*\(|Optional\.ofNullable\s*\(.*\)\.orElse(?:Get)?\s*\(|"
+    r"\?\s*(?:List\.of\s*\(|Set\.of\s*\(|Map\.of\s*\(|Collections\.\w+\s*\(|Locale\.\w+|"
+    r'"[^"]*"|\'[^\']*\'|\d+L?\b|true\b|false\b|[A-Z][A-Z0-9_]*\b)'
+)
 RESPONSE_STATUS_EXCEPTION_PATTERN = re.compile(r"\bResponseStatusException\b")
 COLLECTION_DECLARATION_PATTERN_TEMPLATE = r"\b(?:List|Set|Collection|Iterable|ArrayList|LinkedList|HashSet|LinkedHashSet)\s*<[^;=()]+>\s+{name}\b"
 LOWERCASE_SQL_KEYWORD_PATTERNS = [
@@ -314,6 +337,77 @@ class ConfigurationPropertiesPackageRule(Rule):
                 snippet=file_ctx.lines[line - 1].strip() if line > 0 else file_ctx.rel_path,
             )
         ]
+
+
+class ConfigurationPropertiesNoInternalDefaultRule(Rule):
+    name = RULE_PROPERTIES_NO_INTERNAL_DEFAULT
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        if CONFIGURATION_PROPERTIES_PATTERN.search(file_ctx.text) is None:
+            return []
+        violations: list[Violation] = []
+        for index, raw in enumerate(file_ctx.lines, start=1):
+            stripped = _strip_line_comment(raw).strip()
+            if stripped == "":
+                continue
+            if PROPERTIES_INTERNAL_CONSTANT_PATTERN.search(stripped) is not None:
+                violations.append(
+                    Violation(
+                        rule=self.name,
+                        severity=SEVERITY_ERROR,
+                        file=file_ctx.rel_path,
+                        line=index,
+                        reason="ConfigurationProperties classes must not define internal constant defaults. Define values in application.yml instead.",
+                        snippet=stripped,
+                    )
+                )
+                continue
+            if PROPERTIES_INTERNAL_FALLBACK_PATTERN.search(stripped) is None:
+                continue
+            violations.append(
+                Violation(
+                    rule=self.name,
+                    severity=SEVERITY_ERROR,
+                    file=file_ctx.rel_path,
+                    line=index,
+                    reason="ConfigurationProperties classes must not hardcode fallback values. Define the property in application.yml instead.",
+                    snippet=stripped,
+                )
+            )
+        return violations
+
+
+class ConfigurationPropertiesYamlDefinitionRule(Rule):
+    name = RULE_PROPERTIES_DEFINED_IN_APPLICATION_YML
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        if CONFIGURATION_PROPERTIES_PATTERN.search(file_ctx.text) is None:
+            return []
+        prefix = _configuration_properties_prefix(file_ctx.text)
+        if prefix == "":
+            return []
+        component_names = _configuration_properties_component_names(file_ctx.text)
+        if not component_names:
+            return []
+        project_root = _project_root_for_path(file_ctx.path)
+        defined_keys = _application_yaml_defined_keys(project_root)
+        violations: list[Violation] = []
+        for component_name in component_names:
+            expected_key = f"{prefix}.{_camel_to_kebab(component_name)}"
+            if expected_key in defined_keys:
+                continue
+            line = _first_line_regex(file_ctx.lines, rf"\b{re.escape(component_name)}\b")
+            violations.append(
+                Violation(
+                    rule=self.name,
+                    severity=SEVERITY_ERROR,
+                    file=file_ctx.rel_path,
+                    line=line if line > 0 else 1,
+                    reason=f'ConfigurationProperties key "{expected_key}" must be defined in src/main/resources/application.yml.',
+                    snippet=component_name,
+                )
+            )
+        return violations
 
 
 class ValidationMessageConstantRule(Rule):
@@ -2123,6 +2217,110 @@ class QueryKeywordUppercaseRule(Rule):
         return violations
 
 
+class RepositoryNoOrderByDerivedQueryRule(Rule):
+    name = RULE_REPOSITORY_NO_ORDERBY_DERIVED_QUERY
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        if "/repository/" not in file_ctx.rel_path:
+            return []
+        violations: list[Violation] = []
+        for index, raw in enumerate(file_ctx.lines, start=1):
+            stripped = _strip_line_comment(raw).strip()
+            if stripped.startswith("@Query"):
+                continue
+            if DERIVED_QUERY_ORDERBY_PATTERN.search(stripped) is None:
+                continue
+            violations.append(
+                Violation(
+                    rule=self.name,
+                    severity=SEVERITY_ERROR,
+                    file=file_ctx.rel_path,
+                    line=index,
+                    reason="Repository derived query methods must not encode ORDER BY in the method name. Use Sort or Pageable instead.",
+                    snippet=stripped,
+                )
+            )
+        return violations
+
+
+class JpaSpecificationRepositoryPackageRule(Rule):
+    name = RULE_JPA_SPECIFICATION_ONLY_IN_REPOSITORY_SPECIFICATION
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        if not file_ctx.rel_path.startswith("src/main/java/"):
+            return []
+        if "/repository/specification/" in file_ctx.rel_path:
+            return []
+
+        violations: list[Violation] = []
+        if "/service/" in file_ctx.rel_path:
+            import_line = _first_line_regex(file_ctx.lines, r"import\s+org\.springframework\.data\.jpa\.domain\.Specification")
+            if import_line > 0:
+                violations.append(
+                    Violation(
+                        rule=self.name,
+                        severity=SEVERITY_ERROR,
+                        file=file_ctx.rel_path,
+                        line=import_line,
+                        reason="Service layer must not import Specification. Move all specification composition into com.memora.app.repository.specification.",
+                        snippet=file_ctx.lines[import_line - 1].strip(),
+                    )
+                )
+            where_line = _first_line_regex(file_ctx.lines, r"Specification\s*\.\s*where\s*\(")
+            if where_line > 0:
+                violations.append(
+                    Violation(
+                        rule=self.name,
+                        severity=SEVERITY_ERROR,
+                        file=file_ctx.rel_path,
+                        line=where_line,
+                        reason="Service layer must not call Specification.where(...). Compose specifications inside com.memora.app.repository.specification.",
+                        snippet=file_ctx.lines[where_line - 1].strip(),
+                    )
+                )
+
+        if CRITERIA_IMPORT_PATTERN.search(file_ctx.text) is None and SPECIFICATION_LAMBDA_PATTERN.search(file_ctx.text) is None:
+            if SPECIFICATION_FACTORY_METHOD_PATTERN.search(file_ctx.text) is None:
+                return violations
+
+        line = _first_line_regex(
+            file_ctx.lines,
+            r"import\s+jakarta\.persistence\.criteria\.|\(\s*root\s*,\s*query\s*,\s*builder\s*\)\s*->|\bSpecification\s*<[^>]+>\s+\w+\s*\(",
+        )
+        violations.append(
+            Violation(
+                rule=self.name,
+                severity=SEVERITY_ERROR,
+                file=file_ctx.rel_path,
+                line=line if line > 0 else 1,
+                reason="JpaSpecificationExecutor predicate logic must live under com.memora.app.repository.specification.",
+                snippet=file_ctx.lines[line - 1].strip() if line > 0 else file_ctx.rel_path,
+            )
+        )
+        return violations
+
+
+class NoDeprecatedSpecificationWhereRule(Rule):
+    name = RULE_NO_DEPRECATED_SPECIFICATION_WHERE
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        if not file_ctx.rel_path.startswith("src/main/java/"):
+            return []
+        line = _first_line_regex(file_ctx.lines, r"Specification\s*\.\s*where\s*\(")
+        if line <= 0:
+            return []
+        return [
+            Violation(
+                rule=self.name,
+                severity=SEVERITY_ERROR,
+                file=file_ctx.rel_path,
+                line=line,
+                reason="Specification.where(...) is deprecated and marked for removal. Use Specification.allOf(...) or Specification.anyOf(...).",
+                snippet=file_ctx.lines[line - 1].strip(),
+            )
+        ]
+
+
 class EntityNoDataRule(Rule):
     name = RULE_ENTITY_NO_DATA
 
@@ -2350,6 +2548,8 @@ def _default_rules() -> list[Rule]:
     return [
         MaxClassLinesRule(),
         ConfigurationPropertiesPackageRule(),
+        ConfigurationPropertiesNoInternalDefaultRule(),
+        ConfigurationPropertiesYamlDefinitionRule(),
         OneTopLevelTypePerFileRule(),
         NoInnerApiTypesRule(),
         ManualLoggerRule(),
@@ -2380,6 +2580,9 @@ def _default_rules() -> list[Rule]:
         RepositoryJpaRule(),
         QueryMustUseNativeSqlRule(),
         QueryKeywordUppercaseRule(),
+        RepositoryNoOrderByDerivedQueryRule(),
+        JpaSpecificationRepositoryPackageRule(),
+        NoDeprecatedSpecificationWhereRule(),
         EntityNoDataRule(),
         EntityHasIdRule(),
         EntityLayerDependencyRule(),
@@ -2631,6 +2834,117 @@ def _resolve_project_type_path(
     if fallback_simple_name == "":
         return None
     return root / "src" / "main" / "java" / "com" / "memora" / "app" / package_name / f"{fallback_simple_name}.java"
+
+
+def _configuration_properties_prefix(text: str) -> str:
+    match = CONFIGURATION_PROPERTIES_PREFIX_PATTERN.search(text)
+    if match is None:
+        return ""
+    return match.group(1).strip()
+
+
+def _configuration_properties_component_names(text: str) -> list[str]:
+    record_marker = re.search(r"\brecord\s+[A-Z]\w*\s*\(", text)
+    if record_marker is None:
+        return []
+    start = record_marker.end()
+    depth = 1
+    angle_depth = 0
+    index = start
+    while index < len(text):
+        current = text[index]
+        if current == "<":
+            angle_depth += 1
+        elif current == ">" and angle_depth > 0:
+            angle_depth -= 1
+        elif current == "(" and angle_depth == 0:
+            depth += 1
+        elif current == ")" and angle_depth == 0:
+            depth -= 1
+            if depth == 0:
+                break
+        index += 1
+    if depth != 0:
+        return []
+    header = text[start:index]
+    component_names: list[str] = []
+    for component in _split_top_level_csv(header):
+        normalized = re.sub(r"@\w+(?:\([^)]*\))?\s*", "", " ".join(component.split()))
+        if normalized == "":
+            continue
+        name = normalized.rsplit(" ", 1)[-1].strip()
+        if re.match(r"^[A-Za-z_][A-Za-z0-9_]*$", name) is None:
+            continue
+        component_names.append(name)
+    return component_names
+
+
+def _split_top_level_csv(raw: str) -> list[str]:
+    parts: list[str] = []
+    current: list[str] = []
+    angle_depth = 0
+    paren_depth = 0
+    bracket_depth = 0
+
+    for char in raw:
+        if char == "<":
+            angle_depth += 1
+        elif char == ">" and angle_depth > 0:
+            angle_depth -= 1
+        elif char == "(":
+            paren_depth += 1
+        elif char == ")" and paren_depth > 0:
+            paren_depth -= 1
+        elif char == "[":
+            bracket_depth += 1
+        elif char == "]" and bracket_depth > 0:
+            bracket_depth -= 1
+
+        if char == "," and angle_depth == 0 and paren_depth == 0 and bracket_depth == 0:
+            part = "".join(current).strip()
+            if part != "":
+                parts.append(part)
+            current = []
+            continue
+        current.append(char)
+
+    tail = "".join(current).strip()
+    if tail != "":
+        parts.append(tail)
+    return parts
+
+
+def _camel_to_kebab(name: str) -> str:
+    return re.sub(r"(?<!^)(?=[A-Z])", "-", name).lower()
+
+
+def _application_yaml_defined_keys(root: Path) -> set[str]:
+    path = root / "src" / "main" / "resources" / "application.yml"
+    if not path.exists():
+        return set()
+    keys: set[str] = set()
+    stack: list[tuple[int, str]] = []
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.split("#", 1)[0].rstrip()
+        if line.strip() == "":
+            continue
+        stripped = line.lstrip()
+        if stripped.startswith("- "):
+            continue
+        indent = len(line) - len(stripped)
+        while stack and stack[-1][0] >= indent:
+            stack.pop()
+        if ":" not in stripped:
+            continue
+        key, remainder = stripped.split(":", 1)
+        key = key.strip().strip('"').strip("'")
+        if key == "":
+            continue
+        full_key = ".".join([item[1] for item in stack] + [key])
+        keys.add(full_key)
+        if remainder.strip() == "":
+            stack.append((indent, key))
+    return keys
 
 
 def _has_bean_validation(path: Path) -> bool:
@@ -3494,6 +3808,7 @@ def _rule_group_aliases() -> dict[str, set[str]]:
             RULE_CONTROLLER_SERVICE_ONLY,
             RULE_SERVICE_NO_CONTROLLER_DEP,
             RULE_CONTROLLER_ENTITY_SIGNATURE,
+            RULE_JPA_SPECIFICATION_ONLY_IN_REPOSITORY_SPECIFICATION,
         },
         "transaction": {
             RULE_CONTROLLER_TX,
@@ -3544,6 +3859,8 @@ def _rule_group_aliases() -> dict[str, set[str]]:
             RULE_VI_MESSAGES_ACCENTED,
         },
         "jpa": {
+            RULE_JPA_SPECIFICATION_ONLY_IN_REPOSITORY_SPECIFICATION,
+            RULE_NO_DEPRECATED_SPECIFICATION_WHERE,
             RULE_REPOSITORY_EXTENDS_JPA,
             RULE_ENTITY_NO_DATA,
             RULE_ENTITY_HAS_ID,
@@ -3574,9 +3891,14 @@ def _rule_group_aliases() -> dict[str, set[str]]:
         "query": {
             RULE_QUERY_NATIVE_SQL_ONLY,
             RULE_QUERY_KEYWORD_UPPERCASE,
+            RULE_REPOSITORY_NO_ORDERBY_DERIVED_QUERY,
+            RULE_JPA_SPECIFICATION_ONLY_IN_REPOSITORY_SPECIFICATION,
+            RULE_NO_DEPRECATED_SPECIFICATION_WHERE,
         },
         "config": {
             RULE_PROPERTIES_PACKAGE,
+            RULE_PROPERTIES_NO_INTERNAL_DEFAULT,
+            RULE_PROPERTIES_DEFINED_IN_APPLICATION_YML,
         },
         "shape": {
             RULE_DTO_PACKAGE_STRUCTURE,

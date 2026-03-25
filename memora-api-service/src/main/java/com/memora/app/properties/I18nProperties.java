@@ -3,19 +3,20 @@ package com.memora.app.properties;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.commons.collections4.CollectionUtils;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
 @ConfigurationProperties(prefix = "app.i18n")
+@Validated
 public record I18nProperties(
-    Locale defaultLocale,
-    List<Locale> supportedLocales
+    @NotNull Locale defaultLocale,
+    @NotEmpty List<Locale> supportedLocales
 ) {
 
     public I18nProperties {
-        defaultLocale = defaultLocale == null ? Locale.ENGLISH : defaultLocale;
-        supportedLocales = CollectionUtils.isEmpty(supportedLocales)
-            ? List.of(defaultLocale)
-            : List.copyOf(supportedLocales);
+        supportedLocales = List.copyOf(supportedLocales);
     }
 }

@@ -11,10 +11,7 @@ import com.memora.app.repository.FolderRepository;
 import com.memora.app.util.FolderColorResolver;
 import com.memora.app.util.ServiceValidationUtils;
 
-import jakarta.persistence.criteria.Predicate;
-
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 
 final class FolderQuerySupport {
 
@@ -45,35 +42,6 @@ final class FolderQuerySupport {
         }
         // Validate the parent identifier when the caller provides one.
         return ServiceValidationUtils.requirePositiveId(parentId, ApiMessageKey.PARENT_ID_POSITIVE);
-    }
-
-    static Specification<FolderEntity> hasUserId(final Long userId) {
-        // Restrict folder queries to the current workspace owner.
-        return (root, query, builder) -> builder.equal(root.get("userId"), userId);
-    }
-
-    static Specification<FolderEntity> hasParentId(final Long parentId) {
-        // Match the requested parent folder or root-level folders.
-        return (root, query, builder) -> parentId == null
-            ? builder.isNull(root.get("parentId"))
-            : builder.equal(root.get("parentId"), parentId);
-    }
-
-    static Specification<FolderEntity> hasSearchQuery(final String searchQuery) {
-        final String normalizedSearchQuery = ServiceValidationUtils.normalizeOptionalNullableText(searchQuery);
-        // Skip search filtering when the caller does not provide a query.
-        if (normalizedSearchQuery == null) {
-            // Return null so the surrounding specification chain remains unchanged.
-            return null;
-        }
-        // Search folder names and descriptions with a case-insensitive contains filter.
-        return (root, query, builder) -> {
-            final String likePattern = "%" + normalizedSearchQuery.toLowerCase(Locale.ROOT) + "%";
-            final Predicate namePredicate = builder.like(builder.lower(root.get("name")), likePattern);
-            final Predicate descriptionPredicate = builder.like(builder.lower(root.get("description")), likePattern);
-            // Return folders that match either searchable text column.
-            return builder.or(namePredicate, descriptionPredicate);
-        };
     }
 
     static Sort buildSort(final String sortBy, final String sortType) {

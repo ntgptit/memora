@@ -5,7 +5,6 @@ import com.memora.app.entity.UserAccountEntity;
 import com.memora.app.security.AuthenticatedUser;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 
@@ -18,6 +17,12 @@ public interface AuthUserMapper {
 
     AuthUserResponse toDto(UserAccountEntity entity);
 
-    @Mapping(target = "id", source = "userId")
-    AuthUserResponse toDto(AuthenticatedUser authenticatedUser);
+    default AuthUserResponse toDto(final AuthenticatedUser authenticatedUser) {
+        return new AuthUserResponse(
+            authenticatedUser.userId(),
+            authenticatedUser.username(),
+            authenticatedUser.email(),
+            authenticatedUser.accountStatus()
+        );
+    }
 }

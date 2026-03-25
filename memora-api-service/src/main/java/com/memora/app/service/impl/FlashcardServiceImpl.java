@@ -15,6 +15,7 @@ import com.memora.app.mapper.FlashcardMapper;
 import com.memora.app.repository.DeckRepository;
 import com.memora.app.repository.FlashcardLanguageRepository;
 import com.memora.app.repository.FlashcardRepository;
+import com.memora.app.repository.specification.FlashcardSpecification;
 import com.memora.app.security.CurrentAuthenticatedUserService;
 import com.memora.app.service.FlashcardService;
 import com.memora.app.util.ServiceValidationUtils;
@@ -22,7 +23,6 @@ import com.memora.app.util.ServiceValidationUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,12 +83,10 @@ public class FlashcardServiceImpl implements FlashcardService {
             FlashcardQuerySupport.normalizeSize(size),
             FlashcardQuerySupport.buildSort(sortBy, sortType)
         );
-        final Specification<FlashcardEntity> specification = Specification
-            .where(FlashcardQuerySupport.isActive())
-            .and(FlashcardQuerySupport.hasDeckId(deck.getId()))
-            .and(FlashcardQuerySupport.hasSearchQuery(searchQuery));
-
-        final Page<FlashcardEntity> flashcards = flashcardRepository.findAll(specification, pageable);
+        final Page<FlashcardEntity> flashcards = flashcardRepository.findAll(
+            FlashcardSpecification.forDeckListing(deck.getId(), searchQuery),
+            pageable
+        );
         final Page<FlashcardResponse> responsePage = flashcards.map(
             entity -> FlashcardQuerySupport.toResponse(entity, flashcardLanguageRepository, flashcardMapper)
         );

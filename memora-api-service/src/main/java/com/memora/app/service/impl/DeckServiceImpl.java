@@ -20,17 +20,15 @@ import com.memora.app.repository.DeckReviewSettingsRepository;
 import com.memora.app.repository.FlashcardLanguageRepository;
 import com.memora.app.repository.FlashcardRepository;
 import com.memora.app.repository.FolderRepository;
+import com.memora.app.repository.specification.DeckSpecification;
 import com.memora.app.security.CurrentAuthenticatedUserService;
 import com.memora.app.service.DeckService;
 import com.memora.app.util.ServiceValidationUtils;
-
-import jakarta.persistence.criteria.Predicate;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +41,7 @@ public class DeckServiceImpl implements DeckService {
     private static final int DEFAULT_PAGE = 0;
     private static final int DEFAULT_SIZE = 20;
     private static final int MAX_PAGE_SIZE = 100;
+    private static final Sort ID_ASC_SORT = Sort.by(Sort.Order.asc("id"));
 
     private final DeckRepository deckRepository;
     private final DeckReviewSettingsRepository deckReviewSettingsRepository;
@@ -93,16 +92,15 @@ public class DeckServiceImpl implements DeckService {
         final Long currentUserId = currentAuthenticatedUserService.getCurrentUser().userId();
         final FolderEntity folder = getActiveFolder(folderId, currentUserId);
 
-        final Specification<DeckEntity> specification = Specification
-            .where(isActive())
-            .and(hasFolderId(folder.getId()))
-            .and(hasSearchQuery(searchQuery));
         final Pageable pageable = PageRequest.of(
             normalizePage(page),
             normalizeSize(size),
             buildSort(sortBy, sortType)
         );
-        final Page<DeckEntity> resultPage = deckRepository.findAll(specification, pageable);
+        final Page<DeckEntity> resultPage = deckRepository.findAll(
+            DeckSpecification.forFolderListing(folder.getId(), searchQuery),
+            pageable
+        );
 
         // Return the current page content after applying search and sort.
         return resultPage.map(this::toResponse).getContent();
@@ -177,7 +175,7 @@ public class DeckServiceImpl implements DeckService {
         deckReviewSettingsRepository.removeByDeckId(deck.getId());
 
         // Soft-delete each active flashcard attached to the deck.
-        for (final var flashcard : flashcardRepository.findAllByDeckIdAndDeletedAtIsNullOrderByIdAsc(deck.getId())) {
+        for (final var flashcard : flashcardRepository.findAllByDeckIdAndDeletedAtIsNull(deck.getId(), ID_ASC_SORT)) {
             flashcardLanguageRepository.removeByFlashcardId(flashcard.getId());
             flashcard.setDeletedAt(deletedAt);
             flashcardRepository.save(flashcard);
@@ -185,34 +183,6 @@ public class DeckServiceImpl implements DeckService {
 
         deck.setDeletedAt(deletedAt);
         deckRepository.save(deck);
-    }
-
-    private Specification<DeckEntity> isActive() {
-        // Hide soft-deleted rows from listing queries.
-        return (root, query, builder) -> builder.isNull(root.get("deletedAt"));
-    }
-
-    private Specification<DeckEntity> hasFolderId(final Long folderId) {
-        // Restrict deck queries to the requested folder.
-        return (root, query, builder) -> builder.equal(root.get("folderId"), folderId);
-    }
-
-    private Specification<DeckEntity> hasSearchQuery(final String searchQuery) {
-        final String normalizedSearchQuery = ServiceValidationUtils.normalizeOptionalNullableText(searchQuery);
-        // Skip search filtering when the caller does not provide a query.
-        if (normalizedSearchQuery == null) {
-            // Return null so the surrounding specification chain remains unchanged.
-            return null;
-        }
-
-        // Search deck names and descriptions with a case-insensitive contains filter.
-        return (root, query, builder) -> {
-            final String likePattern = "%" + normalizedSearchQuery.toLowerCase(Locale.ROOT) + "%";
-            final Predicate namePredicate = builder.like(builder.lower(root.get("name")), likePattern);
-            final Predicate descriptionPredicate = builder.like(builder.lower(root.get("description")), likePattern);
-            // Return decks that match either searchable text column.
-            return builder.or(namePredicate, descriptionPredicate);
-        };
     }
 
     private Sort buildSort(final String sortBy, final String sortType) {

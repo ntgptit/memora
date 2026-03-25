@@ -5,17 +5,16 @@ import java.util.Optional;
 
 import com.memora.app.entity.ReviewProfileEntity;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReviewProfileRepository extends JpaRepository<ReviewProfileEntity, Long> {
 
     Optional<ReviewProfileEntity> findById(Long reviewProfileId);
 
-    List<ReviewProfileEntity> findAllByOrderByIdAsc();
+    List<ReviewProfileEntity> findAllByOwnerUserId(Long ownerUserId, Sort sort);
 
-    List<ReviewProfileEntity> findAllByOwnerUserIdOrderByIdAsc(Long ownerUserId);
-
-    List<ReviewProfileEntity> findAllBySystemProfileOrderByIdAsc(boolean systemProfile);
+    List<ReviewProfileEntity> findAllBySystemProfile(boolean systemProfile, Sort sort);
 
     Optional<ReviewProfileEntity> findByOwnerUserIdAndDefaultProfileTrue(Long ownerUserId);
 

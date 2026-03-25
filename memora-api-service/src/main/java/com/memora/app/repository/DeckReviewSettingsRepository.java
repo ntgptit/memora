@@ -11,8 +11,6 @@ public interface DeckReviewSettingsRepository extends JpaRepository<DeckReviewSe
 
     Optional<DeckReviewSettingsEntity> findById(Long deckReviewSettingsId);
 
-    List<DeckReviewSettingsEntity> findAllByOrderByIdAsc();
-
     Optional<DeckReviewSettingsEntity> findByDeckId(Long deckId);
 
     boolean existsByDeckId(Long deckId);

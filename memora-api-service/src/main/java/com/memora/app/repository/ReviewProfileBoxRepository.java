@@ -5,15 +5,14 @@ import java.util.Optional;
 
 import com.memora.app.entity.ReviewProfileBoxEntity;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReviewProfileBoxRepository extends JpaRepository<ReviewProfileBoxEntity, Long> {
 
     Optional<ReviewProfileBoxEntity> findById(Long reviewProfileBoxId);
 
-    List<ReviewProfileBoxEntity> findAllByOrderByIdAsc();
-
-    List<ReviewProfileBoxEntity> findAllByReviewProfileIdOrderByBoxNumberAsc(Long reviewProfileId);
+    List<ReviewProfileBoxEntity> findAllByReviewProfileId(Long reviewProfileId, Sort sort);
 
     boolean existsByReviewProfileIdAndBoxNumber(Long reviewProfileId, Integer boxNumber);
 

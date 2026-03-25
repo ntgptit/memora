@@ -1,22 +1,15 @@
 package com.memora.app.properties;
 
-import org.apache.commons.lang3.StringUtils;
+import jakarta.validation.constraints.NotBlank;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
 @ConfigurationProperties(prefix = "app.docs")
+@Validated
 public record DocsProperties(
-    String title,
-    String description,
-    String version
+    @NotBlank String title,
+    @NotBlank String description,
+    @NotBlank String version
 ) {
-
-    public DocsProperties {
-        title = normalize(title, "Memora API Service");
-        description = normalize(description, "REST API for Memora.");
-        version = normalize(version, "v1");
-    }
-
-    private static String normalize(final String value, final String fallback) {
-        return StringUtils.isBlank(value) ? fallback : value;
-    }
 }

@@ -13,16 +13,14 @@ import com.memora.app.mapper.FlashcardMapper;
 import com.memora.app.repository.FlashcardLanguageRepository;
 import com.memora.app.util.ServiceValidationUtils;
 
-import jakarta.persistence.criteria.Predicate;
-
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 
 final class FlashcardQuerySupport {
 
     private static final int DEFAULT_PAGE = 0;
     private static final int DEFAULT_SIZE = 20;
     private static final int MAX_PAGE_SIZE = 100;
+    private static final Sort ID_ASC_SORT = Sort.by(Sort.Order.asc("id"));
 
     private FlashcardQuerySupport() {
     }
@@ -33,7 +31,7 @@ final class FlashcardQuerySupport {
         final FlashcardMapper flashcardMapper
     ) {
         final List<FlashcardLanguageEntity> languageEntities =
-            flashcardLanguageRepository.findAllByFlashcardIdOrderByIdAsc(entity.getId());
+            flashcardLanguageRepository.findAllByFlashcardId(entity.getId(), ID_ASC_SORT);
         final FlashcardLanguageEntity frontLanguage = findLanguage(languageEntities, FlashcardSide.TERM);
         final FlashcardLanguageEntity backLanguage = findLanguage(languageEntities, FlashcardSide.MEANING);
         final String pronunciation = frontLanguage != null
@@ -56,7 +54,7 @@ final class FlashcardQuerySupport {
         final FlashcardLanguageRepository flashcardLanguageRepository
     ) {
         final List<FlashcardLanguageEntity> existingLanguages =
-            flashcardLanguageRepository.findAllByFlashcardIdOrderByIdAsc(flashcardId);
+            flashcardLanguageRepository.findAllByFlashcardId(flashcardId, ID_ASC_SORT);
         upsertFlashcardLanguage(
             flashcardId,
             FlashcardSide.TERM,
@@ -71,35 +69,6 @@ final class FlashcardQuerySupport {
             existingLanguages,
             flashcardLanguageRepository
         );
-    }
-
-    static Specification<FlashcardEntity> isActive() {
-        // Hide soft-deleted flashcards from all list queries.
-        return (root, query, builder) -> builder.isNull(root.get("deletedAt"));
-    }
-
-    static Specification<FlashcardEntity> hasDeckId(final Long deckId) {
-        // Restrict flashcard queries to the requested deck scope.
-        return (root, query, builder) -> builder.equal(root.get("deckId"), deckId);
-    }
-
-    static Specification<FlashcardEntity> hasSearchQuery(final String searchQuery) {
-        final String normalizedSearchQuery = ServiceValidationUtils.normalizeOptionalNullableText(searchQuery);
-        // Skip the search predicate when the caller does not provide a query.
-        if (normalizedSearchQuery == null) {
-            // Leave the surrounding specification chain unchanged.
-            return null;
-        }
-
-        // Build a case-insensitive contains filter across the searchable text columns.
-        return (root, query, builder) -> {
-            final String likePattern = "%" + normalizedSearchQuery.toLowerCase(Locale.ROOT) + "%";
-            final Predicate frontPredicate = builder.like(builder.lower(root.get("term")), likePattern);
-            final Predicate backPredicate = builder.like(builder.lower(root.get("meaning")), likePattern);
-            final Predicate notePredicate = builder.like(builder.lower(root.get("note")), likePattern);
-            // Return rows that match any searchable field.
-            return builder.or(frontPredicate, backPredicate, notePredicate);
-        };
     }
 
     static Sort buildSort(final String sortBy, final String sortType) {

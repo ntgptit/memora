@@ -2,28 +2,29 @@ package com.memora.app.properties;
 
 import java.util.List;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
 @ConfigurationProperties(prefix = "app.cors")
+@Validated
 public record CorsProperties(
-    List<String> allowedOrigins,
-    List<String> allowedOriginPatterns,
-    List<String> allowedMethods,
-    List<String> allowedHeaders,
-    List<String> exposedHeaders,
+    @NotNull List<String> allowedOrigins,
+    @NotNull List<String> allowedOriginPatterns,
+    @NotNull List<String> allowedMethods,
+    @NotNull List<String> allowedHeaders,
+    @NotNull List<String> exposedHeaders,
     boolean allowCredentials,
-    long maxAgeSeconds
+    @PositiveOrZero long maxAgeSeconds
 ) {
 
     public CorsProperties {
-        allowedOrigins = normalize(allowedOrigins);
-        allowedOriginPatterns = normalize(allowedOriginPatterns);
-        allowedMethods = normalize(allowedMethods);
-        allowedHeaders = normalize(allowedHeaders);
-        exposedHeaders = normalize(exposedHeaders);
-    }
-
-    private static List<String> normalize(final List<String> values) {
-        return values == null ? List.of() : List.copyOf(values);
+        allowedOrigins = List.copyOf(allowedOrigins);
+        allowedOriginPatterns = List.copyOf(allowedOriginPatterns);
+        allowedMethods = List.copyOf(allowedMethods);
+        allowedHeaders = List.copyOf(allowedHeaders);
+        exposedHeaders = List.copyOf(exposedHeaders);
     }
 }

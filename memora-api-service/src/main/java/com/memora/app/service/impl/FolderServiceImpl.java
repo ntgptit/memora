@@ -19,12 +19,14 @@ import com.memora.app.repository.DeckReviewSettingsRepository;
 import com.memora.app.repository.FlashcardLanguageRepository;
 import com.memora.app.repository.FlashcardRepository;
 import com.memora.app.repository.FolderRepository;
+import com.memora.app.repository.specification.FolderSpecification;
 import com.memora.app.security.CurrentAuthenticatedUserService;
 import com.memora.app.service.FolderService;
 import com.memora.app.util.ServiceValidationUtils;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +35,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class FolderServiceImpl implements FolderService {
+
+    private static final Sort ID_ASC_SORT = Sort.by(Sort.Order.asc("id"));
 
     private final DeckRepository deckRepository;
     private final DeckReviewSettingsRepository deckReviewSettingsRepository;
@@ -92,13 +96,12 @@ public class FolderServiceImpl implements FolderService {
             FolderQuerySupport.normalizeSize(size),
             FolderQuerySupport.buildSort(sortBy, sortType)
         );
-        final var specification = org.springframework.data.jpa.domain.Specification
-            .where(FolderQuerySupport.hasUserId(currentUserId))
-            .and(FolderQuerySupport.hasParentId(normalizedParentId))
-            .and(FolderQuerySupport.hasSearchQuery(searchQuery));
 
         // Return the requested page content after applying search and sort rules.
-        return folderRepository.findAll(specification, pageable)
+        return folderRepository.findAll(
+            FolderSpecification.forListing(currentUserId, normalizedParentId, searchQuery),
+            pageable
+        )
             .map(entity -> FolderQuerySupport.toResponse(entity, folderRepository, folderMapper))
             .getContent();
     }
@@ -173,12 +176,12 @@ public class FolderServiceImpl implements FolderService {
 
     private void deleteFolderTree(final FolderEntity folder) {
         // Delete child folders before touching the current folder row.
-        for (final FolderEntity childFolder : folderRepository.findAllByParentIdAndDeletedAtIsNullOrderByIdAsc(folder.getId())) {
+        for (final FolderEntity childFolder : folderRepository.findAllByParentIdAndDeletedAtIsNull(folder.getId(), ID_ASC_SORT)) {
             deleteFolderTree(childFolder);
         }
 
         // Delete decks in the current folder before soft-deleting the folder itself.
-        for (final DeckEntity deck : deckRepository.findAllByFolderIdAndDeletedAtIsNullOrderByIdAsc(folder.getId())) {
+        for (final DeckEntity deck : deckRepository.findAllByFolderIdAndDeletedAtIsNull(folder.getId(), ID_ASC_SORT)) {
             deleteDeckTree(deck);
         }
 
@@ -191,7 +194,7 @@ public class FolderServiceImpl implements FolderService {
         // Remove deck-specific review settings before marking the deck deleted.
         deckReviewSettingsRepository.removeByDeckId(deck.getId());
         // Soft-delete each active flashcard attached to the deck.
-        for (final var flashcard : flashcardRepository.findAllByDeckIdAndDeletedAtIsNullOrderByIdAsc(deck.getId())) {
+        for (final var flashcard : flashcardRepository.findAllByDeckIdAndDeletedAtIsNull(deck.getId(), ID_ASC_SORT)) {
             flashcardLanguageRepository.removeByFlashcardId(flashcard.getId());
             flashcard.setDeletedAt(OffsetDateTime.now());
             flashcardRepository.save(flashcard);

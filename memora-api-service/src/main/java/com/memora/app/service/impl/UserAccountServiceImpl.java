@@ -20,6 +20,7 @@ import com.memora.app.service.UserAccountService;
 import com.memora.app.util.ServiceValidationUtils;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UserAccountServiceImpl implements UserAccountService {
+
+    private static final Sort ID_ASC_SORT = Sort.by(Sort.Order.asc("id"));
 
     private final FolderRepository folderRepository;
     private final PasswordEncoder passwordEncoder;
@@ -74,14 +77,14 @@ public class UserAccountServiceImpl implements UserAccountService {
         // Return every active account when the caller does not filter by status.
         if (accountStatus == null) {
             // Return all active accounts.
-            return userAccountRepository.findAllByDeletedAtIsNullOrderByIdAsc()
+            return userAccountRepository.findAllByDeletedAtIsNull(ID_ASC_SORT)
                 // Convert persisted account rows into DTOs for the API layer.
                 .stream()
                 .map(userAccountMapper::toDto)
                 .toList();
         }
         // Return only active accounts in the requested status.
-        return userAccountRepository.findAllByAccountStatusAndDeletedAtIsNullOrderByIdAsc(accountStatus)
+        return userAccountRepository.findAllByAccountStatusAndDeletedAtIsNull(accountStatus, ID_ASC_SORT)
             // Convert persisted account rows into DTOs for the API layer.
             .stream()
             .map(userAccountMapper::toDto)
@@ -124,13 +127,13 @@ public class UserAccountServiceImpl implements UserAccountService {
         final UserAccountEntity entity = getActiveUserAccount(userAccountId);
 
         // Block deletion while the user still owns active folders.
-        if (!folderRepository.findAllByUserIdAndDeletedAtIsNullOrderByIdAsc(entity.getId()).isEmpty()) {
+        if (!folderRepository.findAllByUserIdAndDeletedAtIsNull(entity.getId(), ID_ASC_SORT).isEmpty()) {
             // Reject deletion when active folders still reference the user.
             throw new ConflictException(ApiMessageKey.USER_ACCOUNT_DELETE_HAS_ACTIVE_FOLDERS);
         }
 
         // Block deletion while the user still owns custom review profiles.
-        if (!reviewProfileRepository.findAllByOwnerUserIdOrderByIdAsc(entity.getId()).isEmpty()) {
+        if (!reviewProfileRepository.findAllByOwnerUserId(entity.getId(), ID_ASC_SORT).isEmpty()) {
             // Reject deletion when custom review profiles still reference the user.
             throw new ConflictException(ApiMessageKey.USER_ACCOUNT_DELETE_HAS_CUSTOM_REVIEW_PROFILES);
         }

@@ -16,6 +16,7 @@ import com.memora.app.repository.ReviewProfileRepository;
 import com.memora.app.service.ReviewProfileBoxService;
 import com.memora.app.util.ServiceValidationUtils;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,9 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ReviewProfileBoxServiceImpl implements ReviewProfileBoxService {
+
+    private static final Sort BOX_NUMBER_ASC_SORT = Sort.by(Sort.Order.asc("boxNumber"));
+    private static final Sort ID_ASC_SORT = Sort.by(Sort.Order.asc("id"));
 
     private final ReviewProfileBoxRepository reviewProfileBoxRepository;
     private final ReviewProfileRepository reviewProfileRepository;
@@ -58,8 +62,9 @@ public class ReviewProfileBoxServiceImpl implements ReviewProfileBoxService {
         // Narrow the query when the caller requests boxes for one review profile.
         if (reviewProfileId != null) {
             // Return box rules that belong to the requested profile.
-            return reviewProfileBoxRepository.findAllByReviewProfileIdOrderByBoxNumberAsc(
-                    ServiceValidationUtils.requirePositiveId(reviewProfileId, ApiMessageKey.REVIEW_PROFILE_ID_POSITIVE)
+            return reviewProfileBoxRepository.findAllByReviewProfileId(
+                    ServiceValidationUtils.requirePositiveId(reviewProfileId, ApiMessageKey.REVIEW_PROFILE_ID_POSITIVE),
+                    BOX_NUMBER_ASC_SORT
                 )
                 // Convert persisted box rules into DTOs for the API layer.
                 .stream()
@@ -68,7 +73,7 @@ public class ReviewProfileBoxServiceImpl implements ReviewProfileBoxService {
         }
 
         // Return every box rule when no review profile filter is provided.
-        return reviewProfileBoxRepository.findAllByOrderByIdAsc()
+        return reviewProfileBoxRepository.findAll(ID_ASC_SORT)
             // Convert persisted box rules into DTOs for the API layer.
             .stream()
             .map(reviewProfileBoxMapper::toDto)

@@ -6,15 +6,14 @@ import java.util.Optional;
 import com.memora.app.entity.FlashcardLanguageEntity;
 import com.memora.app.enums.flashcard.FlashcardSide;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FlashcardLanguageRepository extends JpaRepository<FlashcardLanguageEntity, Long> {
 
     Optional<FlashcardLanguageEntity> findById(Long flashcardLanguageId);
 
-    List<FlashcardLanguageEntity> findAllByOrderByIdAsc();
-
-    List<FlashcardLanguageEntity> findAllByFlashcardIdOrderByIdAsc(Long flashcardId);
+    List<FlashcardLanguageEntity> findAllByFlashcardId(Long flashcardId, Sort sort);
 
     boolean existsByFlashcardIdAndSide(Long flashcardId, FlashcardSide side);
 

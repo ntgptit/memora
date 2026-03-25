@@ -72,7 +72,7 @@ class FlashcardServiceImplTest {
             entity.setVersion(0L);
             return entity;
         });
-        when(flashcardLanguageRepository.findAllByFlashcardIdOrderByIdAsc(100L)).thenAnswer(
+        when(flashcardLanguageRepository.findAllByFlashcardId(org.mockito.ArgumentMatchers.eq(100L), any(Sort.class))).thenAnswer(
             invocation -> List.copyOf(storedLanguages)
         );
         when(flashcardLanguageRepository.save(any(FlashcardLanguageEntity.class))).thenAnswer(invocation -> {
@@ -105,7 +105,7 @@ class FlashcardServiceImplTest {
         assertThat(response.audit().version()).isZero();
 
         verify(flashcardLanguageRepository, times(2)).save(any(FlashcardLanguageEntity.class));
-        verify(flashcardLanguageRepository, times(2)).findAllByFlashcardIdOrderByIdAsc(100L);
+        verify(flashcardLanguageRepository, times(2)).findAllByFlashcardId(org.mockito.ArgumentMatchers.eq(100L), any(Sort.class));
     }
 
     @Test
@@ -127,7 +127,7 @@ class FlashcardServiceImplTest {
         when(flashcardRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(
             new PageImpl<>(List.of(flashcard), PageRequest.of(1, 7, Sort.by("updatedAt")), 8L)
         );
-        when(flashcardLanguageRepository.findAllByFlashcardIdOrderByIdAsc(100L)).thenReturn(languages);
+        when(flashcardLanguageRepository.findAllByFlashcardId(org.mockito.ArgumentMatchers.eq(100L), any(Sort.class))).thenReturn(languages);
         stubFlashcardMapper();
 
         final FlashcardPageResponse response = flashcardService.getFlashcards(

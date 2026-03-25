@@ -18,6 +18,7 @@ import com.memora.app.service.FlashcardLanguageService;
 import com.memora.app.util.ServiceValidationUtils;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class FlashcardLanguageServiceImpl implements FlashcardLanguageService {
+
+    private static final Sort ID_ASC_SORT = Sort.by(Sort.Order.asc("id"));
 
     private final FlashcardLanguageRepository flashcardLanguageRepository;
     private final FlashcardRepository flashcardRepository;
@@ -59,8 +62,9 @@ public class FlashcardLanguageServiceImpl implements FlashcardLanguageService {
         // Narrow the query when the caller requests languages for one flashcard.
         if (flashcardId != null) {
             // Return languages that belong to the requested flashcard.
-            return flashcardLanguageRepository.findAllByFlashcardIdOrderByIdAsc(
-                    ServiceValidationUtils.requirePositiveId(flashcardId, ApiMessageKey.FLASHCARD_ID_POSITIVE)
+            return flashcardLanguageRepository.findAllByFlashcardId(
+                    ServiceValidationUtils.requirePositiveId(flashcardId, ApiMessageKey.FLASHCARD_ID_POSITIVE),
+                    ID_ASC_SORT
                 )
                 // Convert persisted language rows into DTOs for the API layer.
                 .stream()
@@ -69,7 +73,7 @@ public class FlashcardLanguageServiceImpl implements FlashcardLanguageService {
         }
 
         // Return every flashcard language row when no filter is provided.
-        return flashcardLanguageRepository.findAllByOrderByIdAsc()
+        return flashcardLanguageRepository.findAll(ID_ASC_SORT)
             // Convert persisted language rows into DTOs for the API layer.
             .stream()
             .map(flashcardLanguageMapper::toDto)
