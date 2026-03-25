@@ -44,13 +44,14 @@ public class ReviewProfileServiceImpl implements ReviewProfileService {
             clearExistingDefaultProfile(ownerUser.getId(), null);
         }
 
-        final ReviewProfileEntity entity = new ReviewProfileEntity();
-        entity.setOwnerUserId(ownerUser.getId());
-        entity.setName(name);
-        entity.setDescription(ServiceValidationUtils.normalizeOptionalText(request.description()));
-        entity.setAlgorithmType(request.algorithmType());
-        entity.setSystemProfile(false);
-        entity.setDefaultProfile(request.defaultProfile());
+        final ReviewProfileEntity entity = ReviewProfileEntity.builder()
+            .ownerUserId(ownerUser.getId())
+            .name(name)
+            .description(ServiceValidationUtils.normalizeOptionalText(request.description()))
+            .algorithmType(request.algorithmType())
+            .systemProfile(false)
+            .defaultProfile(request.defaultProfile())
+            .build();
         // Return the persisted custom review profile.
         return reviewProfileMapper.toDto(reviewProfileRepository.save(entity));
     }

@@ -7,11 +7,13 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "deck_review_settings", schema = "memora")
+@SuperBuilder
 @NoArgsConstructor
 public class DeckReviewSettingsEntity extends AuditableEntity {
 

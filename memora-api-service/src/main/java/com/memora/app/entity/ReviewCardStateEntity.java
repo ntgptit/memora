@@ -14,11 +14,13 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "review_card_states", schema = "memora")
+@SuperBuilder
 @NoArgsConstructor
 public class ReviewCardStateEntity extends AuditableEntity {
 

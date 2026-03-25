@@ -55,11 +55,12 @@ public class UserAccountServiceImpl implements UserAccountService {
         assertUsernameAvailable(username, null);
         assertEmailAvailable(email, null);
 
-        final UserAccountEntity entity = new UserAccountEntity();
-        entity.setUsername(username);
-        entity.setEmail(email);
-        entity.setPasswordHash(passwordEncoder.encode(password));
-        entity.setAccountStatus(resolveAccountStatus(request.accountStatus()));
+        final UserAccountEntity entity = UserAccountEntity.builder()
+            .username(username)
+            .email(email)
+            .passwordHash(passwordEncoder.encode(password))
+            .accountStatus(resolveAccountStatus(request.accountStatus()))
+            .build();
         // Return the persisted user account without exposing the password hash.
         return userAccountMapper.toDto(userAccountRepository.save(entity));
     }

@@ -10,6 +10,7 @@ import json
 import re
 import sys
 from dataclasses import dataclass
+from functools import lru_cache
 from pathlib import Path
 from typing import Iterable
 
@@ -68,6 +69,8 @@ RULE_NESTED_FOR_STREAM = "NESTED_FOR_SHOULD_USE_STREAM_INNER_LOOP"
 RULE_LOMBOK_REQUIRED_ARGS_CONSTRUCTOR = "LOMBOK_REQUIRED_ARGS_CONSTRUCTOR_FOR_SPRING_BEAN"
 RULE_LOMBOK_ENTITY_GETTER_SETTER = "LOMBOK_ENTITY_GETTER_SETTER_REQUIRED"
 RULE_LOMBOK_BUILDER_PREFERRED = "LOMBOK_BUILDER_PREFERRED_FOR_DTO_CLASS"
+RULE_ENTITY_SUPER_BUILDER = "ENTITY_USES_LOMBOK_SUPERBUILDER"
+RULE_NO_SETTER_CHAIN_CONSTRUCTION = "OBJECT_CONSTRUCTION_USES_BUILDER_NOT_SETTER_CHAIN"
 RULE_SHARED_MAPPED_SUPERCLASS = "ENTITY_SHARED_FIELDS_MAPPED_SUPERCLASS"
 RULE_AUDIT_ENTITY_SEPARATE_CLASS = "AUDIT_FIELDS_ENTITY_MUST_USE_SEPARATE_BASE_CLASS"
 RULE_AUDIT_DTO_SEPARATE_CLASS = "AUDIT_FIELDS_DTO_MUST_USE_SEPARATE_MODEL"
@@ -82,10 +85,13 @@ RULE_MESSAGE_KEYS_BUNDLE = "ERROR_MESSAGE_KEYS_MUST_EXIST_IN_MESSAGE_BUNDLES"
 RULE_VI_MESSAGES_ACCENTED = "VI_MESSAGES_MUST_BE_VIETNAMESE_ACCENTED"
 RULE_REST_CONTROLLER_ADVICE_REQUIRED = "REST_CONTROLLER_ADVICE_REQUIRED"
 RULE_CONTROLLER_NO_MANUAL_EXCEPTION_MAPPING = "CONTROLLER_NO_MANUAL_EXCEPTION_MAPPING"
+RULE_SERVICE_IMPL_TEST_CASE_COUNT = "SERVICE_IMPL_PUBLIC_METHOD_TEST_CASES_AT_LEAST_IF_COUNT"
+RULE_CONTROLLER_HTTP_STATUS_TEST_CASE_COUNT = "CONTROLLER_PUBLIC_METHOD_TEST_CASES_AT_LEAST_HTTP_STATUS_COUNT"
 RULE_NO_DIRECT_TRIM = "NO_DIRECT_TRIM_USE_STRINGUTILS"
 RULE_NO_DIRECT_BLANK_CHECK = "NO_DIRECT_BLANK_CHECK_USE_STRINGUTILS"
 RULE_NO_DIRECT_STRING_PREDICATE = "NO_DIRECT_STRING_PREDICATE_USE_STRINGUTILS"
 RULE_NO_DIRECT_COLLECTION_EMPTY_CHECK = "NO_DIRECT_COLLECTION_EMPTY_CHECK_USE_COLLECTIONUTILS"
+RULE_NO_STRING_CONCAT_WITH_PLUS = "NO_STRING_CONCAT_WITH_PLUS_USE_STRINGBUILDER_OR_EQUIVALENT"
 RULE_ONE_TOP_LEVEL_TYPE = "ONE_TOP_LEVEL_TYPE_PER_FILE"
 RULE_NO_INNER_API_TYPES = "NO_INNER_DTO_ENUM_EXCEPTION_TYPES"
 RULE_NO_MANUAL_LOGGER = "NO_MANUAL_LOGGER_USE_SLF4J"
@@ -132,6 +138,7 @@ OPERATION_ANNOTATION_PATTERN = re.compile(r"^\s*@\s*Operation\b")
 INTERFACE_PATTERN = re.compile(r"\binterface\s+\w+")
 EXTENDS_JPA_PATTERN = re.compile(r"\bextends\s+[^{;]*JpaRepository<")
 QUERY_ANNOTATION_PATTERN = re.compile(r"^\s*@\s*Query\b")
+API_RESPONSE_CODE_PATTERN = re.compile(r'@ApiResponse\s*\([^)]*responseCode\s*=\s*"(\d{3})"')
 DERIVED_QUERY_ORDERBY_PATTERN = re.compile(
     r"\b(?:find|read|get|query|search|stream|count|exists|delete|remove)[A-Za-z0-9_]*OrderBy[A-Z][A-Za-z0-9_]*\s*\("
 )
@@ -172,10 +179,17 @@ REQUIRED_ARGS_CONSTRUCTOR_PATTERN = re.compile(r"@\s*RequiredArgsConstructor\b")
 FINAL_FIELD_PATTERN = re.compile(r"^\s*private\s+final\s+[\w<>, ?\[\]]+\s+\w+\s*;")
 LOMBOK_GETTER_OR_SETTER_PATTERN = re.compile(r"@\s*(Getter|Setter)\b")
 MANUAL_GETTER_OR_SETTER_PATTERN = re.compile(r"^\s*public\s+[\w<>, ?\[\]]+\s+(get|set|is)[A-Z]\w*\s*\(")
-LOMBOK_BUILDER_PATTERN = re.compile(r"@\s*Builder\b")
+LOMBOK_BUILDER_PATTERN = re.compile(r"@\s*(Builder|SuperBuilder)\b")
+LOMBOK_SUPER_BUILDER_PATTERN = re.compile(r"@\s*SuperBuilder\b")
 RECORD_PATTERN = re.compile(r"\brecord\s+[A-Z]\w*\s*\(")
 PRIVATE_FIELD_PATTERN = re.compile(r"^\s*private\s+[\w<>, ?\[\]]+\s+\w+\s*;")
 FINAL_FIELD_CAPTURE_PATTERN = re.compile(r"^\s*private\s+final\s+([\w<>, ?\[\].]+)\s+(\w+)\s*;")
+NEW_OBJECT_PATTERN = re.compile(
+    r"\b(?:final\s+)?(?:(?P<declared_type>[A-Z]\w+)|var)\s+(?P<variable>[a-zA-Z_][A-Za-z0-9_]*)\s*=\s*new\s+(?P<constructed_type>[A-Z]\w*)\s*\(\s*\)\s*;"
+)
+SETTER_CALL_PATTERN = re.compile(r"\b([A-Za-z_][A-Za-z0-9_]*)\.set[A-Z]\w*\s*\(")
+TEST_ANNOTATION_PATTERN = re.compile(r"^\s*@\s*(Test|ParameterizedTest|RepeatedTest)\b")
+TEST_METHOD_CALL_PATTERN = re.compile(r"\.\s*([a-z][A-Za-z0-9_]*)\s*\(")
 ELSE_PATTERN = re.compile(r"\belse\b")
 MAPPED_SUPERCLASS_PATTERN = re.compile(r"@\s*MappedSuperclass\b")
 EXCEPTION_CLASS_PATTERN = re.compile(r"\bclass\s+([A-Z]\w*Exception)\s+extends\s+[\w.]*Exception\b")
@@ -185,6 +199,7 @@ THROW_NEW_EXCEPTION_LITERAL_PATTERN = re.compile(r'throw\s+new\s+[A-Za-z_][A-Za-
 RESPONSE_STATUS_EXCEPTION_LITERAL_PATTERN = re.compile(r'new\s+ResponseStatusException\s*\([^)]*"([^"]+)"')
 MESSAGE_SOURCE_LITERAL_PATTERN = re.compile(r'messageSource\s*\.\s*getMessage\s*\(\s*"([^"]+)"')
 MESSAGE_KEY_CONSTANT_PATTERN = re.compile(r'public\s+static\s+final\s+String\s+[A-Z0-9_]+\s*=\s*"([^"]+)";')
+INLINE_IF_PATTERN = re.compile(r"\bif\s*\(")
 DIRECT_TRIM_PATTERN = re.compile(r"\.\s*trim\s*\(")
 DIRECT_IS_BLANK_PATTERN = re.compile(r"\.\s*isBlank\s*\(")
 NULL_OR_BLANK_PATTERN = re.compile(r"\b([A-Za-z_][A-Za-z0-9_]*)\s*==\s*null\s*\|\|\s*!?\s*\1\s*\.\s*isBlank\s*\(")
@@ -287,6 +302,16 @@ class TypeDeclaration:
     name: str
     line: int
     indent: int
+
+
+@dataclass(frozen=True)
+class PublicMethodRequirement:
+    class_name: str
+    method_name: str
+    file: str
+    line: int
+    required_count: int
+    metric_name: str
 
 
 class Rule:
@@ -779,6 +804,81 @@ class LombokBuilderPreferredRule(Rule):
         ]
 
 
+class EntitySuperBuilderRule(Rule):
+    name = RULE_ENTITY_SUPER_BUILDER
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        if not file_ctx.rel_path.startswith("src/main/java/com/memora/app/entity/"):
+            return []
+        declarations = [item for item in _type_declarations(file_ctx.lines) if item.indent == 0]
+        primary = declarations[0] if len(declarations) > 0 else None
+        if primary is None or primary.kind != "class":
+            return []
+        if LOMBOK_SUPER_BUILDER_PATTERN.search(file_ctx.text) is not None:
+            return []
+        return [
+            Violation(
+                rule=self.name,
+                severity=SEVERITY_ERROR,
+                file=file_ctx.rel_path,
+                line=primary.line,
+                reason="Entity and mapped-superclass models must use Lombok @SuperBuilder so object creation does not rely on setter chains.",
+                snippet=file_ctx.lines[primary.line - 1].strip(),
+            )
+        ]
+
+
+class NoSetterChainConstructionRule(Rule):
+    name = RULE_NO_SETTER_CHAIN_CONSTRUCTION
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        if not file_ctx.rel_path.startswith("src/main/java/"):
+            return []
+
+        project_root = _project_root_for_path(file_ctx.path)
+        builder_capable_types = _builder_capable_type_names(str(project_root))
+        tracked_variables: dict[str, str] = {}
+        reported_variables: set[str] = set()
+        violations: list[Violation] = []
+        in_block_comment = False
+
+        for index, raw in enumerate(file_ctx.lines, start=1):
+            code_line, in_block_comment = _strip_java_comments(raw, in_block_comment)
+            normalized = " ".join(code_line.split())
+            if normalized == "":
+                continue
+
+            new_match = NEW_OBJECT_PATTERN.search(normalized)
+            if new_match is not None:
+                constructed_type = new_match.group("constructed_type")
+                if _requires_builder_construction(constructed_type, builder_capable_types):
+                    tracked_variables[new_match.group("variable")] = constructed_type
+
+            setter_match = SETTER_CALL_PATTERN.search(normalized)
+            if setter_match is None:
+                continue
+            variable_name = setter_match.group(1)
+            constructed_type = tracked_variables.get(variable_name)
+            if constructed_type is None or variable_name in reported_variables:
+                continue
+            violations.append(
+                Violation(
+                    rule=self.name,
+                    severity=SEVERITY_ERROR,
+                    file=file_ctx.rel_path,
+                    line=index,
+                    reason=(
+                        f"{constructed_type} is being populated through a setter chain after construction. "
+                        "Use Lombok builder-based construction instead."
+                    ),
+                    snippet=raw.strip(),
+                )
+            )
+            reported_variables.add(variable_name)
+
+        return violations
+
+
 class SharedMappedSuperclassRule(Rule):
     name = RULE_SHARED_MAPPED_SUPERCLASS
 
@@ -1109,6 +1209,66 @@ class NoDirectCollectionEmptyCheckRule(Rule):
                     snippet=raw.strip(),
                 )
             )
+        return violations
+
+
+class NoStringConcatWithPlusRule(Rule):
+    name = RULE_NO_STRING_CONCAT_WITH_PLUS
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        if not file_ctx.rel_path.startswith("src/main/java/"):
+            return []
+
+        violations: list[Violation] = []
+        in_block_comment = False
+        brace_depth = 0
+        pending_method_signature = ""
+        string_method_depths: list[int] = []
+        known_string_names: set[str] = set()
+
+        for index, raw in enumerate(file_ctx.lines, start=1):
+            while string_method_depths and brace_depth < string_method_depths[-1]:
+                string_method_depths.pop()
+
+            code_line, in_block_comment = _strip_java_comments(raw, in_block_comment)
+            sanitized_line = _replace_java_literals_with_placeholders(code_line)
+            normalized_line = " ".join(sanitized_line.split())
+
+            if normalized_line != "":
+                if brace_depth == 1:
+                    pending_method_signature, new_string_params, string_method_depth = _consume_method_signature_state(
+                        pending_method_signature,
+                        normalized_line,
+                        brace_depth,
+                        code_line,
+                    )
+                    known_string_names.update(new_string_params)
+                    if string_method_depth is not None:
+                        string_method_depths.append(string_method_depth)
+
+                known_string_names.update(_extract_declared_string_names(normalized_line))
+
+                if _contains_plus_operator(normalized_line) and _looks_like_string_concat_line(
+                    normalized_line,
+                    known_string_names,
+                    bool(string_method_depths),
+                ):
+                    violations.append(
+                        Violation(
+                            rule=self.name,
+                            severity=SEVERITY_ERROR,
+                            file=file_ctx.rel_path,
+                            line=index,
+                            reason=(
+                                "String concatenation via + or += is forbidden. "
+                                "Use StringBuilder or an equivalent API such as String.format, String.join, or StringUtils.wrap."
+                            ),
+                            snippet=raw.strip(),
+                        )
+                    )
+
+            brace_depth += _brace_delta(code_line)
+
         return violations
 
 
@@ -2597,6 +2757,8 @@ def _default_rules() -> list[Rule]:
         LombokRequiredArgsConstructorRule(),
         LombokEntityGetterSetterRule(),
         LombokBuilderPreferredRule(),
+        EntitySuperBuilderRule(),
+        NoSetterChainConstructionRule(),
         SharedMappedSuperclassRule(),
         AuditEntitySeparateClassRule(),
         AuditDtoSeparateClassRule(),
@@ -2606,6 +2768,7 @@ def _default_rules() -> list[Rule]:
         NoDirectBlankCheckRule(),
         NoDirectStringPredicateRule(),
         NoDirectCollectionEmptyCheckRule(),
+        NoStringConcatWithPlusRule(),
         PrecedingCommentRule(
             name=RULE_IF_REQUIRES_COMMENT,
             pattern=IF_STATEMENT_PATTERN,
@@ -2651,6 +2814,8 @@ def _project_rule_names() -> set[str]:
         RULE_MESSAGE_KEYS_BUNDLE,
         RULE_VI_MESSAGES_ACCENTED,
         RULE_REST_CONTROLLER_ADVICE_REQUIRED,
+        RULE_SERVICE_IMPL_TEST_CASE_COUNT,
+        RULE_CONTROLLER_HTTP_STATUS_TEST_CASE_COUNT,
         RULE_DTO_ROOT_NO_DIRECT_CLASS,
         RULE_COMMON_DTO_SHARED_USAGE,
         RULE_ENUM_ROOT_NO_DIRECT_CLASS,
@@ -2755,6 +2920,56 @@ def _project_violations(root: Path, selected_rule_names: set[str]) -> list[Viola
     if should_run_all or RULE_ENTITY_COMMON_STRUCTURE in selected_rule_names:
         violations.extend(_check_entity_common_structure(root))
 
+    service_test_requirements: list[PublicMethodRequirement] = []
+    controller_test_requirements: list[PublicMethodRequirement] = []
+    if (
+        should_run_all
+        or RULE_SERVICE_IMPL_TEST_CASE_COUNT in selected_rule_names
+        or RULE_CONTROLLER_HTTP_STATUS_TEST_CASE_COUNT in selected_rule_names
+    ):
+        service_test_requirements, controller_test_requirements = _public_method_requirements(root)
+        test_case_counts = _test_case_counts(str(root))
+
+        if should_run_all or RULE_SERVICE_IMPL_TEST_CASE_COUNT in selected_rule_names:
+            for requirement in service_test_requirements:
+                actual_count = test_case_counts.get((requirement.class_name, requirement.method_name), 0)
+                if actual_count >= requirement.required_count:
+                    continue
+                violations.append(
+                    Violation(
+                        rule=RULE_SERVICE_IMPL_TEST_CASE_COUNT,
+                        severity=SEVERITY_ERROR,
+                        file=requirement.file,
+                        line=requirement.line,
+                        reason=(
+                            f'Public service.impl method "{requirement.method_name}" requires at least '
+                            f"{requirement.required_count} JUnit test case(s) based on its {requirement.metric_name}; "
+                            f"found {actual_count}."
+                        ),
+                        snippet=requirement.method_name,
+                    )
+                )
+
+        if should_run_all or RULE_CONTROLLER_HTTP_STATUS_TEST_CASE_COUNT in selected_rule_names:
+            for requirement in controller_test_requirements:
+                actual_count = test_case_counts.get((requirement.class_name, requirement.method_name), 0)
+                if actual_count >= requirement.required_count:
+                    continue
+                violations.append(
+                    Violation(
+                        rule=RULE_CONTROLLER_HTTP_STATUS_TEST_CASE_COUNT,
+                        severity=SEVERITY_ERROR,
+                        file=requirement.file,
+                        line=requirement.line,
+                        reason=(
+                            f'Controller endpoint "{requirement.method_name}" requires at least '
+                            f"{requirement.required_count} JUnit test case(s) based on its {requirement.metric_name}; "
+                            f"found {actual_count}."
+                        ),
+                        snippet=requirement.method_name,
+                    )
+                )
+
     return violations
 
 
@@ -2820,6 +3035,288 @@ def _project_root_for_path(path: Path) -> Path:
         if (candidate / "pom.xml").exists():
             return candidate
     return current
+
+
+@lru_cache(maxsize=None)
+def _builder_capable_type_names(project_root: str) -> frozenset[str]:
+    root = Path(project_root)
+    java_root = root / "src" / "main" / "java"
+    if not java_root.exists():
+        return frozenset()
+
+    type_names: set[str] = set()
+    for path in java_root.rglob(f"*{JAVA_EXTENSION}"):
+        text = path.read_text(encoding="utf-8")
+        if LOMBOK_BUILDER_PATTERN.search(text) is None:
+            continue
+        declarations = [item for item in _type_declarations(text.splitlines()) if item.indent == 0 and item.kind == "class"]
+        if len(declarations) == 0:
+            continue
+        type_names.add(declarations[0].name)
+    return frozenset(type_names)
+
+
+def _requires_builder_construction(type_name: str, builder_capable_types: frozenset[str]) -> bool:
+    return type_name.endswith("Entity") or type_name in builder_capable_types
+
+
+def _public_method_requirements(root: Path) -> tuple[list[PublicMethodRequirement], list[PublicMethodRequirement]]:
+    return (
+        _service_impl_public_method_requirements(root),
+        _controller_public_method_requirements(root),
+    )
+
+
+def _service_impl_public_method_requirements(root: Path) -> list[PublicMethodRequirement]:
+    requirements: list[PublicMethodRequirement] = []
+    service_impl_root = root / "src" / "main" / "java" / "com" / "memora" / "app" / "service" / "impl"
+    if not service_impl_root.exists():
+        return requirements
+
+    for path in sorted(service_impl_root.rglob(f"*{JAVA_EXTENSION}")):
+        rel_path = path.relative_to(root).as_posix()
+        for method_name, line, _, method_body, _ in _collect_public_method_contexts(path):
+            required_count = _count_if_statements(method_body)
+            if required_count <= 0:
+                continue
+            requirements.append(
+                PublicMethodRequirement(
+                    class_name=path.stem,
+                    method_name=method_name,
+                    file=rel_path,
+                    line=line,
+                    required_count=required_count,
+                    metric_name="if statement count",
+                )
+            )
+    return requirements
+
+
+def _controller_public_method_requirements(root: Path) -> list[PublicMethodRequirement]:
+    requirements: list[PublicMethodRequirement] = []
+    controller_root = root / "src" / "main" / "java" / "com" / "memora" / "app" / "controller"
+    if not controller_root.exists():
+        return requirements
+
+    for path in sorted(controller_root.rglob(f"*{JAVA_EXTENSION}")):
+        rel_path = path.relative_to(root).as_posix()
+        for method_name, line, _, method_body, annotation_context in _collect_public_method_contexts(path):
+            required_count = _count_controller_http_statuses(annotation_context, method_body)
+            if required_count <= 0:
+                continue
+            requirements.append(
+                PublicMethodRequirement(
+                    class_name=path.stem,
+                    method_name=method_name,
+                    file=rel_path,
+                    line=line,
+                    required_count=required_count,
+                    metric_name="distinct HTTP status count",
+                )
+            )
+    return requirements
+
+
+def _collect_public_method_contexts(path: Path) -> list[tuple[str, int, str, list[str], str]]:
+    lines = path.read_text(encoding="utf-8").splitlines()
+    methods: list[tuple[str, int, str, list[str], str]] = []
+    in_block_comment = False
+    brace_depth = 0
+    current: dict[str, object] | None = None
+
+    for index, raw in enumerate(lines, start=1):
+        stripped_line, in_block_comment = _strip_java_comments(raw, in_block_comment)
+        normalized = " ".join(stripped_line.strip().split())
+        current_depth = brace_depth
+
+        if current is None and current_depth == 1 and _looks_like_public_method_signature_start(normalized):
+            current = {
+                "line": index,
+                "start_depth": current_depth,
+                "signature_parts": [normalized] if normalized != "" else [],
+                "body": [raw],
+                "signature_closed": "{" in stripped_line,
+            }
+        elif current is not None:
+            current["body"].append(raw)
+            if not bool(current["signature_closed"]) and normalized != "":
+                cast_signature_parts = current["signature_parts"]
+                if isinstance(cast_signature_parts, list):
+                    cast_signature_parts.append(normalized)
+                if "{" in stripped_line:
+                    current["signature_closed"] = True
+
+        brace_depth += _brace_delta(stripped_line)
+
+        if current is None:
+            continue
+        if brace_depth != int(current["start_depth"]):
+            continue
+
+        signature = " ".join(part for part in current["signature_parts"] if part != "")
+        method_name = _extract_public_method_name(signature)
+        if method_name != "":
+            methods.append(
+                (
+                    method_name,
+                    int(current["line"]),
+                    signature,
+                    list(current["body"]),
+                    _collect_preceding_annotation_context(lines, int(current["line"]), 30),
+                )
+            )
+        current = None
+
+    return methods
+
+
+def _looks_like_public_method_signature_start(line: str) -> bool:
+    if not line.startswith("public "):
+        return False
+    if "(" not in line:
+        return False
+    if re.search(r"\b(class|record|enum|interface)\b", line) is not None:
+        return False
+    return True
+
+
+def _extract_public_method_name(signature: str) -> str:
+    normalized = " ".join(signature.split())
+    match = re.search(
+        r"\bpublic\s+(?:static\s+)?(?:final\s+)?(?:synchronized\s+)?[A-Za-z0-9_<>\[\], ?]+\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(",
+        normalized,
+    )
+    if match is None:
+        return ""
+    return match.group(1)
+
+
+def _collect_preceding_annotation_context(lines: list[str], start_line: int, max_lookback: int) -> str:
+    parts: list[str] = []
+    index = start_line - 2
+    end_index = max(-1, index - max_lookback)
+
+    while index > end_index:
+        raw = lines[index].strip()
+        if raw == "":
+            index -= 1
+            continue
+        if raw.startswith("/**") or raw.startswith("*") or raw.startswith("*/"):
+            parts.append(raw)
+            index -= 1
+            continue
+        if raw.startswith("@") or raw in {"})", "});", "}", "{"}:
+            parts.append(raw)
+            index -= 1
+            continue
+        break
+
+    parts.reverse()
+    return "\n".join(parts)
+
+
+def _count_if_statements(method_body: list[str]) -> int:
+    count = 0
+    in_block_comment = False
+    for raw in method_body:
+        stripped_line, in_block_comment = _strip_java_comments(raw, in_block_comment)
+        sanitized = _replace_java_literals_with_placeholders(stripped_line)
+        count += len(INLINE_IF_PATTERN.findall(sanitized))
+    return count
+
+
+def _count_controller_http_statuses(annotation_context: str, method_body: list[str]) -> int:
+    documented_codes = {match.group(1) for match in API_RESPONSE_CODE_PATTERN.finditer(annotation_context)}
+    if documented_codes:
+        return len(documented_codes)
+
+    body_text = "\n".join(method_body)
+    codes: set[str] = set()
+    if "ResponseEntity.ok(" in body_text:
+        codes.add("200")
+    if "ResponseEntity.noContent(" in body_text:
+        codes.add("204")
+    for match in re.finditer(r"ResponseEntity\.status\s*\(\s*HttpStatus\.([A-Z_]+)\s*\)", body_text):
+        codes.add(match.group(1))
+    return len(codes)
+
+
+@lru_cache(maxsize=None)
+def _test_case_counts(root_path: str) -> dict[tuple[str, str], int]:
+    root = Path(root_path)
+    test_root = root / "src" / "test" / "java"
+    counts: dict[tuple[str, str], int] = {}
+    if not test_root.exists():
+        return counts
+
+    for path in sorted(test_root.rglob(f"*Test{JAVA_EXTENSION}")):
+        target_class_name = path.stem[: -len("Test")]
+        if target_class_name == "":
+            continue
+        for invoked_method in _collect_test_invoked_methods(path):
+            key = (target_class_name, invoked_method)
+            counts[key] = counts.get(key, 0) + 1
+
+    return counts
+
+
+def _collect_test_invoked_methods(path: Path) -> list[str]:
+    lines = path.read_text(encoding="utf-8").splitlines()
+    in_block_comment = False
+    brace_depth = 0
+    pending_annotations: list[str] = []
+    current: dict[str, object] | None = None
+    invoked_methods: list[str] = []
+
+    for raw in lines:
+        stripped_line, in_block_comment = _strip_java_comments(raw, in_block_comment)
+        normalized = " ".join(stripped_line.strip().split())
+        current_depth = brace_depth
+
+        if current is None and current_depth == 1:
+            if normalized.startswith("@"):
+                pending_annotations.append(normalized)
+            elif _looks_like_test_method_signature(normalized):
+                current = {
+                    "start_depth": current_depth,
+                    "is_test": any(TEST_ANNOTATION_PATTERN.search(annotation) is not None for annotation in pending_annotations),
+                    "body": [raw],
+                }
+                pending_annotations = []
+            elif normalized != "":
+                pending_annotations = []
+        elif current is not None:
+            current["body"].append(raw)
+
+        brace_depth += _brace_delta(stripped_line)
+
+        if current is None:
+            continue
+        if brace_depth != int(current["start_depth"]):
+            continue
+        if bool(current["is_test"]):
+            invoked_methods.extend(_invoked_methods_in_test_case(list(current["body"])))
+        current = None
+
+    return invoked_methods
+
+
+def _looks_like_test_method_signature(line: str) -> bool:
+    if "(" not in line or "{" not in line:
+        return False
+    if re.search(r"\b(class|record|enum|interface)\b", line) is not None:
+        return False
+    return re.match(r"^(?:public|protected|private)?\s*(?:final\s+)?void\s+[A-Za-z_][A-Za-z0-9_]*\s*\(", line) is not None
+
+
+def _invoked_methods_in_test_case(method_body: list[str]) -> list[str]:
+    invoked: set[str] = set()
+    in_block_comment = False
+    for raw in method_body:
+        stripped_line, in_block_comment = _strip_java_comments(raw, in_block_comment)
+        sanitized = _replace_java_literals_with_placeholders(stripped_line)
+        invoked.update(match.group(1) for match in TEST_METHOD_CALL_PATTERN.finditer(sanitized))
+    return sorted(invoked)
 
 
 def _resolve_project_type_path(
@@ -3391,6 +3888,163 @@ def _extract_params_segment(signature: str) -> str:
     return normalized[start + 1:end].strip()
 
 
+def _replace_java_literals_with_placeholders(line: str) -> str:
+    result: list[str] = []
+    index = 0
+
+    while index < len(line):
+        current = line[index]
+        if current not in {'"', "'"}:
+            result.append(current)
+            index += 1
+            continue
+
+        placeholder = " __STR__ " if current == '"' else " __CHAR__ "
+        quote = current
+        escaped = False
+        result.append(placeholder)
+        index += 1
+
+        while index < len(line):
+            literal_char = line[index]
+            if literal_char == quote and not escaped:
+                index += 1
+                break
+            if literal_char == "\\" and not escaped:
+                escaped = True
+                index += 1
+                continue
+            escaped = False
+            index += 1
+
+    return "".join(result)
+
+
+def _contains_plus_operator(line: str) -> bool:
+    for index, current in enumerate(line):
+        if current != "+":
+            continue
+        previous = line[index - 1] if index > 0 else ""
+        following = line[index + 1] if index + 1 < len(line) else ""
+        if previous == "+" or following == "+":
+            continue
+        return True
+    return False
+
+
+def _looks_like_method_declaration_start(line: str) -> bool:
+    if "(" not in line:
+        return False
+    if "->" in line:
+        return False
+    if re.match(r"^(if|for|while|switch|catch|return|throw)\b", line) is not None:
+        return False
+    if re.search(r"\b(class|record|enum|interface)\b", line) is not None:
+        return False
+    return re.match(r"^(public|protected|private)\b", line) is not None
+
+
+def _extract_any_method_return_type(signature: str) -> str:
+    normalized = " ".join(signature.split())
+    match = re.search(
+        r"\b(?:public|protected|private)\s+(?:default\s+)?(?:static\s+)?(?:final\s+)?(?:synchronized\s+)?(?:abstract\s+)?([A-Za-z0-9_<>\[\], ?]+?)\s+[A-Za-z_][A-Za-z0-9_]*\s*\(",
+        normalized,
+    )
+    if match is None:
+        return ""
+    return match.group(1).strip()
+
+
+def _extract_string_param_names(signature: str) -> set[str]:
+    params_segment = _extract_params_segment(signature)
+    if params_segment == "":
+        return set()
+
+    names: set[str] = set()
+    for param in params_segment.split(","):
+        normalized = " ".join(param.split())
+        if re.search(r"\bString(?:\s*\[\])?\b", normalized) is None:
+            continue
+        tokens = [token for token in normalized.split(" ") if token != "final" and not token.startswith("@")]
+        if len(tokens) == 0:
+            continue
+        candidate = tokens[-1].replace("...", "").strip()
+        if candidate == "":
+            continue
+        names.add(candidate)
+    return names
+
+
+def _extract_declared_string_names(line: str) -> set[str]:
+    return {
+        match.group(1)
+        for match in re.finditer(r"\b(?:final\s+)?String(?:\s*\[\])?\s+([A-Za-z_][A-Za-z0-9_]*)\b(?!\s*\()", line)
+    }
+
+
+def _consume_method_signature_state(
+    pending_signature: str,
+    line: str,
+    brace_depth: int,
+    raw_line: str,
+) -> tuple[str, set[str], int | None]:
+    if pending_signature != "":
+        combined_signature = f"{pending_signature} {line}".strip()
+        if "{" not in line and not line.endswith(";"):
+            return combined_signature, set(), None
+        return _resolve_method_signature_state(combined_signature, brace_depth, raw_line)
+
+    if not _looks_like_method_declaration_start(line):
+        return "", set(), None
+    if "{" not in line and not line.endswith(";"):
+        return line, set(), None
+    return _resolve_method_signature_state(line, brace_depth, raw_line)
+
+
+def _resolve_method_signature_state(signature: str, brace_depth: int, raw_line: str) -> tuple[str, set[str], int | None]:
+    return_type = _extract_any_method_return_type(signature)
+    if return_type != "String":
+        return "", set(), None
+
+    next_depth = brace_depth + _brace_delta(raw_line)
+    if next_depth <= brace_depth:
+        return "", _extract_string_param_names(signature), None
+    return "", _extract_string_param_names(signature), next_depth
+
+
+def _looks_like_string_concat_line(
+    line: str,
+    known_string_names: set[str],
+    inside_string_method: bool,
+) -> bool:
+    if "__STR__" in line:
+        return True
+
+    if re.search(r"\b(?:final\s+)?String(?:\s*\[\])?\s+[A-Za-z_][A-Za-z0-9_]*\b(?!\s*\()[^;]*\+", line) is not None:
+        return True
+
+    if re.search(r"\b[A-Za-z_][A-Za-z0-9_]*\s*\+=\s*", line) is not None:
+        left_side = line.split("+=", 1)[0].strip()
+        left_name_match = re.search(r"([A-Za-z_][A-Za-z0-9_]*)$", left_side)
+        if left_name_match is not None and left_name_match.group(1) in known_string_names:
+            return True
+
+    if inside_string_method and re.match(r"^return\b.*\+", line) is not None:
+        return True
+
+    assignment_match = re.match(r"^(?:final\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*.*\+", line)
+    if assignment_match is not None and assignment_match.group(1) in known_string_names:
+        return True
+
+    for name in known_string_names:
+        if re.search(rf"\b{re.escape(name)}\b\s*(?:\+|\+=)", line) is not None:
+            return True
+        if re.search(rf"(?:\+|\+=)\s*\b{re.escape(name)}\b", line) is not None:
+            return True
+
+    return False
+
+
 def _segment_mentions_package_type(segment: str, simple_names: set[str], package_prefix: str) -> bool:
     if segment == "":
         return False
@@ -3659,8 +4313,8 @@ def _check_common_dto_usage(root: Path) -> list[Violation]:
                     "Move object-specific DTOs out of dto/common or delete dead mapper-only artifacts."
                 ),
                 snippet=primary.name,
+                )
             )
-        )
 
     return violations
 
@@ -3848,6 +4502,7 @@ def _rule_group_aliases() -> dict[str, set[str]]:
             RULE_NO_DIRECT_BLANK_CHECK,
             RULE_NO_DIRECT_STRING_PREDICATE,
             RULE_NO_DIRECT_COLLECTION_EMPTY_CHECK,
+            RULE_NO_STRING_CONCAT_WITH_PLUS,
         },
         "i18n": {
             RULE_CONSTANT_PACKAGE_EXISTS,
@@ -3880,6 +4535,8 @@ def _rule_group_aliases() -> dict[str, set[str]]:
             RULE_LOMBOK_REQUIRED_ARGS_CONSTRUCTOR,
             RULE_LOMBOK_ENTITY_GETTER_SETTER,
             RULE_LOMBOK_BUILDER_PREFERRED,
+            RULE_ENTITY_SUPER_BUILDER,
+            RULE_NO_SETTER_CHAIN_CONSTRUCTION,
             RULE_CONSTANT_UTILITY_CLASS,
         },
         "exception": {
@@ -3914,6 +4571,10 @@ def _rule_group_aliases() -> dict[str, set[str]]:
         "logging": {
             RULE_NO_MANUAL_LOGGER,
             RULE_CONSTANT_UTILITY_CLASS,
+        },
+        "testing": {
+            RULE_SERVICE_IMPL_TEST_CASE_COUNT,
+            RULE_CONTROLLER_HTTP_STATUS_TEST_CASE_COUNT,
         },
     }
 

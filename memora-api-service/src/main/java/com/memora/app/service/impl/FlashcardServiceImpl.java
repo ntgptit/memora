@@ -43,18 +43,19 @@ public class FlashcardServiceImpl implements FlashcardService {
     public FlashcardResponse createFlashcard(final Long deckId, final CreateFlashcardRequest request) {
         final DeckEntity deck = getActiveDeck(deckId);
 
-        final FlashcardEntity entity = new FlashcardEntity();
-        entity.setDeckId(deck.getId());
-        entity.setTerm(ServiceValidationUtils.normalizeRequiredText(
-            request.frontText(),
-            ApiMessageKey.FLASHCARD_FRONT_TEXT_REQUIRED
-        ));
-        entity.setMeaning(ServiceValidationUtils.normalizeRequiredText(
-            request.backText(),
-            ApiMessageKey.FLASHCARD_BACK_TEXT_REQUIRED
-        ));
-        entity.setNote("");
-        entity.setBookmarked(false);
+        final FlashcardEntity entity = FlashcardEntity.builder()
+            .deckId(deck.getId())
+            .term(ServiceValidationUtils.normalizeRequiredText(
+                request.frontText(),
+                ApiMessageKey.FLASHCARD_FRONT_TEXT_REQUIRED
+            ))
+            .meaning(ServiceValidationUtils.normalizeRequiredText(
+                request.backText(),
+                ApiMessageKey.FLASHCARD_BACK_TEXT_REQUIRED
+            ))
+            .note("")
+            .bookmarked(false)
+            .build();
 
         final FlashcardEntity saved = flashcardRepository.save(entity);
         FlashcardQuerySupport.syncFlashcardLanguages(

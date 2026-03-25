@@ -62,11 +62,12 @@ public class AuthServiceImpl implements AuthService {
         assertUsernameAvailable(username);
         assertEmailAvailable(email);
 
-        final UserAccountEntity entity = new UserAccountEntity();
-        entity.setUsername(username);
-        entity.setEmail(email);
-        entity.setPasswordHash(passwordEncoder.encode(password));
-        entity.setAccountStatus(AccountStatus.ACTIVE);
+        final UserAccountEntity entity = UserAccountEntity.builder()
+            .username(username)
+            .email(email)
+            .passwordHash(passwordEncoder.encode(password))
+            .accountStatus(AccountStatus.ACTIVE)
+            .build();
 
         final UserAccountEntity saved = userAccountRepository.save(entity);
         // Return the newly created account together with an authenticated session.
@@ -175,14 +176,13 @@ public class AuthServiceImpl implements AuthService {
         final String accessToken = jwtAccessTokenService.generateToken(userAccount);
         final String refreshToken = generateRefreshToken();
 
-        final RefreshTokenEntity refreshTokenEntity = new RefreshTokenEntity();
-        refreshTokenEntity.setUserId(userAccount.getId());
-        refreshTokenEntity.setTokenHash(hashToken(refreshToken));
-        refreshTokenEntity.setTokenStatus(TokenStatus.ACTIVE);
-        refreshTokenEntity.setExpiresAt(
-            OffsetDateTime.now().plusSeconds(securityProperties.refreshTokenExpiresInSeconds())
-        );
-        refreshTokenEntity.setDeviceLabel(null);
+        final RefreshTokenEntity refreshTokenEntity = RefreshTokenEntity.builder()
+            .userId(userAccount.getId())
+            .tokenHash(hashToken(refreshToken))
+            .tokenStatus(TokenStatus.ACTIVE)
+            .expiresAt(OffsetDateTime.now().plusSeconds(securityProperties.refreshTokenExpiresInSeconds()))
+            .deviceLabel(null)
+            .build();
         refreshTokenRepository.save(refreshTokenEntity);
 
         // Return the transport payload expected by the frontend auth contract.

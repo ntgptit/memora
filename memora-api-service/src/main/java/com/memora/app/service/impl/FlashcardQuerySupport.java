@@ -136,11 +136,12 @@ final class FlashcardQuerySupport {
 
         // Create the side row when it does not exist yet.
         if (existingLanguage == null) {
-            final FlashcardLanguageEntity entity = new FlashcardLanguageEntity();
-            entity.setFlashcardId(flashcardId);
-            entity.setSide(side);
-            entity.setLanguageCode(normalizedLanguageCode);
-            entity.setPronunciation("");
+            final FlashcardLanguageEntity entity = FlashcardLanguageEntity.builder()
+                .flashcardId(flashcardId)
+                .side(side)
+                .languageCode(normalizedLanguageCode)
+                .pronunciation("")
+                .build();
             flashcardLanguageRepository.save(entity);
             // New side row has been created successfully.
             return;

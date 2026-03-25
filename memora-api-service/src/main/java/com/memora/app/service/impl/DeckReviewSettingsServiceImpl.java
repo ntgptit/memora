@@ -48,14 +48,15 @@ public class DeckReviewSettingsServiceImpl implements DeckReviewSettingsService 
         }
 
         final ReviewProfileEntity reviewProfile = getAccessibleReviewProfile(deck.getUserId(), request.reviewProfileId());
-        final DeckReviewSettingsEntity entity = new DeckReviewSettingsEntity();
-        entity.setDeckId(deck.getId());
-        entity.setReviewProfileId(reviewProfile.getId());
-        entity.setNewCardsPerDay(request.newCardsPerDay());
-        entity.setReviewsPerDay(request.reviewsPerDay());
-        entity.setBurySiblings(request.burySiblings());
-        entity.setLeechThreshold(request.leechThreshold());
-        entity.setSuspendLeechCards(request.suspendLeechCards());
+        final DeckReviewSettingsEntity entity = DeckReviewSettingsEntity.builder()
+            .deckId(deck.getId())
+            .reviewProfileId(reviewProfile.getId())
+            .newCardsPerDay(request.newCardsPerDay())
+            .reviewsPerDay(request.reviewsPerDay())
+            .burySiblings(request.burySiblings())
+            .leechThreshold(request.leechThreshold())
+            .suspendLeechCards(request.suspendLeechCards())
+            .build();
         // Return the persisted deck review settings.
         return deckReviewSettingsMapper.toDto(deckReviewSettingsRepository.save(entity));
     }

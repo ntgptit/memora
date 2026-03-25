@@ -11,11 +11,13 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "flashcard_languages", schema = "memora")
+@SuperBuilder
 @NoArgsConstructor
 public class FlashcardLanguageEntity extends AuditableEntity {
 

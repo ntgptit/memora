@@ -1,14 +1,14 @@
 package com.memora.app.repository;
 
-import java.util.List;
 import java.util.Optional;
-
-import com.memora.app.entity.DeckReviewSettingsEntity;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.memora.app.entity.DeckReviewSettingsEntity;
+
 public interface DeckReviewSettingsRepository extends JpaRepository<DeckReviewSettingsEntity, Long> {
 
+    @Override
     Optional<DeckReviewSettingsEntity> findById(Long deckReviewSettingsId);
 
     Optional<DeckReviewSettingsEntity> findByDeckId(Long deckId);

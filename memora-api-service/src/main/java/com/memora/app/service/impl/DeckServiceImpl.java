@@ -61,11 +61,12 @@ public class DeckServiceImpl implements DeckService {
         assertFolderCanContainDecks(folder);
         assertDeckNameAvailable(folder.getId(), name, null);
 
-        final DeckEntity entity = new DeckEntity();
-        entity.setUserId(folder.getUserId());
-        entity.setFolderId(folder.getId());
-        entity.setName(name);
-        entity.setDescription(ServiceValidationUtils.normalizeOptionalText(request.description()));
+        final DeckEntity entity = DeckEntity.builder()
+            .userId(folder.getUserId())
+            .folderId(folder.getId())
+            .name(name)
+            .description(ServiceValidationUtils.normalizeOptionalText(request.description()))
+            .build();
         // Return the created deck snapshot for the active folder.
         return toResponse(deckRepository.save(entity)); 
     }

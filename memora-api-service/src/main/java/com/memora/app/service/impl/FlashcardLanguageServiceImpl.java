@@ -40,11 +40,12 @@ public class FlashcardLanguageServiceImpl implements FlashcardLanguageService {
         final FlashcardEntity flashcard = getActiveFlashcard(request.flashcardId());
         assertSideAvailable(flashcard.getId(), request.side(), null);
 
-        final FlashcardLanguageEntity entity = new FlashcardLanguageEntity();
-        entity.setFlashcardId(flashcard.getId());
-        entity.setSide(request.side());
-        entity.setLanguageCode(normalizeLanguageCode(request.languageCode()));
-        entity.setPronunciation(ServiceValidationUtils.normalizeOptionalText(request.pronunciation()));
+        final FlashcardLanguageEntity entity = FlashcardLanguageEntity.builder()
+            .flashcardId(flashcard.getId())
+            .side(request.side())
+            .languageCode(normalizeLanguageCode(request.languageCode()))
+            .pronunciation(ServiceValidationUtils.normalizeOptionalText(request.pronunciation()))
+            .build();
         // Return the persisted flashcard language metadata.
         return flashcardLanguageMapper.toDto(flashcardLanguageRepository.save(entity));
     }

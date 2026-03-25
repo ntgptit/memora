@@ -39,12 +39,13 @@ public class ReviewProfileBoxServiceImpl implements ReviewProfileBoxService {
         final ReviewProfileEntity reviewProfile = getMutableReviewProfile(request.reviewProfileId());
         assertBoxNumberAvailable(reviewProfile.getId(), request.boxNumber(), null);
 
-        final ReviewProfileBoxEntity entity = new ReviewProfileBoxEntity();
-        entity.setReviewProfileId(reviewProfile.getId());
-        entity.setBoxNumber(request.boxNumber());
-        entity.setIntervalSeconds(request.intervalSeconds());
-        entity.setIncorrectBoxNumber(request.incorrectBoxNumber());
-        entity.setCorrectBoxNumber(request.correctBoxNumber());
+        final ReviewProfileBoxEntity entity = ReviewProfileBoxEntity.builder()
+            .reviewProfileId(reviewProfile.getId())
+            .boxNumber(request.boxNumber())
+            .intervalSeconds(request.intervalSeconds())
+            .incorrectBoxNumber(request.incorrectBoxNumber())
+            .correctBoxNumber(request.correctBoxNumber())
+            .build();
         // Return the persisted review profile box rule.
         return reviewProfileBoxMapper.toDto(reviewProfileBoxRepository.save(entity));
     }

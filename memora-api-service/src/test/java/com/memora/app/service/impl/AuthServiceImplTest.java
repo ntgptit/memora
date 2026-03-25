@@ -12,6 +12,7 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import com.memora.app.dto.request.auth.AuthLoginRequest;
+import com.memora.app.dto.request.auth.AuthLogoutRequest;
 import com.memora.app.dto.request.auth.AuthRefreshRequest;
 import com.memora.app.dto.request.auth.AuthRegisterRequest;
 import com.memora.app.dto.response.auth.AuthUserResponse;
@@ -157,6 +158,56 @@ class AuthServiceImplTest {
         assertThat(response.accessToken()).isEqualTo("refreshed-access-token");
         assertThat(response.refreshToken()).isNotBlank();
         assertThat(response.authenticated()).isTrue();
+    }
+
+    @Test
+    void refreshRejectsExpiredTokenAndMarksItExpired() {
+        final RefreshTokenEntity refreshTokenEntity = new RefreshTokenEntity();
+        refreshTokenEntity.setId(9L);
+        refreshTokenEntity.setUserId(1L);
+        refreshTokenEntity.setTokenStatus(TokenStatus.ACTIVE);
+        refreshTokenEntity.setExpiresAt(OffsetDateTime.now().minusMinutes(1));
+
+        when(refreshTokenRepository.findByTokenHash(anyString())).thenReturn(Optional.of(refreshTokenEntity));
+
+        assertThatThrownBy(() -> authService.refresh(new AuthRefreshRequest("refresh-token")))
+            .isInstanceOf(UnauthorizedException.class);
+
+        verify(refreshTokenRepository).save(refreshTokenEntity);
+        assertThat(refreshTokenEntity.getTokenStatus()).isEqualTo(TokenStatus.EXPIRED);
+    }
+
+    @Test
+    void logoutExpiresActiveTokenThatAlreadyTimedOut() {
+        final RefreshTokenEntity refreshTokenEntity = new RefreshTokenEntity();
+        refreshTokenEntity.setId(9L);
+        refreshTokenEntity.setUserId(1L);
+        refreshTokenEntity.setTokenStatus(TokenStatus.ACTIVE);
+        refreshTokenEntity.setExpiresAt(OffsetDateTime.now().minusMinutes(1));
+
+        when(refreshTokenRepository.findByTokenHash(anyString())).thenReturn(Optional.of(refreshTokenEntity));
+
+        authService.logout(new AuthLogoutRequest("refresh-token"));
+
+        verify(refreshTokenRepository).save(refreshTokenEntity);
+        assertThat(refreshTokenEntity.getTokenStatus()).isEqualTo(TokenStatus.EXPIRED);
+    }
+
+    @Test
+    void logoutRevokesActiveTokenBeforeExpiry() {
+        final RefreshTokenEntity refreshTokenEntity = new RefreshTokenEntity();
+        refreshTokenEntity.setId(9L);
+        refreshTokenEntity.setUserId(1L);
+        refreshTokenEntity.setTokenStatus(TokenStatus.ACTIVE);
+        refreshTokenEntity.setExpiresAt(OffsetDateTime.now().plusMinutes(5));
+
+        when(refreshTokenRepository.findByTokenHash(anyString())).thenReturn(Optional.of(refreshTokenEntity));
+
+        authService.logout(new AuthLogoutRequest("refresh-token"));
+
+        verify(refreshTokenRepository).save(refreshTokenEntity);
+        assertThat(refreshTokenEntity.getTokenStatus()).isEqualTo(TokenStatus.REVOKED);
+        assertThat(refreshTokenEntity.getRevokedAt()).isNotNull();
     }
 }
 

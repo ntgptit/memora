@@ -56,12 +56,13 @@ public class FolderServiceImpl implements FolderService {
         assertFolderCanAcceptChildFolder(parentFolder);
         assertFolderNameAvailable(currentUserId, request.parentId(), name, null);
 
-        final FolderEntity entity = new FolderEntity();
-        entity.setUserId(currentUserId);
-        entity.setParentId(parentFolder == null ? null : parentFolder.getId());
-        entity.setName(name);
-        entity.setDescription(ServiceValidationUtils.normalizeOptionalText(request.description()));
-        entity.setDepth(parentFolder == null ? 0 : parentFolder.getDepth() + 1);
+        final FolderEntity entity = FolderEntity.builder()
+            .userId(currentUserId)
+            .parentId(parentFolder == null ? null : parentFolder.getId())
+            .name(name)
+            .description(ServiceValidationUtils.normalizeOptionalText(request.description()))
+            .depth(parentFolder == null ? 0 : parentFolder.getDepth() + 1)
+            .build();
         // Return the persisted folder snapshot.
         return FolderQuerySupport.toResponse(folderRepository.save(entity), folderRepository, folderMapper);
     }
