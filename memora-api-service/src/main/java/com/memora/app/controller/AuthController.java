@@ -1,11 +1,11 @@
 package com.memora.app.controller;
 
-import com.memora.app.dto.AuthLoginRequest;
-import com.memora.app.dto.AuthLogoutRequest;
-import com.memora.app.dto.AuthRefreshRequest;
-import com.memora.app.dto.AuthRegisterRequest;
-import com.memora.app.dto.AuthResponse;
-import com.memora.app.dto.AuthUserDto;
+import com.memora.app.dto.request.auth.AuthLoginRequest;
+import com.memora.app.dto.request.auth.AuthLogoutRequest;
+import com.memora.app.dto.request.auth.AuthRefreshRequest;
+import com.memora.app.dto.request.auth.AuthRegisterRequest;
+import com.memora.app.dto.response.auth.AuthResponse;
+import com.memora.app.dto.response.auth.AuthUserResponse;
 import com.memora.app.service.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -115,7 +115,10 @@ public class AuthController {
         @ApiResponse(responseCode = "401", description = "Access token is missing or invalid")
     })
     @GetMapping("/me")
-    public ResponseEntity<AuthUserDto> getCurrentUser() {
+    public ResponseEntity<AuthUserResponse> getCurrentUser() {
         return ResponseEntity.ok(authService.getCurrentUser());
     }
 }
+
+
+

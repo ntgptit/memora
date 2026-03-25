@@ -1,8 +1,9 @@
 package com.memora.app.entity;
 
+import com.memora.app.entity.common.AuditableEntity;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.memora.app.enums.StudySessionState;
-import com.memora.app.enums.StudySessionType;
+import com.memora.app.enums.study.StudySessionState;
+import com.memora.app.enums.study.StudySessionType;
 
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;

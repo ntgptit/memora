@@ -2,10 +2,10 @@ package com.memora.app.controller;
 
 import java.util.List;
 
-import com.memora.app.dto.CreateUserAccountRequest;
-import com.memora.app.dto.UpdateUserAccountRequest;
-import com.memora.app.dto.UserAccountDto;
-import com.memora.app.enums.AccountStatus;
+import com.memora.app.dto.request.user_account.CreateUserAccountRequest;
+import com.memora.app.dto.request.user_account.UpdateUserAccountRequest;
+import com.memora.app.dto.response.user_account.UserAccountResponse;
+import com.memora.app.enums.user_account.AccountStatus;
 import com.memora.app.service.UserAccountService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,7 +51,7 @@ public class UserAccountController {
         @ApiResponse(responseCode = "409", description = "Username or email already exists")
     })
     @PostMapping
-    public ResponseEntity<UserAccountDto> createUserAccount(
+    public ResponseEntity<UserAccountResponse> createUserAccount(
         @Valid @RequestBody final CreateUserAccountRequest request
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userAccountService.createUserAccount(request));
@@ -69,7 +69,7 @@ public class UserAccountController {
         @ApiResponse(responseCode = "404", description = "User account not found")
     })
     @GetMapping("/{userAccountId}")
-    public ResponseEntity<UserAccountDto> getUserAccount(@PathVariable final Long userAccountId) {
+    public ResponseEntity<UserAccountResponse> getUserAccount(@PathVariable final Long userAccountId) {
         return ResponseEntity.ok(userAccountService.getUserAccount(userAccountId));
     }
 
@@ -84,7 +84,7 @@ public class UserAccountController {
         @ApiResponse(responseCode = "200", description = "User accounts loaded")
     })
     @GetMapping
-    public ResponseEntity<List<UserAccountDto>> getUserAccounts(
+    public ResponseEntity<List<UserAccountResponse>> getUserAccounts(
         @RequestParam(required = false) final AccountStatus accountStatus
     ) {
         return ResponseEntity.ok(userAccountService.getUserAccounts(accountStatus));
@@ -105,7 +105,7 @@ public class UserAccountController {
         @ApiResponse(responseCode = "409", description = "Username or email already exists")
     })
     @PutMapping("/{userAccountId}")
-    public ResponseEntity<UserAccountDto> updateUserAccount(
+    public ResponseEntity<UserAccountResponse> updateUserAccount(
         @PathVariable final Long userAccountId,
         @Valid @RequestBody final UpdateUserAccountRequest request
     ) {
@@ -130,3 +130,6 @@ public class UserAccountController {
         return ResponseEntity.noContent().build();
     }
 }
+
+
+

@@ -2,9 +2,9 @@ package com.memora.app.controller;
 
 import java.util.List;
 
-import com.memora.app.dto.CreateDeckRequest;
-import com.memora.app.dto.DeckDto;
-import com.memora.app.dto.UpdateDeckRequest;
+import com.memora.app.dto.request.deck.CreateDeckRequest;
+import com.memora.app.dto.response.deck.DeckResponse;
+import com.memora.app.dto.request.deck.UpdateDeckRequest;
 import com.memora.app.service.DeckService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -54,7 +54,7 @@ public class DeckController {
         @ApiResponse(responseCode = "409", description = "Deck name already exists or folder is not a leaf")
     })
     @PostMapping
-    public ResponseEntity<DeckDto> createDeck(
+    public ResponseEntity<DeckResponse> createDeck(
         @PathVariable final Long folderId,
         @Valid @RequestBody final CreateDeckRequest request
     ) {
@@ -74,7 +74,7 @@ public class DeckController {
         @ApiResponse(responseCode = "404", description = "Deck not found")
     })
     @GetMapping("/{deckId}")
-    public ResponseEntity<DeckDto> getDeck(
+    public ResponseEntity<DeckResponse> getDeck(
         @PathVariable final Long folderId,
         @PathVariable final Long deckId
     ) {
@@ -97,7 +97,7 @@ public class DeckController {
         @ApiResponse(responseCode = "200", description = "Decks loaded")
     })
     @GetMapping
-    public ResponseEntity<List<DeckDto>> getDecks(
+    public ResponseEntity<List<DeckResponse>> getDecks(
         @PathVariable final Long folderId,
         @RequestParam(required = false) final String searchQuery,
         @RequestParam(required = false, defaultValue = "NAME") final String sortBy,
@@ -124,7 +124,7 @@ public class DeckController {
         @ApiResponse(responseCode = "409", description = "Deck name already exists")
     })
     @PutMapping("/{deckId}")
-    public ResponseEntity<DeckDto> updateDeck(
+    public ResponseEntity<DeckResponse> updateDeck(
         @PathVariable final Long folderId,
         @PathVariable final Long deckId,
         @Valid @RequestBody final UpdateDeckRequest request
@@ -153,3 +153,6 @@ public class DeckController {
         return ResponseEntity.noContent().build();
     }
 }
+
+
+

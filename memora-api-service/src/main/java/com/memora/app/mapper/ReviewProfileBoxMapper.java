@@ -1,44 +1,20 @@
 package com.memora.app.mapper;
 
-import com.memora.app.dto.ReviewProfileBoxDto;
+import com.memora.app.dto.response.review_profile_box.ReviewProfileBoxResponse;
 import com.memora.app.entity.ReviewProfileBoxEntity;
 
-import lombok.experimental.UtilityClass;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 
-@UtilityClass
-public class ReviewProfileBoxMapper {
+@Mapper(
+    componentModel = MappingConstants.ComponentModel.SPRING,
+    unmappedSourcePolicy = ReportingPolicy.IGNORE,
+    unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
+public interface ReviewProfileBoxMapper {
 
-    public ReviewProfileBoxDto toDto(final ReviewProfileBoxEntity entity) {
-        if (entity == null) {
-            return null;
-        }
-        return new ReviewProfileBoxDto(
-            entity.getId(),
-            entity.getReviewProfileId(),
-            entity.getBoxNumber(),
-            entity.getIntervalSeconds(),
-            entity.getIncorrectBoxNumber(),
-            entity.getCorrectBoxNumber(),
-            entity.getCreatedAt(),
-            entity.getUpdatedAt(),
-            entity.getVersion()
-        );
-    }
+    ReviewProfileBoxResponse toDto(ReviewProfileBoxEntity entity);
 
-    public ReviewProfileBoxEntity toEntity(final ReviewProfileBoxDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        final ReviewProfileBoxEntity entity = new ReviewProfileBoxEntity();
-        entity.setId(dto.id());
-        entity.setReviewProfileId(dto.reviewProfileId());
-        entity.setBoxNumber(dto.boxNumber());
-        entity.setIntervalSeconds(dto.intervalSeconds());
-        entity.setIncorrectBoxNumber(dto.incorrectBoxNumber());
-        entity.setCorrectBoxNumber(dto.correctBoxNumber());
-        entity.setCreatedAt(dto.createdAt());
-        entity.setUpdatedAt(dto.updatedAt());
-        entity.setVersion(dto.version());
-        return entity;
-    }
+    ReviewProfileBoxEntity toEntity(ReviewProfileBoxResponse dto);
 }

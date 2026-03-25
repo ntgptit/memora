@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Locale;
 
 import com.memora.app.constant.ApiMessageKey;
-import com.memora.app.dto.CreateUserAccountRequest;
-import com.memora.app.dto.UpdateUserAccountRequest;
-import com.memora.app.dto.UserAccountDto;
+import com.memora.app.dto.request.user_account.CreateUserAccountRequest;
+import com.memora.app.dto.request.user_account.UpdateUserAccountRequest;
+import com.memora.app.dto.response.user_account.UserAccountResponse;
 import com.memora.app.entity.UserAccountEntity;
-import com.memora.app.enums.AccountStatus;
+import com.memora.app.enums.user_account.AccountStatus;
 import com.memora.app.exception.ConflictException;
 import com.memora.app.exception.ResourceNotFoundException;
 import com.memora.app.mapper.UserAccountMapper;
@@ -34,10 +34,11 @@ public class UserAccountServiceImpl implements UserAccountService {
     private final PasswordEncoder passwordEncoder;
     private final ReviewProfileRepository reviewProfileRepository;
     private final UserAccountRepository userAccountRepository;
+    private final UserAccountMapper userAccountMapper;
 
     @Override
     @Transactional
-    public UserAccountDto createUserAccount(final CreateUserAccountRequest request) {
+    public UserAccountResponse createUserAccount(final CreateUserAccountRequest request) {
         final String username = ServiceValidationUtils.normalizeRequiredText(
             request.username(),
             ApiMessageKey.USERNAME_REQUIRED
@@ -57,39 +58,39 @@ public class UserAccountServiceImpl implements UserAccountService {
         entity.setPasswordHash(passwordEncoder.encode(password));
         entity.setAccountStatus(resolveAccountStatus(request.accountStatus()));
         // Return the persisted user account without exposing the password hash.
-        return UserAccountMapper.toDto(userAccountRepository.save(entity));
+        return userAccountMapper.toDto(userAccountRepository.save(entity));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public UserAccountDto getUserAccount(final Long userAccountId) {
+    public UserAccountResponse getUserAccount(final Long userAccountId) {
         // Return the requested active user account.
-        return UserAccountMapper.toDto(getActiveUserAccount(userAccountId));
+        return userAccountMapper.toDto(getActiveUserAccount(userAccountId));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<UserAccountDto> getUserAccounts(final AccountStatus accountStatus) {
+    public List<UserAccountResponse> getUserAccounts(final AccountStatus accountStatus) {
         // Return every active account when the caller does not filter by status.
         if (accountStatus == null) {
             // Return all active accounts.
             return userAccountRepository.findAllByDeletedAtIsNullOrderByIdAsc()
                 // Convert persisted account rows into DTOs for the API layer.
                 .stream()
-                .map(UserAccountMapper::toDto)
+                .map(userAccountMapper::toDto)
                 .toList();
         }
         // Return only active accounts in the requested status.
         return userAccountRepository.findAllByAccountStatusAndDeletedAtIsNullOrderByIdAsc(accountStatus)
             // Convert persisted account rows into DTOs for the API layer.
             .stream()
-            .map(UserAccountMapper::toDto)
+            .map(userAccountMapper::toDto)
             .toList();
     }
 
     @Override
     @Transactional
-    public UserAccountDto updateUserAccount(final Long userAccountId, final UpdateUserAccountRequest request) {
+    public UserAccountResponse updateUserAccount(final Long userAccountId, final UpdateUserAccountRequest request) {
         final UserAccountEntity entity = getActiveUserAccount(userAccountId);
         final String username = ServiceValidationUtils.normalizeRequiredText(
             request.username(),
@@ -114,7 +115,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         }
 
         // Return the updated user account snapshot.
-        return UserAccountMapper.toDto(userAccountRepository.save(entity));
+        return userAccountMapper.toDto(userAccountRepository.save(entity));
     }
 
     @Override
@@ -190,3 +191,6 @@ public class UserAccountServiceImpl implements UserAccountService {
         return accountStatus;
     }
 }
+
+
+

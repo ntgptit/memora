@@ -1,6 +1,7 @@
 package com.memora.app.entity;
 
-import com.memora.app.enums.FlashcardSide;
+import com.memora.app.entity.common.AuditableEntity;
+import com.memora.app.enums.flashcard.FlashcardSide;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

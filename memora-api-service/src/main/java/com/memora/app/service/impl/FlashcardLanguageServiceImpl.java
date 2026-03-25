@@ -4,9 +4,9 @@ import java.util.Locale;
 import java.util.List;
 
 import com.memora.app.constant.ApiMessageKey;
-import com.memora.app.dto.CreateFlashcardLanguageRequest;
-import com.memora.app.dto.FlashcardLanguageDto;
-import com.memora.app.dto.UpdateFlashcardLanguageRequest;
+import com.memora.app.dto.request.flashcard_language.CreateFlashcardLanguageRequest;
+import com.memora.app.dto.response.flashcard_language.FlashcardLanguageResponse;
+import com.memora.app.dto.request.flashcard_language.UpdateFlashcardLanguageRequest;
 import com.memora.app.entity.FlashcardEntity;
 import com.memora.app.entity.FlashcardLanguageEntity;
 import com.memora.app.exception.ConflictException;
@@ -29,10 +29,11 @@ public class FlashcardLanguageServiceImpl implements FlashcardLanguageService {
 
     private final FlashcardLanguageRepository flashcardLanguageRepository;
     private final FlashcardRepository flashcardRepository;
+    private final FlashcardLanguageMapper flashcardLanguageMapper;
 
     @Override
     @Transactional
-    public FlashcardLanguageDto createFlashcardLanguage(final CreateFlashcardLanguageRequest request) {
+    public FlashcardLanguageResponse createFlashcardLanguage(final CreateFlashcardLanguageRequest request) {
         final FlashcardEntity flashcard = getActiveFlashcard(request.flashcardId());
         assertSideAvailable(flashcard.getId(), request.side(), null);
 
@@ -42,19 +43,19 @@ public class FlashcardLanguageServiceImpl implements FlashcardLanguageService {
         entity.setLanguageCode(normalizeLanguageCode(request.languageCode()));
         entity.setPronunciation(ServiceValidationUtils.normalizeOptionalText(request.pronunciation()));
         // Return the persisted flashcard language metadata.
-        return FlashcardLanguageMapper.toDto(flashcardLanguageRepository.save(entity));
+        return flashcardLanguageMapper.toDto(flashcardLanguageRepository.save(entity));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public FlashcardLanguageDto getFlashcardLanguage(final Long flashcardLanguageId) {
+    public FlashcardLanguageResponse getFlashcardLanguage(final Long flashcardLanguageId) {
         // Return the requested flashcard language row.
-        return FlashcardLanguageMapper.toDto(getFlashcardLanguageEntity(flashcardLanguageId));
+        return flashcardLanguageMapper.toDto(getFlashcardLanguageEntity(flashcardLanguageId));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<FlashcardLanguageDto> getFlashcardLanguages(final Long flashcardId) {
+    public List<FlashcardLanguageResponse> getFlashcardLanguages(final Long flashcardId) {
         // Narrow the query when the caller requests languages for one flashcard.
         if (flashcardId != null) {
             // Return languages that belong to the requested flashcard.
@@ -63,7 +64,7 @@ public class FlashcardLanguageServiceImpl implements FlashcardLanguageService {
                 )
                 // Convert persisted language rows into DTOs for the API layer.
                 .stream()
-                .map(FlashcardLanguageMapper::toDto)
+                .map(flashcardLanguageMapper::toDto)
                 .toList();
         }
 
@@ -71,13 +72,13 @@ public class FlashcardLanguageServiceImpl implements FlashcardLanguageService {
         return flashcardLanguageRepository.findAllByOrderByIdAsc()
             // Convert persisted language rows into DTOs for the API layer.
             .stream()
-            .map(FlashcardLanguageMapper::toDto)
+            .map(flashcardLanguageMapper::toDto)
             .toList();
     }
 
     @Override
     @Transactional
-    public FlashcardLanguageDto updateFlashcardLanguage(
+    public FlashcardLanguageResponse updateFlashcardLanguage(
         final Long flashcardLanguageId,
         final UpdateFlashcardLanguageRequest request
     ) {
@@ -90,7 +91,7 @@ public class FlashcardLanguageServiceImpl implements FlashcardLanguageService {
         entity.setLanguageCode(normalizeLanguageCode(request.languageCode()));
         entity.setPronunciation(ServiceValidationUtils.normalizeOptionalText(request.pronunciation()));
         // Return the updated flashcard language metadata.
-        return FlashcardLanguageMapper.toDto(flashcardLanguageRepository.save(entity));
+        return flashcardLanguageMapper.toDto(flashcardLanguageRepository.save(entity));
     }
 
     @Override
@@ -122,7 +123,7 @@ public class FlashcardLanguageServiceImpl implements FlashcardLanguageService {
 
     private void assertSideAvailable(
         final Long flashcardId,
-        final com.memora.app.enums.FlashcardSide side,
+        final com.memora.app.enums.flashcard.FlashcardSide side,
         final Long flashcardLanguageId
     ) {
         final boolean alreadyExists = flashcardLanguageId == null
@@ -144,3 +145,6 @@ public class FlashcardLanguageServiceImpl implements FlashcardLanguageService {
         );
     }
 }
+
+
+

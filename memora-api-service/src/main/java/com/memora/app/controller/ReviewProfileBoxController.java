@@ -2,9 +2,9 @@ package com.memora.app.controller;
 
 import java.util.List;
 
-import com.memora.app.dto.CreateReviewProfileBoxRequest;
-import com.memora.app.dto.ReviewProfileBoxDto;
-import com.memora.app.dto.UpdateReviewProfileBoxRequest;
+import com.memora.app.dto.request.review_profile_box.CreateReviewProfileBoxRequest;
+import com.memora.app.dto.response.review_profile_box.ReviewProfileBoxResponse;
+import com.memora.app.dto.request.review_profile_box.UpdateReviewProfileBoxRequest;
 import com.memora.app.service.ReviewProfileBoxService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,7 +51,7 @@ public class ReviewProfileBoxController {
         @ApiResponse(responseCode = "409", description = "System profile is immutable or box number already exists")
     })
     @PostMapping
-    public ResponseEntity<ReviewProfileBoxDto> createReviewProfileBox(
+    public ResponseEntity<ReviewProfileBoxResponse> createReviewProfileBox(
         @Valid @RequestBody final CreateReviewProfileBoxRequest request
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(reviewProfileBoxService.createReviewProfileBox(request));
@@ -69,7 +69,7 @@ public class ReviewProfileBoxController {
         @ApiResponse(responseCode = "404", description = "Review profile box not found")
     })
     @GetMapping("/{reviewProfileBoxId}")
-    public ResponseEntity<ReviewProfileBoxDto> getReviewProfileBox(
+    public ResponseEntity<ReviewProfileBoxResponse> getReviewProfileBox(
         @PathVariable final Long reviewProfileBoxId
     ) {
         return ResponseEntity.ok(reviewProfileBoxService.getReviewProfileBox(reviewProfileBoxId));
@@ -86,7 +86,7 @@ public class ReviewProfileBoxController {
         @ApiResponse(responseCode = "200", description = "Review profile boxes loaded")
     })
     @GetMapping
-    public ResponseEntity<List<ReviewProfileBoxDto>> getReviewProfileBoxes(
+    public ResponseEntity<List<ReviewProfileBoxResponse>> getReviewProfileBoxes(
         @RequestParam(required = false) final Long reviewProfileId
     ) {
         return ResponseEntity.ok(reviewProfileBoxService.getReviewProfileBoxes(reviewProfileId));
@@ -107,7 +107,7 @@ public class ReviewProfileBoxController {
         @ApiResponse(responseCode = "409", description = "System profile is immutable or box number already exists")
     })
     @PutMapping("/{reviewProfileBoxId}")
-    public ResponseEntity<ReviewProfileBoxDto> updateReviewProfileBox(
+    public ResponseEntity<ReviewProfileBoxResponse> updateReviewProfileBox(
         @PathVariable final Long reviewProfileBoxId,
         @Valid @RequestBody final UpdateReviewProfileBoxRequest request
     ) {
@@ -132,3 +132,6 @@ public class ReviewProfileBoxController {
         return ResponseEntity.noContent().build();
     }
 }
+
+
+

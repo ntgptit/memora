@@ -1,6 +1,7 @@
 package com.memora.app.entity;
 
-import com.memora.app.enums.AccountStatus;
+import com.memora.app.entity.common.SoftDeletableAuditableEntity;
+import com.memora.app.enums.user_account.AccountStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

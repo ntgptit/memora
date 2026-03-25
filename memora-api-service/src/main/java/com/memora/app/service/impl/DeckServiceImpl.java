@@ -6,12 +6,12 @@ import java.util.Locale;
 import java.util.Objects;
 
 import com.memora.app.constant.ApiMessageKey;
-import com.memora.app.dto.CreateDeckRequest;
-import com.memora.app.dto.DeckDto;
-import com.memora.app.dto.UpdateDeckRequest;
+import com.memora.app.dto.request.deck.CreateDeckRequest;
+import com.memora.app.dto.response.deck.DeckResponse;
+import com.memora.app.dto.request.deck.UpdateDeckRequest;
 import com.memora.app.entity.DeckEntity;
 import com.memora.app.entity.FolderEntity;
-import com.memora.app.enums.DeckSortField;
+import com.memora.app.enums.deck.DeckSortField;
 import com.memora.app.exception.ConflictException;
 import com.memora.app.exception.ResourceNotFoundException;
 import com.memora.app.mapper.DeckMapper;
@@ -50,10 +50,11 @@ public class DeckServiceImpl implements DeckService {
     private final FlashcardRepository flashcardRepository;
     private final FolderRepository folderRepository;
     private final CurrentAuthenticatedUserService currentAuthenticatedUserService;
+    private final DeckMapper deckMapper;
 
     @Override
     @Transactional
-    public DeckDto createDeck(final Long folderId, final CreateDeckRequest request) {
+    public DeckResponse createDeck(final Long folderId, final CreateDeckRequest request) {
         final Long currentUserId = currentAuthenticatedUserService.getCurrentUser().userId();
         final FolderEntity folder = getActiveFolder(folderId, currentUserId);
         final String name = ServiceValidationUtils.normalizeRequiredText(request.name(), ApiMessageKey.NAME_REQUIRED);
@@ -72,7 +73,7 @@ public class DeckServiceImpl implements DeckService {
 
     @Override
     @Transactional(readOnly = true)
-    public DeckDto getDeck(final Long folderId, final Long deckId) {
+    public DeckResponse getDeck(final Long folderId, final Long deckId) {
         final Long currentUserId = currentAuthenticatedUserService.getCurrentUser().userId();
         getActiveFolder(folderId, currentUserId);
         // Return the requested deck inside the current folder scope.
@@ -81,7 +82,7 @@ public class DeckServiceImpl implements DeckService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<DeckDto> getDecks(
+    public List<DeckResponse> getDecks(
         final Long folderId,
         final String searchQuery,
         final String sortBy,
@@ -109,7 +110,7 @@ public class DeckServiceImpl implements DeckService {
 
     @Override
     @Transactional
-    public DeckDto updateDeck(final Long folderId, final Long deckId, final UpdateDeckRequest request) {
+    public DeckResponse updateDeck(final Long folderId, final Long deckId, final UpdateDeckRequest request) {
         final Long currentUserId = currentAuthenticatedUserService.getCurrentUser().userId();
         final FolderEntity folder = getActiveFolder(folderId, currentUserId);
         final DeckEntity entity = getActiveDeck(deckId, folder.getId());
@@ -132,9 +133,9 @@ public class DeckServiceImpl implements DeckService {
         deleteDeckTree(getActiveDeck(deckId, folderId), OffsetDateTime.now());
     }
 
-    private DeckDto toResponse(final DeckEntity entity) {
+    private DeckResponse toResponse(final DeckEntity entity) {
         // Map persistence fields to the API response and add derived values.
-        return DeckMapper.toDto(entity, flashcardRepository.countByDeckIdAndDeletedAtIsNull(entity.getId()));
+        return deckMapper.toDto(entity, flashcardRepository.countByDeckIdAndDeletedAtIsNull(entity.getId()));
     }
 
     private FolderEntity getActiveFolder(final Long folderId, final Long userId) {
@@ -278,3 +279,6 @@ public class DeckServiceImpl implements DeckService {
         return Math.min(size, MAX_PAGE_SIZE);
     }
 }
+
+
+

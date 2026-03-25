@@ -1,58 +1,37 @@
 package com.memora.app.mapper;
 
-import com.memora.app.dto.FlashcardDto;
+import com.memora.app.dto.response.flashcard.FlashcardResponse;
 import com.memora.app.entity.FlashcardEntity;
 
-import lombok.experimental.UtilityClass;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 
-@UtilityClass
-public class FlashcardMapper {
+@Mapper(
+    componentModel = MappingConstants.ComponentModel.SPRING,
+    uses = AuditMapper.class,
+    unmappedSourcePolicy = ReportingPolicy.IGNORE,
+    unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
+public interface FlashcardMapper {
 
-    public FlashcardDto toDto(
-        final FlashcardEntity entity,
-        final String frontLangCode,
-        final String backLangCode,
-        final String pronunciation
-    ) {
-        if (entity == null) {
-            return null;
-        }
-        return new FlashcardDto(
-            entity.getId(),
-            entity.getDeckId(),
-            entity.getTerm(),
-            entity.getMeaning(),
-            frontLangCode,
-            backLangCode,
-            pronunciation,
-            entity.getNote(),
-            entity.isBookmarked(),
-            new com.memora.app.dto.AuditDto(
-                entity.getCreatedAt(),
-                entity.getUpdatedAt(),
-                entity.getDeletedAt(),
-                entity.getVersion()
-            )
-        );
-    }
+    @Mapping(target = "frontText", source = "entity.term")
+    @Mapping(target = "backText", source = "entity.meaning")
+    @Mapping(target = "frontLangCode", source = "frontLangCode")
+    @Mapping(target = "backLangCode", source = "backLangCode")
+    @Mapping(target = "pronunciation", source = "pronunciation")
+    @Mapping(target = "isBookmarked", expression = "java(entity.isBookmarked())")
+    @Mapping(target = "audit", source = "entity")
+    FlashcardResponse toDto(
+        FlashcardEntity entity,
+        String frontLangCode,
+        String backLangCode,
+        String pronunciation
+    );
 
-    public FlashcardEntity toEntity(final FlashcardDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        final FlashcardEntity entity = new FlashcardEntity();
-        entity.setId(dto.id());
-        entity.setDeckId(dto.deckId());
-        entity.setTerm(dto.frontText());
-        entity.setMeaning(dto.backText());
-        entity.setNote(dto.note());
-        entity.setBookmarked(dto.isBookmarked());
-        if (dto.audit() != null) {
-            entity.setCreatedAt(dto.audit().createdAt());
-            entity.setUpdatedAt(dto.audit().updatedAt());
-            entity.setDeletedAt(dto.audit().deletedAt());
-            entity.setVersion(dto.audit().version());
-        }
-        return entity;
-    }
+    @Mapping(target = "term", source = "frontText")
+    @Mapping(target = "meaning", source = "backText")
+    @Mapping(target = "bookmarked", expression = "java(dto.isBookmarked())")
+    FlashcardEntity toEntity(FlashcardResponse dto);
 }

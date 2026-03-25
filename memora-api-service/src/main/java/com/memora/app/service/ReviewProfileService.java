@@ -2,19 +2,22 @@ package com.memora.app.service;
 
 import java.util.List;
 
-import com.memora.app.dto.CreateReviewProfileRequest;
-import com.memora.app.dto.ReviewProfileDto;
-import com.memora.app.dto.UpdateReviewProfileRequest;
+import com.memora.app.dto.request.review_profile.CreateReviewProfileRequest;
+import com.memora.app.dto.response.review_profile.ReviewProfileResponse;
+import com.memora.app.dto.request.review_profile.UpdateReviewProfileRequest;
 
 public interface ReviewProfileService {
 
-    ReviewProfileDto createReviewProfile(CreateReviewProfileRequest request);
+    ReviewProfileResponse createReviewProfile(CreateReviewProfileRequest request);
 
-    ReviewProfileDto getReviewProfile(Long reviewProfileId);
+    ReviewProfileResponse getReviewProfile(Long reviewProfileId);
 
-    List<ReviewProfileDto> getReviewProfiles(Long ownerUserId, Boolean systemProfile);
+    List<ReviewProfileResponse> getReviewProfiles(Long ownerUserId, Boolean systemProfile);
 
-    ReviewProfileDto updateReviewProfile(Long reviewProfileId, UpdateReviewProfileRequest request);
+    ReviewProfileResponse updateReviewProfile(Long reviewProfileId, UpdateReviewProfileRequest request);
 
     void deleteReviewProfile(Long reviewProfileId);
 }
+
+
+

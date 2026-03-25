@@ -9,16 +9,16 @@ import java.util.Locale;
 import java.util.UUID;
 
 import com.memora.app.constant.ApiMessageKey;
-import com.memora.app.dto.AuthLoginRequest;
-import com.memora.app.dto.AuthLogoutRequest;
-import com.memora.app.dto.AuthRefreshRequest;
-import com.memora.app.dto.AuthRegisterRequest;
-import com.memora.app.dto.AuthResponse;
-import com.memora.app.dto.AuthUserDto;
+import com.memora.app.dto.request.auth.AuthLoginRequest;
+import com.memora.app.dto.request.auth.AuthLogoutRequest;
+import com.memora.app.dto.request.auth.AuthRefreshRequest;
+import com.memora.app.dto.request.auth.AuthRegisterRequest;
+import com.memora.app.dto.response.auth.AuthResponse;
+import com.memora.app.dto.response.auth.AuthUserResponse;
 import com.memora.app.entity.RefreshTokenEntity;
 import com.memora.app.entity.UserAccountEntity;
-import com.memora.app.enums.AccountStatus;
-import com.memora.app.enums.TokenStatus;
+import com.memora.app.enums.user_account.AccountStatus;
+import com.memora.app.enums.refresh_token.TokenStatus;
 import com.memora.app.exception.ConflictException;
 import com.memora.app.exception.UnauthorizedException;
 import com.memora.app.mapper.AuthUserMapper;
@@ -47,6 +47,7 @@ public class AuthServiceImpl implements AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final SecurityProperties securityProperties;
     private final UserAccountRepository userAccountRepository;
+    private final AuthUserMapper authUserMapper;
 
     @Override
     @Transactional
@@ -165,9 +166,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional(readOnly = true)
-    public AuthUserDto getCurrentUser() {
+    public AuthUserResponse getCurrentUser() {
         // Return the authenticated user identity resolved from the security context.
-        return AuthUserMapper.toDto(currentAuthenticatedUserService.getCurrentUser());
+        return authUserMapper.toDto(currentAuthenticatedUserService.getCurrentUser());
     }
 
     private AuthResponse createSession(final UserAccountEntity userAccount) {
@@ -186,7 +187,7 @@ public class AuthServiceImpl implements AuthService {
 
         // Return the transport payload expected by the frontend auth contract.
         return new AuthResponse(
-            AuthUserMapper.toDto(userAccount),
+            authUserMapper.toDto(userAccount),
             accessToken,
             refreshToken,
             jwtAccessTokenService.expiresInSeconds(),
@@ -277,3 +278,6 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 }
+
+
+

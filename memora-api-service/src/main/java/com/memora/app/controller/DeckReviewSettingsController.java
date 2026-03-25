@@ -2,9 +2,9 @@ package com.memora.app.controller;
 
 import java.util.List;
 
-import com.memora.app.dto.CreateDeckReviewSettingsRequest;
-import com.memora.app.dto.DeckReviewSettingsDto;
-import com.memora.app.dto.UpdateDeckReviewSettingsRequest;
+import com.memora.app.dto.request.deck_review_settings.CreateDeckReviewSettingsRequest;
+import com.memora.app.dto.response.deck_review_settings.DeckReviewSettingsResponse;
+import com.memora.app.dto.request.deck_review_settings.UpdateDeckReviewSettingsRequest;
 import com.memora.app.service.DeckReviewSettingsService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,7 +51,7 @@ public class DeckReviewSettingsController {
         @ApiResponse(responseCode = "409", description = "Deck review settings already exist or profile is not accessible")
     })
     @PostMapping
-    public ResponseEntity<DeckReviewSettingsDto> createDeckReviewSettings(
+    public ResponseEntity<DeckReviewSettingsResponse> createDeckReviewSettings(
         @Valid @RequestBody final CreateDeckReviewSettingsRequest request
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -71,7 +71,7 @@ public class DeckReviewSettingsController {
         @ApiResponse(responseCode = "404", description = "Deck review settings not found")
     })
     @GetMapping("/{deckReviewSettingsId}")
-    public ResponseEntity<DeckReviewSettingsDto> getDeckReviewSettingsById(
+    public ResponseEntity<DeckReviewSettingsResponse> getDeckReviewSettingsById(
         @PathVariable final Long deckReviewSettingsId
     ) {
         return ResponseEntity.ok(deckReviewSettingsService.getDeckReviewSettingsById(deckReviewSettingsId));
@@ -88,7 +88,7 @@ public class DeckReviewSettingsController {
         @ApiResponse(responseCode = "200", description = "Deck review settings loaded")
     })
     @GetMapping
-    public ResponseEntity<List<DeckReviewSettingsDto>> getDeckReviewSettingsList(
+    public ResponseEntity<List<DeckReviewSettingsResponse>> getDeckReviewSettingsList(
         @RequestParam(required = false) final Long deckId
     ) {
         return ResponseEntity.ok(deckReviewSettingsService.getDeckReviewSettingsList(deckId));
@@ -109,7 +109,7 @@ public class DeckReviewSettingsController {
         @ApiResponse(responseCode = "409", description = "Review profile is not accessible for the selected deck")
     })
     @PutMapping("/{deckReviewSettingsId}")
-    public ResponseEntity<DeckReviewSettingsDto> updateDeckReviewSettings(
+    public ResponseEntity<DeckReviewSettingsResponse> updateDeckReviewSettings(
         @PathVariable final Long deckReviewSettingsId,
         @Valid @RequestBody final UpdateDeckReviewSettingsRequest request
     ) {
@@ -135,3 +135,6 @@ public class DeckReviewSettingsController {
         return ResponseEntity.noContent().build();
     }
 }
+
+
+

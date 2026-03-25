@@ -1,6 +1,7 @@
 package com.memora.app.entity;
 
-import com.memora.app.enums.ReviewOutcome;
+import com.memora.app.entity.common.AuditableEntity;
+import com.memora.app.enums.review.ReviewOutcome;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

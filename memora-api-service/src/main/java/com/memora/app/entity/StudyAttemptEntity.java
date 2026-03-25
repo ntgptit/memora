@@ -1,7 +1,8 @@
 package com.memora.app.entity;
 
-import com.memora.app.enums.ReviewOutcome;
-import com.memora.app.enums.StudyMode;
+import com.memora.app.entity.common.CreatedOnlyEntity;
+import com.memora.app.enums.review.ReviewOutcome;
+import com.memora.app.enums.study.StudyMode;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

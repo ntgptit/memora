@@ -2,20 +2,23 @@ package com.memora.app.service;
 
 import java.util.List;
 
-import com.memora.app.dto.CreateUserAccountRequest;
-import com.memora.app.dto.UpdateUserAccountRequest;
-import com.memora.app.dto.UserAccountDto;
-import com.memora.app.enums.AccountStatus;
+import com.memora.app.dto.request.user_account.CreateUserAccountRequest;
+import com.memora.app.dto.request.user_account.UpdateUserAccountRequest;
+import com.memora.app.dto.response.user_account.UserAccountResponse;
+import com.memora.app.enums.user_account.AccountStatus;
 
 public interface UserAccountService {
 
-    UserAccountDto createUserAccount(CreateUserAccountRequest request);
+    UserAccountResponse createUserAccount(CreateUserAccountRequest request);
 
-    UserAccountDto getUserAccount(Long userAccountId);
+    UserAccountResponse getUserAccount(Long userAccountId);
 
-    List<UserAccountDto> getUserAccounts(AccountStatus accountStatus);
+    List<UserAccountResponse> getUserAccounts(AccountStatus accountStatus);
 
-    UserAccountDto updateUserAccount(Long userAccountId, UpdateUserAccountRequest request);
+    UserAccountResponse updateUserAccount(Long userAccountId, UpdateUserAccountRequest request);
 
     void deleteUserAccount(Long userAccountId);
 }
+
+
+

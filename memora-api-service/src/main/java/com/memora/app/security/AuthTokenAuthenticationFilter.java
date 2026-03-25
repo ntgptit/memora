@@ -3,7 +3,7 @@ package com.memora.app.security;
 import java.io.IOException;
 
 import com.memora.app.entity.UserAccountEntity;
-import com.memora.app.enums.AccountStatus;
+import com.memora.app.enums.user_account.AccountStatus;
 import com.memora.app.repository.UserAccountRepository;
 
 import io.jsonwebtoken.JwtException;

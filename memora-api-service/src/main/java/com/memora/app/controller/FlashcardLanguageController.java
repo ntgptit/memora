@@ -2,9 +2,9 @@ package com.memora.app.controller;
 
 import java.util.List;
 
-import com.memora.app.dto.CreateFlashcardLanguageRequest;
-import com.memora.app.dto.FlashcardLanguageDto;
-import com.memora.app.dto.UpdateFlashcardLanguageRequest;
+import com.memora.app.dto.request.flashcard_language.CreateFlashcardLanguageRequest;
+import com.memora.app.dto.response.flashcard_language.FlashcardLanguageResponse;
+import com.memora.app.dto.request.flashcard_language.UpdateFlashcardLanguageRequest;
 import com.memora.app.service.FlashcardLanguageService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,7 +51,7 @@ public class FlashcardLanguageController {
         @ApiResponse(responseCode = "409", description = "Flashcard side language already exists")
     })
     @PostMapping
-    public ResponseEntity<FlashcardLanguageDto> createFlashcardLanguage(
+    public ResponseEntity<FlashcardLanguageResponse> createFlashcardLanguage(
         @Valid @RequestBody final CreateFlashcardLanguageRequest request
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(flashcardLanguageService.createFlashcardLanguage(request));
@@ -69,7 +69,7 @@ public class FlashcardLanguageController {
         @ApiResponse(responseCode = "404", description = "Flashcard language not found")
     })
     @GetMapping("/{flashcardLanguageId}")
-    public ResponseEntity<FlashcardLanguageDto> getFlashcardLanguage(
+    public ResponseEntity<FlashcardLanguageResponse> getFlashcardLanguage(
         @PathVariable final Long flashcardLanguageId
     ) {
         return ResponseEntity.ok(flashcardLanguageService.getFlashcardLanguage(flashcardLanguageId));
@@ -86,7 +86,7 @@ public class FlashcardLanguageController {
         @ApiResponse(responseCode = "200", description = "Flashcard languages loaded")
     })
     @GetMapping
-    public ResponseEntity<List<FlashcardLanguageDto>> getFlashcardLanguages(
+    public ResponseEntity<List<FlashcardLanguageResponse>> getFlashcardLanguages(
         @RequestParam(required = false) final Long flashcardId
     ) {
         return ResponseEntity.ok(flashcardLanguageService.getFlashcardLanguages(flashcardId));
@@ -107,7 +107,7 @@ public class FlashcardLanguageController {
         @ApiResponse(responseCode = "409", description = "Flashcard side language already exists")
     })
     @PutMapping("/{flashcardLanguageId}")
-    public ResponseEntity<FlashcardLanguageDto> updateFlashcardLanguage(
+    public ResponseEntity<FlashcardLanguageResponse> updateFlashcardLanguage(
         @PathVariable final Long flashcardLanguageId,
         @Valid @RequestBody final UpdateFlashcardLanguageRequest request
     ) {
@@ -133,3 +133,6 @@ public class FlashcardLanguageController {
         return ResponseEntity.noContent().build();
     }
 }
+
+
+

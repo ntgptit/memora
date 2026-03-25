@@ -2,19 +2,22 @@ package com.memora.app.service;
 
 import java.util.List;
 
-import com.memora.app.dto.CreateFlashcardLanguageRequest;
-import com.memora.app.dto.FlashcardLanguageDto;
-import com.memora.app.dto.UpdateFlashcardLanguageRequest;
+import com.memora.app.dto.request.flashcard_language.CreateFlashcardLanguageRequest;
+import com.memora.app.dto.response.flashcard_language.FlashcardLanguageResponse;
+import com.memora.app.dto.request.flashcard_language.UpdateFlashcardLanguageRequest;
 
 public interface FlashcardLanguageService {
 
-    FlashcardLanguageDto createFlashcardLanguage(CreateFlashcardLanguageRequest request);
+    FlashcardLanguageResponse createFlashcardLanguage(CreateFlashcardLanguageRequest request);
 
-    FlashcardLanguageDto getFlashcardLanguage(Long flashcardLanguageId);
+    FlashcardLanguageResponse getFlashcardLanguage(Long flashcardLanguageId);
 
-    List<FlashcardLanguageDto> getFlashcardLanguages(Long flashcardId);
+    List<FlashcardLanguageResponse> getFlashcardLanguages(Long flashcardId);
 
-    FlashcardLanguageDto updateFlashcardLanguage(Long flashcardLanguageId, UpdateFlashcardLanguageRequest request);
+    FlashcardLanguageResponse updateFlashcardLanguage(Long flashcardLanguageId, UpdateFlashcardLanguageRequest request);
 
     void deleteFlashcardLanguage(Long flashcardLanguageId);
 }
+
+
+

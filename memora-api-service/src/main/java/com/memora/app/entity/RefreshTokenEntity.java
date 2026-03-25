@@ -1,8 +1,9 @@
 package com.memora.app.entity;
 
+import com.memora.app.entity.common.AuditableEntity;
 import java.time.OffsetDateTime;
 
-import com.memora.app.enums.TokenStatus;
+import com.memora.app.enums.refresh_token.TokenStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,13 +1,13 @@
 package com.memora.app.service;
 
-import com.memora.app.dto.CreateFlashcardRequest;
-import com.memora.app.dto.FlashcardDto;
-import com.memora.app.dto.FlashcardPageResponse;
-import com.memora.app.dto.UpdateFlashcardRequest;
+import com.memora.app.dto.request.flashcard.CreateFlashcardRequest;
+import com.memora.app.dto.response.flashcard.FlashcardResponse;
+import com.memora.app.dto.response.flashcard.FlashcardPageResponse;
+import com.memora.app.dto.request.flashcard.UpdateFlashcardRequest;
 
 public interface FlashcardService {
 
-    FlashcardDto createFlashcard(Long deckId, CreateFlashcardRequest request);
+    FlashcardResponse createFlashcard(Long deckId, CreateFlashcardRequest request);
 
     FlashcardPageResponse getFlashcards(
         Long deckId,
@@ -18,7 +18,10 @@ public interface FlashcardService {
         Integer size
     );
 
-    FlashcardDto updateFlashcard(Long deckId, Long flashcardId, UpdateFlashcardRequest request);
+    FlashcardResponse updateFlashcard(Long deckId, Long flashcardId, UpdateFlashcardRequest request);
 
     void deleteFlashcard(Long deckId, Long flashcardId);
 }
+
+
+

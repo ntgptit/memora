@@ -2,22 +2,25 @@ package com.memora.app.service;
 
 import java.util.List;
 
-import com.memora.app.dto.CreateDeckReviewSettingsRequest;
-import com.memora.app.dto.DeckReviewSettingsDto;
-import com.memora.app.dto.UpdateDeckReviewSettingsRequest;
+import com.memora.app.dto.request.deck_review_settings.CreateDeckReviewSettingsRequest;
+import com.memora.app.dto.response.deck_review_settings.DeckReviewSettingsResponse;
+import com.memora.app.dto.request.deck_review_settings.UpdateDeckReviewSettingsRequest;
 
 public interface DeckReviewSettingsService {
 
-    DeckReviewSettingsDto createDeckReviewSettings(CreateDeckReviewSettingsRequest request);
+    DeckReviewSettingsResponse createDeckReviewSettings(CreateDeckReviewSettingsRequest request);
 
-    DeckReviewSettingsDto getDeckReviewSettingsById(Long deckReviewSettingsId);
+    DeckReviewSettingsResponse getDeckReviewSettingsById(Long deckReviewSettingsId);
 
-    List<DeckReviewSettingsDto> getDeckReviewSettingsList(Long deckId);
+    List<DeckReviewSettingsResponse> getDeckReviewSettingsList(Long deckId);
 
-    DeckReviewSettingsDto updateDeckReviewSettings(
+    DeckReviewSettingsResponse updateDeckReviewSettings(
         Long deckReviewSettingsId,
         UpdateDeckReviewSettingsRequest request
     );
 
     void deleteDeckReviewSettings(Long deckReviewSettingsId);
 }
+
+
+

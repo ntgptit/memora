@@ -3,9 +3,9 @@ package com.memora.app.service.impl;
 import java.util.Locale;
 
 import com.memora.app.constant.ApiMessageKey;
-import com.memora.app.dto.FolderDto;
+import com.memora.app.dto.response.folder.FolderResponse;
 import com.memora.app.entity.FolderEntity;
-import com.memora.app.enums.FolderSortField;
+import com.memora.app.enums.folder.FolderSortField;
 import com.memora.app.mapper.FolderMapper;
 import com.memora.app.repository.FolderRepository;
 import com.memora.app.util.FolderColorResolver;
@@ -24,9 +24,13 @@ final class FolderQuerySupport {
     private FolderQuerySupport() {
     }
 
-    static FolderDto toResponse(final FolderEntity entity, final FolderRepository folderRepository) {
+    static FolderResponse toResponse(
+        final FolderEntity entity,
+        final FolderRepository folderRepository,
+        final FolderMapper folderMapper
+    ) {
         // Map persistence fields to the API response and add derived values.
-        return FolderMapper.toDto(
+        return folderMapper.toDto(
             entity,
             FolderColorResolver.resolve(entity.getId()),
             folderRepository.countByParentIdAndDeletedAtIsNull(entity.getId())
@@ -97,3 +101,6 @@ final class FolderQuerySupport {
         return size == null ? DEFAULT_SIZE : size;
     }
 }
+
+
+

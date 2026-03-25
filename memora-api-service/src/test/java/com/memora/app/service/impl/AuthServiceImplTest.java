@@ -11,14 +11,16 @@ import static org.mockito.Mockito.when;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
-import com.memora.app.dto.AuthLoginRequest;
-import com.memora.app.dto.AuthRefreshRequest;
-import com.memora.app.dto.AuthRegisterRequest;
+import com.memora.app.dto.request.auth.AuthLoginRequest;
+import com.memora.app.dto.request.auth.AuthRefreshRequest;
+import com.memora.app.dto.request.auth.AuthRegisterRequest;
+import com.memora.app.dto.response.auth.AuthUserResponse;
 import com.memora.app.entity.RefreshTokenEntity;
 import com.memora.app.entity.UserAccountEntity;
-import com.memora.app.enums.AccountStatus;
-import com.memora.app.enums.TokenStatus;
+import com.memora.app.enums.user_account.AccountStatus;
+import com.memora.app.enums.refresh_token.TokenStatus;
 import com.memora.app.exception.UnauthorizedException;
+import com.memora.app.mapper.AuthUserMapper;
 import com.memora.app.properties.SecurityProperties;
 import com.memora.app.repository.RefreshTokenRepository;
 import com.memora.app.repository.UserAccountRepository;
@@ -54,6 +56,9 @@ class AuthServiceImplTest {
     @Mock
     private UserAccountRepository userAccountRepository;
 
+    @Mock
+    private AuthUserMapper authUserMapper;
+
     @InjectMocks
     private AuthServiceImpl authService;
 
@@ -72,6 +77,15 @@ class AuthServiceImplTest {
         when(jwtAccessTokenService.generateToken(savedUser)).thenReturn("access-token");
         when(jwtAccessTokenService.expiresInSeconds()).thenReturn(28800L);
         when(securityProperties.refreshTokenExpiresInSeconds()).thenReturn(2592000L);
+        when(authUserMapper.toDto(any(UserAccountEntity.class))).thenAnswer(invocation -> {
+            final UserAccountEntity entity = invocation.getArgument(0);
+            return new AuthUserResponse(
+                entity.getId(),
+                entity.getUsername(),
+                entity.getEmail(),
+                entity.getAccountStatus()
+            );
+        });
 
         final var response = authService.register(
             new AuthRegisterRequest("demo", "demo@memora.local", "demo12345")
@@ -125,6 +139,15 @@ class AuthServiceImplTest {
         when(jwtAccessTokenService.generateToken(savedUser)).thenReturn("refreshed-access-token");
         when(jwtAccessTokenService.expiresInSeconds()).thenReturn(28800L);
         when(securityProperties.refreshTokenExpiresInSeconds()).thenReturn(2592000L);
+        when(authUserMapper.toDto(any(UserAccountEntity.class))).thenAnswer(invocation -> {
+            final UserAccountEntity entity = invocation.getArgument(0);
+            return new AuthUserResponse(
+                entity.getId(),
+                entity.getUsername(),
+                entity.getEmail(),
+                entity.getAccountStatus()
+            );
+        });
 
         final var response = authService.refresh(new AuthRefreshRequest("refresh-token"));
 
@@ -136,3 +159,5 @@ class AuthServiceImplTest {
         assertThat(response.authenticated()).isTrue();
     }
 }
+
+

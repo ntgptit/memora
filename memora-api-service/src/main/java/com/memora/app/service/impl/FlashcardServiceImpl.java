@@ -4,13 +4,14 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 
 import com.memora.app.constant.ApiMessageKey;
-import com.memora.app.dto.CreateFlashcardRequest;
-import com.memora.app.dto.FlashcardDto;
-import com.memora.app.dto.FlashcardPageResponse;
-import com.memora.app.dto.UpdateFlashcardRequest;
+import com.memora.app.dto.request.flashcard.CreateFlashcardRequest;
+import com.memora.app.dto.response.flashcard.FlashcardResponse;
+import com.memora.app.dto.response.flashcard.FlashcardPageResponse;
+import com.memora.app.dto.request.flashcard.UpdateFlashcardRequest;
 import com.memora.app.entity.DeckEntity;
 import com.memora.app.entity.FlashcardEntity;
 import com.memora.app.exception.ResourceNotFoundException;
+import com.memora.app.mapper.FlashcardMapper;
 import com.memora.app.repository.DeckRepository;
 import com.memora.app.repository.FlashcardLanguageRepository;
 import com.memora.app.repository.FlashcardRepository;
@@ -35,10 +36,11 @@ public class FlashcardServiceImpl implements FlashcardService {
     private final FlashcardLanguageRepository flashcardLanguageRepository;
     private final FlashcardRepository flashcardRepository;
     private final CurrentAuthenticatedUserService currentAuthenticatedUserService;
+    private final FlashcardMapper flashcardMapper;
 
     @Override
     @Transactional
-    public FlashcardDto createFlashcard(final Long deckId, final CreateFlashcardRequest request) {
+    public FlashcardResponse createFlashcard(final Long deckId, final CreateFlashcardRequest request) {
         final DeckEntity deck = getActiveDeck(deckId);
 
         final FlashcardEntity entity = new FlashcardEntity();
@@ -62,7 +64,7 @@ public class FlashcardServiceImpl implements FlashcardService {
             flashcardLanguageRepository
         );
         // Return the created flashcard snapshot after side-language synchronization.
-        return FlashcardQuerySupport.toResponse(saved, flashcardLanguageRepository);
+        return FlashcardQuerySupport.toResponse(saved, flashcardLanguageRepository, flashcardMapper);
     }
 
     @Override
@@ -87,8 +89,8 @@ public class FlashcardServiceImpl implements FlashcardService {
             .and(FlashcardQuerySupport.hasSearchQuery(searchQuery));
 
         final Page<FlashcardEntity> flashcards = flashcardRepository.findAll(specification, pageable);
-        final Page<FlashcardDto> responsePage = flashcards.map(
-            entity -> FlashcardQuerySupport.toResponse(entity, flashcardLanguageRepository)
+        final Page<FlashcardResponse> responsePage = flashcards.map(
+            entity -> FlashcardQuerySupport.toResponse(entity, flashcardLanguageRepository, flashcardMapper)
         );
         // Return the paged response payload expected by the contract.
         return new FlashcardPageResponse(
@@ -104,7 +106,7 @@ public class FlashcardServiceImpl implements FlashcardService {
 
     @Override
     @Transactional
-    public FlashcardDto updateFlashcard(
+    public FlashcardResponse updateFlashcard(
         final Long deckId,
         final Long flashcardId,
         final UpdateFlashcardRequest request
@@ -129,7 +131,7 @@ public class FlashcardServiceImpl implements FlashcardService {
             flashcardLanguageRepository
         );
         // Return the updated flashcard snapshot after side-language synchronization.
-        return FlashcardQuerySupport.toResponse(saved, flashcardLanguageRepository);
+        return FlashcardQuerySupport.toResponse(saved, flashcardLanguageRepository, flashcardMapper);
     }
 
     @Override
@@ -163,3 +165,6 @@ public class FlashcardServiceImpl implements FlashcardService {
     }
 
 }
+
+
+

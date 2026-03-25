@@ -6,10 +6,11 @@ import static org.mockito.Mockito.when;
 import java.util.Optional;
 
 import com.memora.app.constant.ApiMessageKey;
-import com.memora.app.dto.CreateDeckRequest;
+import com.memora.app.dto.request.deck.CreateDeckRequest;
 import com.memora.app.entity.FolderEntity;
-import com.memora.app.enums.AccountStatus;
+import com.memora.app.enums.user_account.AccountStatus;
 import com.memora.app.exception.ConflictException;
+import com.memora.app.mapper.DeckMapper;
 import com.memora.app.repository.DeckRepository;
 import com.memora.app.repository.DeckReviewSettingsRepository;
 import com.memora.app.repository.FlashcardLanguageRepository;
@@ -45,6 +46,9 @@ class DeckServiceImplTest {
     @Mock
     private CurrentAuthenticatedUserService currentAuthenticatedUserService;
 
+    @Mock
+    private DeckMapper deckMapper;
+
     @InjectMocks
     private DeckServiceImpl deckService;
 
@@ -64,3 +68,5 @@ class DeckServiceImplTest {
             .hasMessageContaining(ApiMessageKey.FOLDER_NOT_LEAF_FOR_DECK);
     }
 }
+
+

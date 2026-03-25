@@ -1,9 +1,10 @@
 package com.memora.app.entity;
 
+import com.memora.app.entity.common.AuditableEntity;
 import java.time.OffsetDateTime;
 
-import com.memora.app.enums.ReviewOutcome;
-import com.memora.app.enums.ReviewStateStatus;
+import com.memora.app.enums.review.ReviewOutcome;
+import com.memora.app.enums.review.ReviewStateStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

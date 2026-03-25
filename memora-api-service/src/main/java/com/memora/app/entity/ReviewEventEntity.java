@@ -1,11 +1,12 @@
 package com.memora.app.entity;
 
+import com.memora.app.entity.common.CreatedOnlyEntity;
 import java.time.OffsetDateTime;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.memora.app.enums.ReviewEventType;
-import com.memora.app.enums.ReviewOutcome;
-import com.memora.app.enums.ReviewStateStatus;
+import com.memora.app.enums.review.ReviewEventType;
+import com.memora.app.enums.review.ReviewOutcome;
+import com.memora.app.enums.review.ReviewStateStatus;
 
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;

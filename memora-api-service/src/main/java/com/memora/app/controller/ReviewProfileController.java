@@ -2,9 +2,9 @@ package com.memora.app.controller;
 
 import java.util.List;
 
-import com.memora.app.dto.CreateReviewProfileRequest;
-import com.memora.app.dto.ReviewProfileDto;
-import com.memora.app.dto.UpdateReviewProfileRequest;
+import com.memora.app.dto.request.review_profile.CreateReviewProfileRequest;
+import com.memora.app.dto.response.review_profile.ReviewProfileResponse;
+import com.memora.app.dto.request.review_profile.UpdateReviewProfileRequest;
 import com.memora.app.service.ReviewProfileService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,7 +51,7 @@ public class ReviewProfileController {
         @ApiResponse(responseCode = "409", description = "Review profile name already exists")
     })
     @PostMapping
-    public ResponseEntity<ReviewProfileDto> createReviewProfile(
+    public ResponseEntity<ReviewProfileResponse> createReviewProfile(
         @Valid @RequestBody final CreateReviewProfileRequest request
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(reviewProfileService.createReviewProfile(request));
@@ -69,7 +69,7 @@ public class ReviewProfileController {
         @ApiResponse(responseCode = "404", description = "Review profile not found")
     })
     @GetMapping("/{reviewProfileId}")
-    public ResponseEntity<ReviewProfileDto> getReviewProfile(@PathVariable final Long reviewProfileId) {
+    public ResponseEntity<ReviewProfileResponse> getReviewProfile(@PathVariable final Long reviewProfileId) {
         return ResponseEntity.ok(reviewProfileService.getReviewProfile(reviewProfileId));
     }
 
@@ -85,7 +85,7 @@ public class ReviewProfileController {
         @ApiResponse(responseCode = "200", description = "Review profiles loaded")
     })
     @GetMapping
-    public ResponseEntity<List<ReviewProfileDto>> getReviewProfiles(
+    public ResponseEntity<List<ReviewProfileResponse>> getReviewProfiles(
         @RequestParam(required = false) final Long ownerUserId,
         @RequestParam(required = false) final Boolean systemProfile
     ) {
@@ -107,7 +107,7 @@ public class ReviewProfileController {
         @ApiResponse(responseCode = "409", description = "System profile cannot be changed or name already exists")
     })
     @PutMapping("/{reviewProfileId}")
-    public ResponseEntity<ReviewProfileDto> updateReviewProfile(
+    public ResponseEntity<ReviewProfileResponse> updateReviewProfile(
         @PathVariable final Long reviewProfileId,
         @Valid @RequestBody final UpdateReviewProfileRequest request
     ) {
@@ -132,3 +132,6 @@ public class ReviewProfileController {
         return ResponseEntity.noContent().build();
     }
 }
+
+
+

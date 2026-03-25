@@ -1,42 +1,20 @@
 package com.memora.app.mapper;
 
-import com.memora.app.dto.FlashcardLanguageDto;
+import com.memora.app.dto.response.flashcard_language.FlashcardLanguageResponse;
 import com.memora.app.entity.FlashcardLanguageEntity;
 
-import lombok.experimental.UtilityClass;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 
-@UtilityClass
-public class FlashcardLanguageMapper {
+@Mapper(
+    componentModel = MappingConstants.ComponentModel.SPRING,
+    unmappedSourcePolicy = ReportingPolicy.IGNORE,
+    unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
+public interface FlashcardLanguageMapper {
 
-    public FlashcardLanguageDto toDto(final FlashcardLanguageEntity entity) {
-        if (entity == null) {
-            return null;
-        }
-        return new FlashcardLanguageDto(
-            entity.getId(),
-            entity.getFlashcardId(),
-            entity.getSide(),
-            entity.getLanguageCode(),
-            entity.getPronunciation(),
-            entity.getCreatedAt(),
-            entity.getUpdatedAt(),
-            entity.getVersion()
-        );
-    }
+    FlashcardLanguageResponse toDto(FlashcardLanguageEntity entity);
 
-    public FlashcardLanguageEntity toEntity(final FlashcardLanguageDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        final FlashcardLanguageEntity entity = new FlashcardLanguageEntity();
-        entity.setId(dto.id());
-        entity.setFlashcardId(dto.flashcardId());
-        entity.setSide(dto.side());
-        entity.setLanguageCode(dto.languageCode());
-        entity.setPronunciation(dto.pronunciation());
-        entity.setCreatedAt(dto.createdAt());
-        entity.setUpdatedAt(dto.updatedAt());
-        entity.setVersion(dto.version());
-        return entity;
-    }
+    FlashcardLanguageEntity toEntity(FlashcardLanguageResponse dto);
 }

@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Locale;
 
 import com.memora.app.constant.ApiMessageKey;
-import com.memora.app.dto.FlashcardDto;
+import com.memora.app.dto.response.flashcard.FlashcardResponse;
 import com.memora.app.entity.FlashcardEntity;
 import com.memora.app.entity.FlashcardLanguageEntity;
-import com.memora.app.enums.FlashcardSide;
-import com.memora.app.enums.FlashcardSortField;
+import com.memora.app.enums.flashcard.FlashcardSide;
+import com.memora.app.enums.flashcard.FlashcardSortField;
 import com.memora.app.mapper.FlashcardMapper;
 import com.memora.app.repository.FlashcardLanguageRepository;
 import com.memora.app.util.ServiceValidationUtils;
@@ -27,9 +27,10 @@ final class FlashcardQuerySupport {
     private FlashcardQuerySupport() {
     }
 
-    static FlashcardDto toResponse(
+    static FlashcardResponse toResponse(
         final FlashcardEntity entity,
-        final FlashcardLanguageRepository flashcardLanguageRepository
+        final FlashcardLanguageRepository flashcardLanguageRepository,
+        final FlashcardMapper flashcardMapper
     ) {
         final List<FlashcardLanguageEntity> languageEntities =
             flashcardLanguageRepository.findAllByFlashcardIdOrderByIdAsc(entity.getId());
@@ -40,7 +41,7 @@ final class FlashcardQuerySupport {
             : backLanguage == null ? null : backLanguage.getPronunciation();
 
         // Convert the persistence row into the contract response payload.
-        return FlashcardMapper.toDto(
+        return flashcardMapper.toDto(
             entity,
             frontLanguage == null ? null : frontLanguage.getLanguageCode(),
             backLanguage == null ? null : backLanguage.getLanguageCode(),
@@ -213,3 +214,6 @@ final class FlashcardQuerySupport {
         }
     }
 }
+
+
+

@@ -2,19 +2,22 @@ package com.memora.app.service;
 
 import java.util.List;
 
-import com.memora.app.dto.CreateReviewProfileBoxRequest;
-import com.memora.app.dto.ReviewProfileBoxDto;
-import com.memora.app.dto.UpdateReviewProfileBoxRequest;
+import com.memora.app.dto.request.review_profile_box.CreateReviewProfileBoxRequest;
+import com.memora.app.dto.response.review_profile_box.ReviewProfileBoxResponse;
+import com.memora.app.dto.request.review_profile_box.UpdateReviewProfileBoxRequest;
 
 public interface ReviewProfileBoxService {
 
-    ReviewProfileBoxDto createReviewProfileBox(CreateReviewProfileBoxRequest request);
+    ReviewProfileBoxResponse createReviewProfileBox(CreateReviewProfileBoxRequest request);
 
-    ReviewProfileBoxDto getReviewProfileBox(Long reviewProfileBoxId);
+    ReviewProfileBoxResponse getReviewProfileBox(Long reviewProfileBoxId);
 
-    List<ReviewProfileBoxDto> getReviewProfileBoxes(Long reviewProfileId);
+    List<ReviewProfileBoxResponse> getReviewProfileBoxes(Long reviewProfileId);
 
-    ReviewProfileBoxDto updateReviewProfileBox(Long reviewProfileBoxId, UpdateReviewProfileBoxRequest request);
+    ReviewProfileBoxResponse updateReviewProfileBox(Long reviewProfileBoxId, UpdateReviewProfileBoxRequest request);
 
     void deleteReviewProfileBox(Long reviewProfileBoxId);
 }
+
+
+

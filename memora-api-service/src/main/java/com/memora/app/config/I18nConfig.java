@@ -13,7 +13,7 @@ import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 public class I18nConfig {
 
     @Bean
-    public LocaleResolver localeResolver(final I18nProperties i18nProperties) {
+    LocaleResolver localeResolver(final I18nProperties i18nProperties) {
         final AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
         localeResolver.setDefaultLocale(i18nProperties.defaultLocale());
         localeResolver.setSupportedLocales(i18nProperties.supportedLocales());

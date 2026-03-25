@@ -1,5 +1,6 @@
 package com.memora.app.entity;
 
+import com.memora.app.entity.common.AuditableEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

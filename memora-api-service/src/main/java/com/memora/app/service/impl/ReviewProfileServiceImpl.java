@@ -3,9 +3,9 @@ package com.memora.app.service.impl;
 import java.util.List;
 
 import com.memora.app.constant.ApiMessageKey;
-import com.memora.app.dto.CreateReviewProfileRequest;
-import com.memora.app.dto.ReviewProfileDto;
-import com.memora.app.dto.UpdateReviewProfileRequest;
+import com.memora.app.dto.request.review_profile.CreateReviewProfileRequest;
+import com.memora.app.dto.response.review_profile.ReviewProfileResponse;
+import com.memora.app.dto.request.review_profile.UpdateReviewProfileRequest;
 import com.memora.app.entity.ReviewProfileEntity;
 import com.memora.app.entity.UserAccountEntity;
 import com.memora.app.exception.ConflictException;
@@ -27,10 +27,11 @@ public class ReviewProfileServiceImpl implements ReviewProfileService {
 
     private final ReviewProfileRepository reviewProfileRepository;
     private final UserAccountRepository userAccountRepository;
+    private final ReviewProfileMapper reviewProfileMapper;
 
     @Override
     @Transactional
-    public ReviewProfileDto createReviewProfile(final CreateReviewProfileRequest request) {
+    public ReviewProfileResponse createReviewProfile(final CreateReviewProfileRequest request) {
         final UserAccountEntity ownerUser = getActiveUserAccount(request.ownerUserId());
         final String name = ServiceValidationUtils.normalizeRequiredText(request.name(), ApiMessageKey.NAME_REQUIRED);
         assertProfileNameAvailable(ownerUser.getId(), name, null);
@@ -48,32 +49,32 @@ public class ReviewProfileServiceImpl implements ReviewProfileService {
         entity.setSystemProfile(false);
         entity.setDefaultProfile(request.defaultProfile());
         // Return the persisted custom review profile.
-        return ReviewProfileMapper.toDto(reviewProfileRepository.save(entity));
+        return reviewProfileMapper.toDto(reviewProfileRepository.save(entity));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public ReviewProfileDto getReviewProfile(final Long reviewProfileId) {
+    public ReviewProfileResponse getReviewProfile(final Long reviewProfileId) {
         // Return the requested review profile.
-        return ReviewProfileMapper.toDto(getReviewProfileEntity(reviewProfileId));
+        return reviewProfileMapper.toDto(getReviewProfileEntity(reviewProfileId));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ReviewProfileDto> getReviewProfiles(final Long ownerUserId, final Boolean systemProfile) {
+    public List<ReviewProfileResponse> getReviewProfiles(final Long ownerUserId, final Boolean systemProfile) {
         // Return review profiles after applying optional owner and system filters in memory.
         return reviewProfileRepository.findAllByOrderByIdAsc()
             // Convert persisted profiles into DTOs after the filter chain completes.
             .stream()
             .filter(reviewProfile -> ownerUserId == null || ownerUserId.equals(reviewProfile.getOwnerUserId()))
             .filter(reviewProfile -> systemProfile == null || systemProfile.equals(reviewProfile.isSystemProfile()))
-            .map(ReviewProfileMapper::toDto)
+            .map(reviewProfileMapper::toDto)
             .toList();
     }
 
     @Override
     @Transactional
-    public ReviewProfileDto updateReviewProfile(
+    public ReviewProfileResponse updateReviewProfile(
         final Long reviewProfileId,
         final UpdateReviewProfileRequest request
     ) {
@@ -91,7 +92,7 @@ public class ReviewProfileServiceImpl implements ReviewProfileService {
         entity.setAlgorithmType(request.algorithmType());
         entity.setDefaultProfile(request.defaultProfile());
         // Return the updated custom review profile.
-        return ReviewProfileMapper.toDto(reviewProfileRepository.save(entity));
+        return reviewProfileMapper.toDto(reviewProfileRepository.save(entity));
     }
 
     @Override
@@ -151,3 +152,6 @@ public class ReviewProfileServiceImpl implements ReviewProfileService {
             });
     }
 }
+
+
+

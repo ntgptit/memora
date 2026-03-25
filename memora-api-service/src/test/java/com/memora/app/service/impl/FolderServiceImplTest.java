@@ -3,13 +3,17 @@ package com.memora.app.service.impl;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
-import com.memora.app.dto.CreateFolderRequest;
+import com.memora.app.dto.common.AuditDto;
+import com.memora.app.dto.request.folder.CreateFolderRequest;
+import com.memora.app.dto.response.folder.FolderResponse;
 import com.memora.app.entity.FolderEntity;
+import com.memora.app.mapper.FolderMapper;
 import com.memora.app.repository.DeckRepository;
 import com.memora.app.repository.DeckReviewSettingsRepository;
 import com.memora.app.repository.FlashcardLanguageRepository;
@@ -45,6 +49,9 @@ class FolderServiceImplTest {
     @Mock
     private CurrentAuthenticatedUserService currentAuthenticatedUserService;
 
+    @Mock
+    private FolderMapper folderMapper;
+
     @InjectMocks
     private FolderServiceImpl folderService;
 
@@ -63,6 +70,24 @@ class FolderServiceImplTest {
             return entity;
         });
         when(folderRepository.countByParentIdAndDeletedAtIsNull(10L)).thenReturn(0L);
+        when(folderMapper.toDto(any(FolderEntity.class), anyString(), anyLong())).thenAnswer(invocation -> {
+            final FolderEntity entity = invocation.getArgument(0);
+            return new FolderResponse(
+                entity.getId(),
+                entity.getName(),
+                entity.getDescription(),
+                invocation.getArgument(1),
+                entity.getParentId(),
+                entity.getDepth(),
+                invocation.getArgument(2),
+                new AuditDto(
+                    entity.getCreatedAt(),
+                    entity.getUpdatedAt(),
+                    entity.getDeletedAt(),
+                    entity.getVersion()
+                )
+            );
+        });
 
         final var response = folderService.createFolder(new CreateFolderRequest("Root", "Main folder", null));
 
@@ -73,3 +98,5 @@ class FolderServiceImplTest {
         assertThat(response.audit()).isNotNull();
     }
 }
+
+

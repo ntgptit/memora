@@ -1,9 +1,9 @@
 package com.memora.app.controller;
 
-import com.memora.app.dto.CreateFlashcardRequest;
-import com.memora.app.dto.FlashcardDto;
-import com.memora.app.dto.FlashcardPageResponse;
-import com.memora.app.dto.UpdateFlashcardRequest;
+import com.memora.app.dto.request.flashcard.CreateFlashcardRequest;
+import com.memora.app.dto.response.flashcard.FlashcardResponse;
+import com.memora.app.dto.response.flashcard.FlashcardPageResponse;
+import com.memora.app.dto.request.flashcard.UpdateFlashcardRequest;
 import com.memora.app.service.FlashcardService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,7 +50,7 @@ public class FlashcardController {
         @ApiResponse(responseCode = "404", description = "Deck not found")
     })
     @PostMapping
-    public ResponseEntity<FlashcardDto> createFlashcard(
+    public ResponseEntity<FlashcardResponse> createFlashcard(
         @PathVariable final Long deckId,
         @Valid @RequestBody final CreateFlashcardRequest request
     ) {
@@ -100,7 +100,7 @@ public class FlashcardController {
         @ApiResponse(responseCode = "404", description = "Flashcard or deck not found")
     })
     @PutMapping("/{flashcardId}")
-    public ResponseEntity<FlashcardDto> updateFlashcard(
+    public ResponseEntity<FlashcardResponse> updateFlashcard(
         @PathVariable final Long deckId,
         @PathVariable final Long flashcardId,
         @Valid @RequestBody final UpdateFlashcardRequest request
@@ -129,3 +129,6 @@ public class FlashcardController {
         return ResponseEntity.noContent().build();
     }
 }
+
+
+

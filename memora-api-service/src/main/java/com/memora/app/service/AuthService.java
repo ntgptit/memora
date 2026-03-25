@@ -1,11 +1,11 @@
 package com.memora.app.service;
 
-import com.memora.app.dto.AuthLoginRequest;
-import com.memora.app.dto.AuthLogoutRequest;
-import com.memora.app.dto.AuthRefreshRequest;
-import com.memora.app.dto.AuthRegisterRequest;
-import com.memora.app.dto.AuthResponse;
-import com.memora.app.dto.AuthUserDto;
+import com.memora.app.dto.request.auth.AuthLoginRequest;
+import com.memora.app.dto.request.auth.AuthLogoutRequest;
+import com.memora.app.dto.request.auth.AuthRefreshRequest;
+import com.memora.app.dto.request.auth.AuthRegisterRequest;
+import com.memora.app.dto.response.auth.AuthResponse;
+import com.memora.app.dto.response.auth.AuthUserResponse;
 
 public interface AuthService {
 
@@ -17,5 +17,8 @@ public interface AuthService {
 
     void logout(AuthLogoutRequest request);
 
-    AuthUserDto getCurrentUser();
+    AuthUserResponse getCurrentUser();
 }
+
+
+

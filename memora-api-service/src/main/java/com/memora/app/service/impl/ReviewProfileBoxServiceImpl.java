@@ -3,9 +3,9 @@ package com.memora.app.service.impl;
 import java.util.List;
 
 import com.memora.app.constant.ApiMessageKey;
-import com.memora.app.dto.CreateReviewProfileBoxRequest;
-import com.memora.app.dto.ReviewProfileBoxDto;
-import com.memora.app.dto.UpdateReviewProfileBoxRequest;
+import com.memora.app.dto.request.review_profile_box.CreateReviewProfileBoxRequest;
+import com.memora.app.dto.response.review_profile_box.ReviewProfileBoxResponse;
+import com.memora.app.dto.request.review_profile_box.UpdateReviewProfileBoxRequest;
 import com.memora.app.entity.ReviewProfileBoxEntity;
 import com.memora.app.entity.ReviewProfileEntity;
 import com.memora.app.exception.ConflictException;
@@ -27,10 +27,11 @@ public class ReviewProfileBoxServiceImpl implements ReviewProfileBoxService {
 
     private final ReviewProfileBoxRepository reviewProfileBoxRepository;
     private final ReviewProfileRepository reviewProfileRepository;
+    private final ReviewProfileBoxMapper reviewProfileBoxMapper;
 
     @Override
     @Transactional
-    public ReviewProfileBoxDto createReviewProfileBox(final CreateReviewProfileBoxRequest request) {
+    public ReviewProfileBoxResponse createReviewProfileBox(final CreateReviewProfileBoxRequest request) {
         final ReviewProfileEntity reviewProfile = getMutableReviewProfile(request.reviewProfileId());
         assertBoxNumberAvailable(reviewProfile.getId(), request.boxNumber(), null);
 
@@ -41,19 +42,19 @@ public class ReviewProfileBoxServiceImpl implements ReviewProfileBoxService {
         entity.setIncorrectBoxNumber(request.incorrectBoxNumber());
         entity.setCorrectBoxNumber(request.correctBoxNumber());
         // Return the persisted review profile box rule.
-        return ReviewProfileBoxMapper.toDto(reviewProfileBoxRepository.save(entity));
+        return reviewProfileBoxMapper.toDto(reviewProfileBoxRepository.save(entity));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public ReviewProfileBoxDto getReviewProfileBox(final Long reviewProfileBoxId) {
+    public ReviewProfileBoxResponse getReviewProfileBox(final Long reviewProfileBoxId) {
         // Return the requested review profile box rule.
-        return ReviewProfileBoxMapper.toDto(getReviewProfileBoxEntity(reviewProfileBoxId));
+        return reviewProfileBoxMapper.toDto(getReviewProfileBoxEntity(reviewProfileBoxId));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ReviewProfileBoxDto> getReviewProfileBoxes(final Long reviewProfileId) {
+    public List<ReviewProfileBoxResponse> getReviewProfileBoxes(final Long reviewProfileId) {
         // Narrow the query when the caller requests boxes for one review profile.
         if (reviewProfileId != null) {
             // Return box rules that belong to the requested profile.
@@ -62,7 +63,7 @@ public class ReviewProfileBoxServiceImpl implements ReviewProfileBoxService {
                 )
                 // Convert persisted box rules into DTOs for the API layer.
                 .stream()
-                .map(ReviewProfileBoxMapper::toDto)
+                .map(reviewProfileBoxMapper::toDto)
                 .toList();
         }
 
@@ -70,13 +71,13 @@ public class ReviewProfileBoxServiceImpl implements ReviewProfileBoxService {
         return reviewProfileBoxRepository.findAllByOrderByIdAsc()
             // Convert persisted box rules into DTOs for the API layer.
             .stream()
-            .map(ReviewProfileBoxMapper::toDto)
+            .map(reviewProfileBoxMapper::toDto)
             .toList();
     }
 
     @Override
     @Transactional
-    public ReviewProfileBoxDto updateReviewProfileBox(
+    public ReviewProfileBoxResponse updateReviewProfileBox(
         final Long reviewProfileBoxId,
         final UpdateReviewProfileBoxRequest request
     ) {
@@ -90,7 +91,7 @@ public class ReviewProfileBoxServiceImpl implements ReviewProfileBoxService {
         entity.setIncorrectBoxNumber(request.incorrectBoxNumber());
         entity.setCorrectBoxNumber(request.correctBoxNumber());
         // Return the updated review profile box rule.
-        return ReviewProfileBoxMapper.toDto(reviewProfileBoxRepository.save(entity));
+        return reviewProfileBoxMapper.toDto(reviewProfileBoxRepository.save(entity));
     }
 
     @Override
@@ -148,3 +149,6 @@ public class ReviewProfileBoxServiceImpl implements ReviewProfileBoxService {
         }
     }
 }
+
+
+

@@ -1,41 +1,24 @@
 package com.memora.app.mapper;
 
-import com.memora.app.dto.DeckDto;
+import com.memora.app.dto.response.deck.DeckResponse;
 import com.memora.app.entity.DeckEntity;
 
-import lombok.experimental.UtilityClass;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 
-@UtilityClass
-public class DeckMapper {
+@Mapper(
+    componentModel = MappingConstants.ComponentModel.SPRING,
+    uses = AuditMapper.class,
+    unmappedSourcePolicy = ReportingPolicy.IGNORE,
+    unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
+public interface DeckMapper {
 
-    public DeckDto toDto(final DeckEntity entity, final Long flashcardCount) {
-        if (entity == null) {
-            return null;
-        }
-        return new DeckDto(
-            entity.getId(),
-            entity.getFolderId(),
-            entity.getName(),
-            entity.getDescription(),
-            flashcardCount,
-            new com.memora.app.dto.AuditDto(
-                entity.getCreatedAt(),
-                entity.getUpdatedAt(),
-                entity.getDeletedAt(),
-                entity.getVersion()
-            )
-        );
-    }
+    @Mapping(target = "flashcardCount", source = "flashcardCount")
+    @Mapping(target = "audit", source = "entity")
+    DeckResponse toDto(DeckEntity entity, Long flashcardCount);
 
-    public DeckEntity toEntity(final DeckDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        final DeckEntity entity = new DeckEntity();
-        entity.setId(dto.id());
-        entity.setFolderId(dto.folderId());
-        entity.setName(dto.name());
-        entity.setDescription(dto.description());
-        return entity;
-    }
+    DeckEntity toEntity(DeckResponse dto);
 }

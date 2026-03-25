@@ -12,16 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.memora.app.dto.CreateFlashcardRequest;
-import com.memora.app.dto.FlashcardDto;
-import com.memora.app.dto.FlashcardPageResponse;
-import com.memora.app.dto.UpdateFlashcardRequest;
+import com.memora.app.dto.common.AuditDto;
+import com.memora.app.dto.request.flashcard.CreateFlashcardRequest;
+import com.memora.app.dto.response.flashcard.FlashcardResponse;
+import com.memora.app.dto.response.flashcard.FlashcardPageResponse;
+import com.memora.app.dto.request.flashcard.UpdateFlashcardRequest;
 import com.memora.app.entity.DeckEntity;
 import com.memora.app.entity.FlashcardEntity;
 import com.memora.app.entity.FlashcardLanguageEntity;
-import com.memora.app.enums.AccountStatus;
-import com.memora.app.enums.FlashcardSide;
+import com.memora.app.enums.user_account.AccountStatus;
+import com.memora.app.enums.flashcard.FlashcardSide;
 import com.memora.app.exception.ResourceNotFoundException;
+import com.memora.app.mapper.FlashcardMapper;
 import com.memora.app.repository.DeckRepository;
 import com.memora.app.repository.FlashcardLanguageRepository;
 import com.memora.app.repository.FlashcardRepository;
@@ -42,19 +44,16 @@ import org.springframework.data.jpa.domain.Specification;
 
 @ExtendWith(MockitoExtension.class)
 class FlashcardServiceImplTest {
-
     @Mock
     private DeckRepository deckRepository;
-
     @Mock
     private FlashcardLanguageRepository flashcardLanguageRepository;
-
     @Mock
     private FlashcardRepository flashcardRepository;
-
     @Mock
     private CurrentAuthenticatedUserService currentAuthenticatedUserService;
-
+    @Mock
+    private FlashcardMapper flashcardMapper;
     @InjectMocks
     private FlashcardServiceImpl flashcardService;
 
@@ -86,8 +85,9 @@ class FlashcardServiceImplTest {
             storedLanguages.add(entity);
             return entity;
         });
+        stubFlashcardMapper();
 
-        final FlashcardDto response = flashcardService.createFlashcard(
+        final FlashcardResponse response = flashcardService.createFlashcard(
             10L,
             new CreateFlashcardRequest("Front", "Back", "en", "vi")
         );
@@ -128,6 +128,7 @@ class FlashcardServiceImplTest {
             new PageImpl<>(List.of(flashcard), PageRequest.of(1, 7, Sort.by("updatedAt")), 8L)
         );
         when(flashcardLanguageRepository.findAllByFlashcardIdOrderByIdAsc(100L)).thenReturn(languages);
+        stubFlashcardMapper();
 
         final FlashcardPageResponse response = flashcardService.getFlashcards(
             10L,
@@ -171,7 +172,6 @@ class FlashcardServiceImplTest {
         ))
             .isInstanceOf(ResourceNotFoundException.class);
     }
-
     @Test
     void deleteFlashcardSoftDeletesAndClearsLanguageRows() {
         final DeckEntity deck = deckEntity(10L, 1L);
@@ -209,11 +209,6 @@ class FlashcardServiceImplTest {
         ))
             .isInstanceOf(ResourceNotFoundException.class);
     }
-
-    private DeckEntity deckEntity(final Long id) {
-        return deckEntity(id, 1L);
-    }
-
     private DeckEntity deckEntity(final Long id, final Long userId) {
         final DeckEntity deck = new DeckEntity();
         deck.setId(id);
@@ -262,4 +257,30 @@ class FlashcardServiceImplTest {
         flashcardLanguage.setVersion(1L);
         return flashcardLanguage;
     }
+
+    private void stubFlashcardMapper() {
+        when(flashcardMapper.toDto(any(FlashcardEntity.class), any(), any(), any())).thenAnswer(invocation -> {
+            final FlashcardEntity entity = invocation.getArgument(0);
+            return new FlashcardResponse(
+                entity.getId(),
+                entity.getDeckId(),
+                entity.getTerm(),
+                entity.getMeaning(),
+                invocation.getArgument(1),
+                invocation.getArgument(2),
+                invocation.getArgument(3),
+                entity.getNote(),
+                entity.isBookmarked(),
+                new AuditDto(
+                    entity.getCreatedAt(),
+                    entity.getUpdatedAt(),
+                    entity.getDeletedAt(),
+                    entity.getVersion()
+                )
+            );
+        });
+    }
 }
+
+
+

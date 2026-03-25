@@ -5,14 +5,15 @@ import java.util.List;
 import java.util.Objects;
 
 import com.memora.app.constant.ApiMessageKey;
-import com.memora.app.dto.CreateFolderRequest;
-import com.memora.app.dto.FolderDto;
-import com.memora.app.dto.RenameFolderRequest;
-import com.memora.app.dto.UpdateFolderRequest;
+import com.memora.app.dto.request.folder.CreateFolderRequest;
+import com.memora.app.dto.response.folder.FolderResponse;
+import com.memora.app.dto.request.folder.RenameFolderRequest;
+import com.memora.app.dto.request.folder.UpdateFolderRequest;
 import com.memora.app.entity.DeckEntity;
 import com.memora.app.entity.FolderEntity;
 import com.memora.app.exception.ConflictException;
 import com.memora.app.exception.ResourceNotFoundException;
+import com.memora.app.mapper.FolderMapper;
 import com.memora.app.repository.DeckRepository;
 import com.memora.app.repository.DeckReviewSettingsRepository;
 import com.memora.app.repository.FlashcardLanguageRepository;
@@ -39,10 +40,11 @@ public class FolderServiceImpl implements FolderService {
     private final FlashcardRepository flashcardRepository;
     private final FolderRepository folderRepository;
     private final CurrentAuthenticatedUserService currentAuthenticatedUserService;
+    private final FolderMapper folderMapper;
 
     @Override
     @Transactional
-    public FolderDto createFolder(final CreateFolderRequest request) {
+    public FolderResponse createFolder(final CreateFolderRequest request) {
         final Long currentUserId = currentAuthenticatedUserService.getCurrentUser().userId();
         final String name = ServiceValidationUtils.normalizeRequiredText(request.name(), ApiMessageKey.NAME_REQUIRED);
         final FolderEntity parentFolder = getParentFolderOrNull(request.parentId(), currentUserId);
@@ -57,20 +59,20 @@ public class FolderServiceImpl implements FolderService {
         entity.setDescription(ServiceValidationUtils.normalizeOptionalText(request.description()));
         entity.setDepth(parentFolder == null ? 0 : parentFolder.getDepth() + 1);
         // Return the persisted folder snapshot.
-        return FolderQuerySupport.toResponse(folderRepository.save(entity), folderRepository);
+        return FolderQuerySupport.toResponse(folderRepository.save(entity), folderRepository, folderMapper);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public FolderDto getFolder(final Long folderId) {
+    public FolderResponse getFolder(final Long folderId) {
         final Long currentUserId = currentAuthenticatedUserService.getCurrentUser().userId();
         // Return the active folder snapshot for the current user scope.
-        return FolderQuerySupport.toResponse(getActiveFolder(folderId, currentUserId), folderRepository);
+        return FolderQuerySupport.toResponse(getActiveFolder(folderId, currentUserId), folderRepository, folderMapper);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<FolderDto> getFolders(
+    public List<FolderResponse> getFolders(
         final Long parentId,
         final String searchQuery,
         final String sortBy,
@@ -97,13 +99,13 @@ public class FolderServiceImpl implements FolderService {
 
         // Return the requested page content after applying search and sort rules.
         return folderRepository.findAll(specification, pageable)
-            .map(entity -> FolderQuerySupport.toResponse(entity, folderRepository))
+            .map(entity -> FolderQuerySupport.toResponse(entity, folderRepository, folderMapper))
             .getContent();
     }
 
     @Override
     @Transactional
-    public FolderDto renameFolder(final Long folderId, final RenameFolderRequest request) {
+    public FolderResponse renameFolder(final Long folderId, final RenameFolderRequest request) {
         final Long currentUserId = currentAuthenticatedUserService.getCurrentUser().userId();
         final FolderEntity entity = getActiveFolder(folderId, currentUserId);
         final String name = ServiceValidationUtils.normalizeRequiredText(request.name(), ApiMessageKey.NAME_REQUIRED);
@@ -112,12 +114,12 @@ public class FolderServiceImpl implements FolderService {
 
         entity.setName(name);
         // Return the renamed folder snapshot.
-        return FolderQuerySupport.toResponse(folderRepository.save(entity), folderRepository);
+        return FolderQuerySupport.toResponse(folderRepository.save(entity), folderRepository, folderMapper);
     }
 
     @Override
     @Transactional
-    public FolderDto updateFolder(final Long folderId, final UpdateFolderRequest request) {
+    public FolderResponse updateFolder(final Long folderId, final UpdateFolderRequest request) {
         final Long currentUserId = currentAuthenticatedUserService.getCurrentUser().userId();
         final FolderEntity entity = getActiveFolder(folderId, currentUserId);
         final String name = ServiceValidationUtils.normalizeRequiredText(request.name(), ApiMessageKey.NAME_REQUIRED);
@@ -127,7 +129,7 @@ public class FolderServiceImpl implements FolderService {
         entity.setName(name);
         entity.setDescription(ServiceValidationUtils.normalizeOptionalText(request.description()));
         // Return the updated folder snapshot.
-        return FolderQuerySupport.toResponse(folderRepository.save(entity), folderRepository);
+        return FolderQuerySupport.toResponse(folderRepository.save(entity), folderRepository, folderMapper);
     }
 
     @Override
@@ -221,3 +223,6 @@ public class FolderServiceImpl implements FolderService {
         }
     }
 }
+
+
+

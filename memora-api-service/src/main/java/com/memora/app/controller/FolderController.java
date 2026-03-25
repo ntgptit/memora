@@ -2,10 +2,10 @@ package com.memora.app.controller;
 
 import java.util.List;
 
-import com.memora.app.dto.CreateFolderRequest;
-import com.memora.app.dto.FolderDto;
-import com.memora.app.dto.RenameFolderRequest;
-import com.memora.app.dto.UpdateFolderRequest;
+import com.memora.app.dto.request.folder.CreateFolderRequest;
+import com.memora.app.dto.response.folder.FolderResponse;
+import com.memora.app.dto.request.folder.RenameFolderRequest;
+import com.memora.app.dto.request.folder.UpdateFolderRequest;
 import com.memora.app.service.FolderService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -55,7 +55,7 @@ public class FolderController {
         @ApiResponse(responseCode = "409", description = "Folder name already exists or hierarchy is invalid")
     })
     @PostMapping
-    public ResponseEntity<FolderDto> createFolder(@Valid @RequestBody final CreateFolderRequest request) {
+    public ResponseEntity<FolderResponse> createFolder(@Valid @RequestBody final CreateFolderRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(folderService.createFolder(request));
     }
 
@@ -71,7 +71,7 @@ public class FolderController {
         @ApiResponse(responseCode = "404", description = "Folder not found")
     })
     @GetMapping("/{folderId}")
-    public ResponseEntity<FolderDto> getFolder(@PathVariable final Long folderId) {
+    public ResponseEntity<FolderResponse> getFolder(@PathVariable final Long folderId) {
         return ResponseEntity.ok(folderService.getFolder(folderId));
     }
 
@@ -87,7 +87,7 @@ public class FolderController {
         @ApiResponse(responseCode = "200", description = "Folders loaded")
     })
     @GetMapping
-    public ResponseEntity<List<FolderDto>> getFolders(
+    public ResponseEntity<List<FolderResponse>> getFolders(
         @RequestParam(required = false) final Long parentId,
         @RequestParam(required = false) final String searchQuery,
         @RequestParam(required = false, defaultValue = "NAME") final String sortBy,
@@ -113,7 +113,7 @@ public class FolderController {
         @ApiResponse(responseCode = "409", description = "Folder name already exists")
     })
     @PatchMapping("/{folderId}/rename")
-    public ResponseEntity<FolderDto> renameFolder(
+    public ResponseEntity<FolderResponse> renameFolder(
         @PathVariable final Long folderId,
         @Valid @RequestBody final RenameFolderRequest request
     ) {
@@ -135,7 +135,7 @@ public class FolderController {
         @ApiResponse(responseCode = "409", description = "Folder hierarchy or folder name is invalid")
     })
     @PutMapping("/{folderId}")
-    public ResponseEntity<FolderDto> updateFolder(
+    public ResponseEntity<FolderResponse> updateFolder(
         @PathVariable final Long folderId,
         @Valid @RequestBody final UpdateFolderRequest request
     ) {
@@ -160,3 +160,6 @@ public class FolderController {
         return ResponseEntity.noContent().build();
     }
 }
+
+
+

@@ -1,37 +1,23 @@
 package com.memora.app.mapper;
 
-import com.memora.app.dto.AuthUserDto;
+import com.memora.app.dto.response.auth.AuthUserResponse;
 import com.memora.app.entity.UserAccountEntity;
 import com.memora.app.security.AuthenticatedUser;
 
-import lombok.experimental.UtilityClass;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 
-@UtilityClass
-public class AuthUserMapper {
+@Mapper(
+    componentModel = MappingConstants.ComponentModel.SPRING,
+    unmappedSourcePolicy = ReportingPolicy.IGNORE,
+    unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
+public interface AuthUserMapper {
 
-    public static AuthUserDto toDto(final UserAccountEntity entity) {
-        if (entity == null) {
-            return null;
-        }
+    AuthUserResponse toDto(UserAccountEntity entity);
 
-        return new AuthUserDto(
-            entity.getId(),
-            entity.getUsername(),
-            entity.getEmail(),
-            entity.getAccountStatus()
-        );
-    }
-
-    public static AuthUserDto toDto(final AuthenticatedUser authenticatedUser) {
-        if (authenticatedUser == null) {
-            return null;
-        }
-
-        return new AuthUserDto(
-            authenticatedUser.userId(),
-            authenticatedUser.username(),
-            authenticatedUser.email(),
-            authenticatedUser.accountStatus()
-        );
-    }
+    @Mapping(target = "id", source = "userId")
+    AuthUserResponse toDto(AuthenticatedUser authenticatedUser);
 }

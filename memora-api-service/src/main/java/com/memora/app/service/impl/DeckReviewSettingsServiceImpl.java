@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Objects;
 
 import com.memora.app.constant.ApiMessageKey;
-import com.memora.app.dto.CreateDeckReviewSettingsRequest;
-import com.memora.app.dto.DeckReviewSettingsDto;
-import com.memora.app.dto.UpdateDeckReviewSettingsRequest;
+import com.memora.app.dto.request.deck_review_settings.CreateDeckReviewSettingsRequest;
+import com.memora.app.dto.response.deck_review_settings.DeckReviewSettingsResponse;
+import com.memora.app.dto.request.deck_review_settings.UpdateDeckReviewSettingsRequest;
 import com.memora.app.entity.DeckEntity;
 import com.memora.app.entity.DeckReviewSettingsEntity;
 import com.memora.app.entity.ReviewProfileEntity;
@@ -31,10 +31,11 @@ public class DeckReviewSettingsServiceImpl implements DeckReviewSettingsService 
     private final DeckRepository deckRepository;
     private final DeckReviewSettingsRepository deckReviewSettingsRepository;
     private final ReviewProfileRepository reviewProfileRepository;
+    private final DeckReviewSettingsMapper deckReviewSettingsMapper;
 
     @Override
     @Transactional
-    public DeckReviewSettingsDto createDeckReviewSettings(final CreateDeckReviewSettingsRequest request) {
+    public DeckReviewSettingsResponse createDeckReviewSettings(final CreateDeckReviewSettingsRequest request) {
         final DeckEntity deck = getActiveDeck(request.deckId());
 
         // Reject duplicate review settings for the same deck.
@@ -53,19 +54,19 @@ public class DeckReviewSettingsServiceImpl implements DeckReviewSettingsService 
         entity.setLeechThreshold(request.leechThreshold());
         entity.setSuspendLeechCards(request.suspendLeechCards());
         // Return the persisted deck review settings.
-        return DeckReviewSettingsMapper.toDto(deckReviewSettingsRepository.save(entity));
+        return deckReviewSettingsMapper.toDto(deckReviewSettingsRepository.save(entity));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public DeckReviewSettingsDto getDeckReviewSettingsById(final Long deckReviewSettingsId) {
+    public DeckReviewSettingsResponse getDeckReviewSettingsById(final Long deckReviewSettingsId) {
         // Return the requested deck review settings record.
-        return DeckReviewSettingsMapper.toDto(getDeckReviewSettingsEntity(deckReviewSettingsId));
+        return deckReviewSettingsMapper.toDto(getDeckReviewSettingsEntity(deckReviewSettingsId));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<DeckReviewSettingsDto> getDeckReviewSettingsList(final Long deckId) {
+    public List<DeckReviewSettingsResponse> getDeckReviewSettingsList(final Long deckId) {
         // Narrow the result set when the caller requests one deck explicitly.
         if (deckId != null) {
             // Return only the requested deck settings.
@@ -74,7 +75,7 @@ public class DeckReviewSettingsServiceImpl implements DeckReviewSettingsService 
                 )
                 // Convert persisted settings rows into DTOs for the API contract.
                 .stream()
-                .map(DeckReviewSettingsMapper::toDto)
+                .map(deckReviewSettingsMapper::toDto)
                 .toList();
         }
 
@@ -82,13 +83,13 @@ public class DeckReviewSettingsServiceImpl implements DeckReviewSettingsService 
         return deckReviewSettingsRepository.findAllByOrderByIdAsc()
             // Convert persisted settings rows into DTOs for the API contract.
             .stream()
-            .map(DeckReviewSettingsMapper::toDto)
+            .map(deckReviewSettingsMapper::toDto)
             .toList();
     }
 
     @Override
     @Transactional
-    public DeckReviewSettingsDto updateDeckReviewSettings(
+    public DeckReviewSettingsResponse updateDeckReviewSettings(
         final Long deckReviewSettingsId,
         final UpdateDeckReviewSettingsRequest request
     ) {
@@ -103,7 +104,7 @@ public class DeckReviewSettingsServiceImpl implements DeckReviewSettingsService 
         entity.setLeechThreshold(request.leechThreshold());
         entity.setSuspendLeechCards(request.suspendLeechCards());
         // Return the updated deck review settings.
-        return DeckReviewSettingsMapper.toDto(deckReviewSettingsRepository.save(entity));
+        return deckReviewSettingsMapper.toDto(deckReviewSettingsRepository.save(entity));
     }
 
     @Override
@@ -153,3 +154,6 @@ public class DeckReviewSettingsServiceImpl implements DeckReviewSettingsService 
         return reviewProfile;
     }
 }
+
+
+
