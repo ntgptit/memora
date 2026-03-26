@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:memora/data/models/folder_model.dart';
+import 'package:memora/data/models/folder_requests.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'folder_api.g.dart';
@@ -22,18 +23,18 @@ abstract class FolderApi {
   Future<FolderModel> getFolder(@Path('folderId') int folderId);
 
   @POST('/api/v1/folders')
-  Future<FolderModel> createFolder(@Body() Map<String, Object?> body);
+  Future<FolderModel> createFolder(@Body() CreateFolderRequest body);
 
   @PATCH('/api/v1/folders/{folderId}/rename')
   Future<FolderModel> renameFolder(
     @Path('folderId') int folderId,
-    @Body() Map<String, Object?> body,
+    @Body() RenameFolderRequest body,
   );
 
   @PUT('/api/v1/folders/{folderId}')
   Future<FolderModel> updateFolder(
     @Path('folderId') int folderId,
-    @Body() Map<String, Object?> body,
+    @Body() UpdateFolderRequest body,
   );
 
   @DELETE('/api/v1/folders/{folderId}')

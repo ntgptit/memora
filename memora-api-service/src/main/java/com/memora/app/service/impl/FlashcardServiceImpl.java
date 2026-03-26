@@ -46,12 +46,12 @@ public class FlashcardServiceImpl implements FlashcardService {
         final FlashcardEntity entity = FlashcardEntity.builder()
             .deckId(deck.getId())
             .term(ServiceValidationUtils.normalizeRequiredText(
-                request.frontText(),
-                ApiMessageKey.FLASHCARD_FRONT_TEXT_REQUIRED
+                request.term(),
+                ApiMessageKey.TERM_REQUIRED
             ))
             .meaning(ServiceValidationUtils.normalizeRequiredText(
-                request.backText(),
-                ApiMessageKey.FLASHCARD_BACK_TEXT_REQUIRED
+                request.meaning(),
+                ApiMessageKey.MEANING_REQUIRED
             ))
             .note("")
             .bookmarked(false)
@@ -114,12 +114,12 @@ public class FlashcardServiceImpl implements FlashcardService {
         final FlashcardEntity entity = getActiveFlashcard(deck.getId(), flashcardId);
 
         entity.setTerm(ServiceValidationUtils.normalizeRequiredText(
-            request.frontText(),
-            ApiMessageKey.FLASHCARD_FRONT_TEXT_REQUIRED
+            request.term(),
+            ApiMessageKey.TERM_REQUIRED
         ));
         entity.setMeaning(ServiceValidationUtils.normalizeRequiredText(
-            request.backText(),
-            ApiMessageKey.FLASHCARD_BACK_TEXT_REQUIRED
+            request.meaning(),
+            ApiMessageKey.MEANING_REQUIRED
         ));
 
         final FlashcardEntity saved = flashcardRepository.save(entity);

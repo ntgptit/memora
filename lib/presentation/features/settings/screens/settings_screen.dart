@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:memora/app/app_providers.dart';
-import 'package:memora/app/app_routes.dart';
+import 'package:memora/app/app_route_data.dart';
 import 'package:memora/core/enums/app_theme_type.dart';
 import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/features/auth/providers/auth_provider.dart';
@@ -35,13 +34,13 @@ class SettingsScreen extends ConsumerWidget {
                 title: context.l10n.settingsThemeTileTitle,
                 subtitle: _themeLabel(context, themeType),
                 leading: const Icon(Icons.palette_outlined),
-                onTap: () => context.push(AppRoutes.themeSettings),
+                onTap: () => const ThemeSettingsRouteData().push(context),
               ),
               SettingsNavigationTile(
                 title: context.l10n.settingsLanguageTileTitle,
                 subtitle: locale.nativeName,
                 leading: const Icon(Icons.translate_rounded),
-                onTap: () => context.push(AppRoutes.languageSettings),
+                onTap: () => const LanguageSettingsRouteData().push(context),
               ),
             ],
           ),
@@ -54,7 +53,7 @@ class SettingsScreen extends ConsumerWidget {
                 title: context.l10n.settingsAudioTileTitle,
                 subtitle: context.l10n.settingsAudioTileSubtitle,
                 leading: const Icon(Icons.volume_up_rounded),
-                onTap: () => context.push(AppRoutes.audioSettings),
+                onTap: () => const AudioSettingsRouteData().push(context),
               ),
               SettingsSwitchTile(
                 title: context.l10n.settingsQuickHapticsTitle,
@@ -76,13 +75,13 @@ class SettingsScreen extends ConsumerWidget {
                 title: context.l10n.settingsBackupTileTitle,
                 subtitle: context.l10n.settingsBackupTileSubtitle,
                 leading: const Icon(Icons.cloud_sync_outlined),
-                onTap: () => context.push(AppRoutes.backupRestore),
+                onTap: () => const BackupRestoreRouteData().push(context),
               ),
               SettingsNavigationTile(
                 title: context.l10n.settingsReminderTileTitle,
                 subtitle: context.l10n.settingsReminderTileSubtitle,
                 leading: const Icon(Icons.notifications_active_outlined),
-                onTap: () => context.push(AppRoutes.reminders),
+                onTap: () => const ReminderSettingsRouteData().push(context),
               ),
             ],
           ),
@@ -95,7 +94,7 @@ class SettingsScreen extends ConsumerWidget {
                 title: context.l10n.settingsAboutTileTitle,
                 subtitle: context.l10n.settingsAboutTileSubtitle,
                 leading: const Icon(Icons.info_outline_rounded),
-                onTap: () => context.push(AppRoutes.about),
+                onTap: () => const AboutRouteData().push(context),
               ),
               SettingsNavigationTile(
                 title: context.l10n.authSignOutAction,

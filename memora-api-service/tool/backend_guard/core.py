@@ -36,6 +36,7 @@ RULE_COMMON_DTO_SHARED_USAGE = "COMMON_DTO_MUST_BE_SHARED_REUSABLE_MODEL"
 RULE_ENUM_PACKAGE_STRUCTURE = "ENUM_PACKAGE_STRUCTURE"
 RULE_ENUM_ROOT_NO_DIRECT_CLASS = "ENUM_ROOT_HAS_NO_DIRECT_CLASS"
 RULE_MAPPER_USES_MAPSTRUCT = "MAPPER_USES_MAPSTRUCT_SPRING_INTERFACE"
+RULE_MAPPER_NO_ENTITY_DTO_FIELD_RENAME = "MAPPER_NO_ENTITY_DTO_FIELD_RENAME"
 RULE_CONTROLLER_REQUEST_BODY_DTO = "CONTROLLER_REQUEST_BODY_USES_DTO"
 RULE_CONTROLLER_REQUEST_BODY_VALID = "CONTROLLER_REQUEST_BODY_REQUIRES_VALID"
 RULE_REQUEST_DTO_BEAN_VALIDATION = "REQUEST_DTO_HAS_BEAN_VALIDATION"
@@ -230,6 +231,9 @@ LOGGER_FACTORY_PATTERN = re.compile(r"\bLoggerFactory\.getLogger\s*\(")
 LOGGER_FIELD_PATTERN = re.compile(r"\bLogger\s+[A-Za-z_][A-Za-z0-9_]*\s*=")
 UTILITY_CLASS_PATTERN = re.compile(r"@\s*UtilityClass\b")
 MAPPER_ANNOTATION_PATTERN = re.compile(r"^\s*@\s*Mapper\b", re.MULTILINE)
+MAPPING_ANNOTATION_START_PATTERN = re.compile(r"^\s*@\s*Mapping\b")
+MAPPING_SOURCE_ATTRIBUTE_PATTERN = re.compile(r'\bsource\s*=\s*"([^"]+)"')
+MAPPING_TARGET_ATTRIBUTE_PATTERN = re.compile(r'\btarget\s*=\s*"([^"]+)"')
 PROPERTIES_INTERNAL_CONSTANT_PATTERN = re.compile(r"^\s*private\s+static\s+final\b")
 PROPERTIES_INTERNAL_FALLBACK_PATTERN = re.compile(
     r"defaultIfBlank\s*\(|defaultIfEmpty\s*\(|defaultString\s*\(|"
@@ -1451,6 +1455,46 @@ class MapperUsesMapStructRule(Rule):
                     snippet=file_ctx.lines[primary.line - 1].strip(),
                 )
             )
+
+        return violations
+
+
+class MapperNoEntityDtoFieldRenameRule(Rule):
+    name = RULE_MAPPER_NO_ENTITY_DTO_FIELD_RENAME
+
+    def check(self, file_ctx: FileContext) -> Iterable[Violation]:
+        if "/mapper/" not in file_ctx.rel_path:
+            return []
+        if not file_ctx.rel_path.startswith("src/main/java/"):
+            return []
+
+        violations: list[Violation] = []
+        for line_number, annotation_text in _collect_annotation_blocks(file_ctx.lines, MAPPING_ANNOTATION_START_PATTERN):
+            source = _extract_mapping_attribute(annotation_text, MAPPING_SOURCE_ATTRIBUTE_PATTERN)
+            target = _extract_mapping_attribute(annotation_text, MAPPING_TARGET_ATTRIBUTE_PATTERN)
+            if source == "" or target == "":
+                continue
+
+            source_root, separator, source_tail = source.partition(".")
+            if separator == "":
+                continue
+            if source_root not in {"entity", "dto"}:
+                continue
+
+            if "." in source_tail or source_tail != target:
+                violations.append(
+                    Violation(
+                        rule=self.name,
+                        severity=SEVERITY_ERROR,
+                        file=file_ctx.rel_path,
+                        line=line_number,
+                        reason=(
+                            "DTO and entity field names must align directly. Do not rename dto/entity fields through "
+                            "MapStruct source/target remapping; rename the DTO field to match the entity vocabulary instead."
+                        ),
+                        snippet=annotation_text,
+                    )
+                )
 
         return violations
 
@@ -2715,6 +2759,7 @@ def _default_rules() -> list[Rule]:
         ManualLoggerRule(),
         ConstantUtilityClassRule(),
         MapperUsesMapStructRule(),
+        MapperNoEntityDtoFieldRenameRule(),
         DtoPackageStructureRule(),
         EnumPackageStructureRule(),
         ValidationMessageConstantRule(),
@@ -3020,6 +3065,38 @@ def _collect_local_context(lines: list[str], line_number: int, *, before: int, a
     start = max(0, line_number - 1 - before)
     end = min(len(lines), line_number + after)
     return " ".join(lines[start:end])
+
+
+def _collect_annotation_blocks(lines: list[str], annotation_start_pattern: re.Pattern[str]) -> list[tuple[int, str]]:
+    blocks: list[tuple[int, str]] = []
+    index = 0
+    while index < len(lines):
+        raw = lines[index]
+        if annotation_start_pattern.match(raw.strip()) is None:
+            index += 1
+            continue
+
+        start_line = index + 1
+        parts = [raw.strip()]
+        balance = raw.count("(") - raw.count(")")
+
+        while balance > 0 and index + 1 < len(lines):
+            index += 1
+            raw = lines[index]
+            parts.append(raw.strip())
+            balance += raw.count("(") - raw.count(")")
+
+        blocks.append((start_line, " ".join(part for part in parts if part != "")))
+        index += 1
+
+    return blocks
+
+
+def _extract_mapping_attribute(annotation_text: str, attribute_pattern: re.Pattern[str]) -> str:
+    match = attribute_pattern.search(annotation_text)
+    if match is None:
+        return ""
+    return match.group(1).strip()
 
 
 def _extract_request_body_type(context: str) -> str:
@@ -4475,6 +4552,7 @@ def _rule_group_aliases() -> dict[str, set[str]]:
             RULE_ENUM_PACKAGE_STRUCTURE,
             RULE_ENUM_ROOT_NO_DIRECT_CLASS,
             RULE_MAPPER_USES_MAPSTRUCT,
+            RULE_MAPPER_NO_ENTITY_DTO_FIELD_RENAME,
             RULE_CONTROLLER_ENTITY_RESPONSE,
             RULE_CONTROLLER_ENTITY_SIGNATURE,
             RULE_CONTROLLER_REQUEST_BODY_DTO,
@@ -4564,6 +4642,7 @@ def _rule_group_aliases() -> dict[str, set[str]]:
             RULE_ENUM_PACKAGE_STRUCTURE,
             RULE_ENUM_ROOT_NO_DIRECT_CLASS,
             RULE_MAPPER_USES_MAPSTRUCT,
+            RULE_MAPPER_NO_ENTITY_DTO_FIELD_RENAME,
             RULE_ENTITY_COMMON_STRUCTURE,
             RULE_ONE_TOP_LEVEL_TYPE,
             RULE_NO_INNER_API_TYPES,

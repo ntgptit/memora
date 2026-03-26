@@ -1,25 +1,29 @@
-import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-@immutable
+part 'deck_requests.g.dart';
+
+@JsonSerializable(includeIfNull: false)
 class CreateDeckRequest {
   const CreateDeckRequest({required this.name, this.description});
 
   final String name;
   final String? description;
 
-  Map<String, Object?> toJson() {
-    return <String, Object?>{'name': name, 'description': description};
-  }
+  factory CreateDeckRequest.fromJson(Map<String, dynamic> json) =>
+      _$CreateDeckRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreateDeckRequestToJson(this);
 }
 
-@immutable
+@JsonSerializable(includeIfNull: false)
 class UpdateDeckRequest {
   const UpdateDeckRequest({required this.name, this.description});
 
   final String name;
   final String? description;
 
-  Map<String, Object?> toJson() {
-    return <String, Object?>{'name': name, 'description': description};
-  }
+  factory UpdateDeckRequest.fromJson(Map<String, dynamic> json) =>
+      _$UpdateDeckRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UpdateDeckRequestToJson(this);
 }

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:memora/data/models/deck_requests.dart';
 import 'package:memora/data/models/deck_model.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -27,14 +28,14 @@ abstract class DeckApi {
   @POST('/api/v1/folders/{folderId}/decks')
   Future<DeckModel> createDeck(
     @Path('folderId') int folderId,
-    @Body() Map<String, Object?> body,
+    @Body() CreateDeckRequest body,
   );
 
   @PUT('/api/v1/folders/{folderId}/decks/{deckId}')
   Future<DeckModel> updateDeck(
     @Path('folderId') int folderId,
     @Path('deckId') int deckId,
-    @Body() Map<String, Object?> body,
+    @Body() UpdateDeckRequest body,
   );
 
   @DELETE('/api/v1/folders/{folderId}/decks/{deckId}')

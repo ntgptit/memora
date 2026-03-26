@@ -212,10 +212,7 @@ abstract final class ErrorMapper {
     }
 
     if (data is Map) {
-      return ObjectUtils.castOrNull<String>(
-            data['message'] ?? data['error'] ?? data['detail'],
-          )?.trim() ??
-          ObjectUtils.castOrNull<String>(data['title'])?.trim();
+      return ObjectUtils.castOrNull<String>(data['message'])?.trim();
     }
 
     return null;
@@ -223,9 +220,7 @@ abstract final class ErrorMapper {
 
   static String? _extractCode(Object? data) {
     if (data is Map) {
-      return ObjectUtils.castOrNull<String>(
-        data['code'] ?? data['errorCode'] ?? data['type'],
-      )?.trim().toLowerCase();
+      return ObjectUtils.castOrNull<String>(data['code'])?.trim().toLowerCase();
     }
 
     return null;
@@ -236,7 +231,7 @@ abstract final class ErrorMapper {
       return const <String, String>{};
     }
 
-    final rawErrors = data['errors'];
+    final rawErrors = data['fieldErrors'];
     if (rawErrors is! Map) {
       return const <String, String>{};
     }

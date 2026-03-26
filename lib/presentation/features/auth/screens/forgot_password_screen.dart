@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:memora/app/app_routes.dart';
+import 'package:memora/app/app_route_data.dart';
 import 'package:memora/core/enums/snackbar_type.dart';
 import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/features/auth/providers/auth_provider.dart';
@@ -69,7 +68,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       submitBar: AppSubmitBar(
         secondaryAction: AppTextButton(
           text: context.l10n.authBackToLoginAction,
-          onPressed: () => context.go(AppRoutes.login),
+          onPressed: () => const LoginRouteData().go(context),
         ),
         primaryAction: AppPrimaryButton(
           text: context.l10n.authSendResetAction,

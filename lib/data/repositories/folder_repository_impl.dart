@@ -48,7 +48,7 @@ class FolderRepositoryImpl implements FolderRepository {
         name: name,
         description: description,
         parentId: parentId,
-      ).toJson(),
+      ),
     );
     return FolderMapper.toEntity(response);
   }
@@ -60,7 +60,7 @@ class FolderRepositoryImpl implements FolderRepository {
   }) async {
     final response = await _api.renameFolder(
       folderId,
-      RenameFolderRequest(name: name).toJson(),
+      RenameFolderRequest(name: name),
     );
     return FolderMapper.toEntity(response);
   }
@@ -78,7 +78,7 @@ class FolderRepositoryImpl implements FolderRepository {
         name: name,
         description: description,
         parentId: parentId,
-      ).toJson(),
+      ),
     );
     return FolderMapper.toEntity(response);
   }

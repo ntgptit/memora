@@ -45,7 +45,7 @@ class DeckRepositoryImpl implements DeckRepository {
   }) async {
     final response = await _api.createDeck(
       folderId,
-      CreateDeckRequest(name: name, description: description).toJson(),
+      CreateDeckRequest(name: name, description: description),
     );
     return DeckMapper.toEntity(response);
   }
@@ -60,7 +60,7 @@ class DeckRepositoryImpl implements DeckRepository {
     final response = await _api.updateDeck(
       folderId,
       deckId,
-      UpdateDeckRequest(name: name, description: description).toJson(),
+      UpdateDeckRequest(name: name, description: description),
     );
     return DeckMapper.toEntity(response);
   }

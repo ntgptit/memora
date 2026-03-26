@@ -1,18 +1,21 @@
-import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-@immutable
+part 'auth_requests.g.dart';
+
+@JsonSerializable(includeIfNull: false)
 class AuthLoginRequest {
   const AuthLoginRequest({required this.identifier, required this.password});
 
   final String identifier;
   final String password;
 
-  Map<String, Object?> toJson() {
-    return <String, Object?>{'identifier': identifier, 'password': password};
-  }
+  factory AuthLoginRequest.fromJson(Map<String, dynamic> json) =>
+      _$AuthLoginRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AuthLoginRequestToJson(this);
 }
 
-@immutable
+@JsonSerializable(includeIfNull: false)
 class AuthRegisterRequest {
   const AuthRegisterRequest({
     required this.username,
@@ -24,33 +27,32 @@ class AuthRegisterRequest {
   final String email;
   final String password;
 
-  Map<String, Object?> toJson() {
-    return <String, Object?>{
-      'username': username,
-      'email': email,
-      'password': password,
-    };
-  }
+  factory AuthRegisterRequest.fromJson(Map<String, dynamic> json) =>
+      _$AuthRegisterRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AuthRegisterRequestToJson(this);
 }
 
-@immutable
+@JsonSerializable(includeIfNull: false)
 class AuthRefreshRequest {
   const AuthRefreshRequest({required this.refreshToken});
 
   final String refreshToken;
 
-  Map<String, Object?> toJson() {
-    return <String, Object?>{'refreshToken': refreshToken};
-  }
+  factory AuthRefreshRequest.fromJson(Map<String, dynamic> json) =>
+      _$AuthRefreshRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AuthRefreshRequestToJson(this);
 }
 
-@immutable
+@JsonSerializable(includeIfNull: false)
 class AuthLogoutRequest {
   const AuthLogoutRequest({required this.refreshToken});
 
   final String refreshToken;
 
-  Map<String, Object?> toJson() {
-    return <String, Object?>{'refreshToken': refreshToken};
-  }
+  factory AuthLogoutRequest.fromJson(Map<String, dynamic> json) =>
+      _$AuthLogoutRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AuthLogoutRequestToJson(this);
 }

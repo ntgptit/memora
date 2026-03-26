@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:memora/data/models/flashcard_model.dart';
 import 'package:memora/data/models/flashcard_page_model.dart';
+import 'package:memora/data/models/flashcard_requests.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'flashcard_api.g.dart';
@@ -22,14 +23,14 @@ abstract class FlashcardApi {
   @POST('/api/v1/decks/{deckId}/flashcards')
   Future<FlashcardModel> createFlashcard(
     @Path('deckId') int deckId,
-    @Body() Map<String, Object?> body,
+    @Body() CreateFlashcardRequest body,
   );
 
   @PUT('/api/v1/decks/{deckId}/flashcards/{flashcardId}')
   Future<FlashcardModel> updateFlashcard(
     @Path('deckId') int deckId,
     @Path('flashcardId') int flashcardId,
-    @Body() Map<String, Object?> body,
+    @Body() UpdateFlashcardRequest body,
   );
 
   @DELETE('/api/v1/decks/{deckId}/flashcards/{flashcardId}')

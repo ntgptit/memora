@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:memora/app/app_routes.dart';
+import 'package:memora/app/app_route_data.dart';
 import 'package:memora/core/enums/dialog_type.dart';
 import 'package:memora/core/enums/snackbar_type.dart';
 import 'package:memora/domain/entities/folder.dart';
@@ -69,13 +69,15 @@ class _FolderListScreenState extends ConsumerState<FolderListScreen> {
         onToggleSortDirection: ref
             .read(folderFilterControllerProvider.notifier)
             .toggleSortDirection,
-        onOpenHome: () => context.go(AppRoutes.folders),
+        onOpenHome: () => const FoldersRouteData().go(context),
         onOpenFolder: _openFolder,
         onCreateFolder: _openCreateFolderSheet,
         onEditFolder: _openEditFolderSheet,
         onDeleteFolder: _openDeleteFolderDialog,
         onManageDecks: state.currentFolder?.isLeaf == true
-            ? () => context.go(AppRoutes.folderDecks(state.currentFolder!.id))
+            ? () => FolderDecksRouteData(
+                folderId: state.currentFolder!.id,
+              ).go(context)
             : null,
       ),
     );
@@ -108,10 +110,10 @@ class _FolderListScreenState extends ConsumerState<FolderListScreen> {
 
   void _openFolder(Folder folder) {
     if (folder.isLeaf) {
-      context.go(AppRoutes.folderDecks(folder.id));
+      FolderDecksRouteData(folderId: folder.id).go(context);
       return;
     }
-    context.go(AppRoutes.folderDetail(folder.id));
+    FolderDetailRouteData(folderId: folder.id).go(context);
   }
 
   Future<void> _openCreateFolderSheet() async {

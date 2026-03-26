@@ -94,13 +94,13 @@ class FlashcardServiceImplTest {
 
         assertThat(response.id()).isEqualTo(100L);
         assertThat(response.deckId()).isEqualTo(10L);
-        assertThat(response.frontText()).isEqualTo("Front");
-        assertThat(response.backText()).isEqualTo("Back");
+        assertThat(response.term()).isEqualTo("Front");
+        assertThat(response.meaning()).isEqualTo("Back");
         assertThat(response.frontLangCode()).isEqualTo("en");
         assertThat(response.backLangCode()).isEqualTo("vi");
         assertThat(response.pronunciation()).isEqualTo("");
         assertThat(response.note()).isEmpty();
-        assertThat(response.isBookmarked()).isFalse();
+        assertThat(response.bookmarked()).isFalse();
         assertThat(response.audit()).isNotNull();
         assertThat(response.audit().version()).isZero();
 

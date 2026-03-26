@@ -9,13 +9,13 @@ void main() {
         <String, Object?>{
           'id': 1,
           'deckId': 10,
-          'frontText': 'Front',
-          'backText': 'Back',
+          'term': 'Front',
+          'meaning': 'Back',
           'frontLangCode': 'en',
           'backLangCode': 'vi',
           'pronunciation': 'pron',
           'note': 'note',
-          'isBookmarked': true,
+          'bookmarked': true,
           'audit': <String, Object?>{
             'createdAt': '2025-01-01T00:00:00Z',
             'updatedAt': '2025-01-02T00:00:00Z',

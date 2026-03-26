@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:memora/app/app_routes.dart';
+import 'package:memora/app/app_route_data.dart';
 import 'package:memora/presentation/features/flashcard/providers/flashcard_filter_provider.dart';
 import 'package:memora/presentation/features/flashcard/providers/flashcard_provider.dart';
 import 'package:memora/presentation/features/flashcard/providers/flashcard_state.dart';
@@ -76,7 +76,8 @@ class _FlashcardListScreenState extends ConsumerState<FlashcardListScreen> {
         onToggleSortDirection: ref
             .read(flashcardFilterControllerProvider.notifier)
             .toggleSortDirection,
-        onOpenDecks: () => context.go(AppRoutes.folderDecks(widget.folderId)),
+        onOpenDecks: () =>
+            FolderDecksRouteData(folderId: widget.folderId).go(context),
         onCreateFlashcard: () => openFlashcardCreateSheet(
           context: context,
           ref: ref,

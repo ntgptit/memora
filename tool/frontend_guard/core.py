@@ -27,10 +27,13 @@ from frontend_guard.guards import (
     local_constants,
     navigation,
     opacity_contract,
+    route_codegen,
     riverpod_annotation,
     riverpod_layout_state,
+    serialization_codegen,
     spacing_ownership,
     state_management,
+    transport_contract,
     ui_constants,
     ui_design,
     ui_logic_separation,
@@ -141,6 +144,24 @@ def _build_tasks() -> list[GuardTask]:
             description=opacity_contract.DESCRIPTION,
             run=opacity_contract.run,
         ),
+        GuardTask(
+            id=route_codegen.GUARD_ID,
+            file_name=route_codegen.FILE_NAME,
+            description=route_codegen.DESCRIPTION,
+            run=route_codegen.run,
+        ),
+        GuardTask(
+            id=serialization_codegen.GUARD_ID,
+            file_name=serialization_codegen.FILE_NAME,
+            description=serialization_codegen.DESCRIPTION,
+            run=serialization_codegen.run,
+        ),
+        GuardTask(
+            id=transport_contract.GUARD_ID,
+            file_name=transport_contract.FILE_NAME,
+            description=transport_contract.DESCRIPTION,
+            run=transport_contract.run,
+        ),
     ]
 
 
@@ -162,6 +183,9 @@ def _group_aliases() -> dict[str, set[str]]:
             navigation.GUARD_ID,
             l10n_usage.GUARD_ID,
             feature_surface.GUARD_ID,
+            route_codegen.GUARD_ID,
+            serialization_codegen.GUARD_ID,
+            transport_contract.GUARD_ID,
         },
         "class2": {
             state_management.GUARD_ID,
@@ -190,7 +214,8 @@ def _group_aliases() -> dict[str, set[str]]:
             common_widget_boundaries.GUARD_ID,
             ui_design.GUARD_ID,
         },
-        "navigation": {navigation.GUARD_ID},
+        "navigation": {navigation.GUARD_ID, route_codegen.GUARD_ID},
+        "routing": {navigation.GUARD_ID, route_codegen.GUARD_ID},
         "l10n": {l10n_usage.GUARD_ID, local_constants.GUARD_ID},
         "theme": {
             feature_surface.GUARD_ID,
@@ -204,6 +229,14 @@ def _group_aliases() -> dict[str, set[str]]:
             code_quality.GUARD_ID,
             accessibility.GUARD_ID,
             spacing_ownership.GUARD_ID,
+            route_codegen.GUARD_ID,
+            serialization_codegen.GUARD_ID,
+            transport_contract.GUARD_ID,
+        },
+        "contract": {
+            route_codegen.GUARD_ID,
+            serialization_codegen.GUARD_ID,
+            transport_contract.GUARD_ID,
         },
     }
 

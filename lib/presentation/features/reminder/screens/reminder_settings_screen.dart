@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:memora/app/app_routes.dart';
+import 'package:memora/app/app_route_data.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
 import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/features/reminder/providers/reminder_provider.dart';
@@ -105,12 +104,13 @@ class ReminderSettingsScreen extends ConsumerWidget {
                   children: [
                     AppPrimaryButton(
                       text: context.l10n.reminderPreviewAction,
-                      onPressed: () => context.push(AppRoutes.reminderPreview),
+                      onPressed: () =>
+                          const ReminderPreviewRouteData().push(context),
                     ),
                     AppSecondaryButton(
                       text: context.l10n.reminderManageSlotsAction,
                       onPressed: () =>
-                          context.push(AppRoutes.reminderTimeSlots),
+                          const ReminderTimeSlotsRouteData().push(context),
                     ),
                   ],
                 ),

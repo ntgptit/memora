@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:memora/app/app_routes.dart';
+import 'package:memora/app/app_route_data.dart';
 import 'package:memora/core/config/app_icons.dart';
 import 'package:memora/core/enums/dialog_type.dart';
 import 'package:memora/core/enums/snackbar_type.dart';
@@ -76,8 +76,9 @@ class _DeckListScreenState extends ConsumerState<DeckListScreen> {
         onToggleSortDirection: ref
             .read(deckFilterControllerProvider.notifier)
             .toggleSortDirection,
-        onOpenHome: () => context.go(AppRoutes.folders),
-        onOpenFolder: (folder) => context.go(AppRoutes.folderDetail(folder.id)),
+        onOpenHome: () => const FoldersRouteData().go(context),
+        onOpenFolder: (folder) =>
+            FolderDetailRouteData(folderId: folder.id).go(context),
         onCreateDeck: _openCreateDeckSheet,
         onEditDeck: _openEditDeckSheet,
         onDeleteDeck: _openDeleteDeckDialog,
@@ -97,7 +98,7 @@ class _DeckListScreenState extends ConsumerState<DeckListScreen> {
         actions: [
           AppPrimaryButton(
             text: context.l10n.deckShellBrowseFoldersAction,
-            onPressed: () => context.go(AppRoutes.folders),
+            onPressed: () => const FoldersRouteData().go(context),
           ),
         ],
       ),

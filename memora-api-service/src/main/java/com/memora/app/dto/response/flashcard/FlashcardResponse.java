@@ -5,13 +5,13 @@ import com.memora.app.dto.common.AuditDto;
 public record FlashcardResponse(
     Long id,
     Long deckId,
-    String frontText,
-    String backText,
+    String term,
+    String meaning,
     String frontLangCode,
     String backLangCode,
     String pronunciation,
     String note,
-    boolean isBookmarked,
+    boolean bookmarked,
     AuditDto audit
 ) {
 }

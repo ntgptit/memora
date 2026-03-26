@@ -22,14 +22,10 @@ class ApiErrorResponse {
     int? statusCode,
   }) {
     return ApiErrorResponse(
-      message:
-          _readString(json['message'] ?? json['error'] ?? json['detail']) ??
-          'Unexpected server error.',
-      code: _readString(
-        json['code'] ?? json['errorCode'] ?? json['type'],
-      )?.toLowerCase(),
-      statusCode: statusCode ?? _readInt(json['statusCode'] ?? json['status']),
-      fieldErrors: _readFieldErrors(json['errors']),
+      message: _readString(json['message']) ?? 'Unexpected server error.',
+      code: _readString(json['code'])?.toLowerCase(),
+      statusCode: statusCode ?? _readInt(json['statusCode']),
+      fieldErrors: _readFieldErrors(json['fieldErrors']),
     );
   }
 

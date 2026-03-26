@@ -23,15 +23,13 @@ class ApiResponse<T> {
   ) {
     final rawData = json.containsKey('data')
         ? json['data']
-        : json.containsKey('result')
-        ? json['result']
         : json;
 
     return ApiResponse<T>(
       data: decoder(rawData),
       message: _readString(json['message']),
       meta: _readMap(json['meta']),
-      statusCode: _readInt(json['statusCode'] ?? json['status']),
+      statusCode: _readInt(json['statusCode']),
     );
   }
 

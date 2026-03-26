@@ -1,6 +1,8 @@
-import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-@immutable
+part 'flashcard_requests.g.dart';
+
+@JsonSerializable(includeIfNull: false)
 class CreateFlashcardRequest {
   const CreateFlashcardRequest({
     required this.frontText,
@@ -9,22 +11,20 @@ class CreateFlashcardRequest {
     this.backLangCode,
   });
 
+  @JsonKey(name: 'term')
   final String frontText;
+  @JsonKey(name: 'meaning')
   final String backText;
   final String? frontLangCode;
   final String? backLangCode;
 
-  Map<String, Object?> toJson() {
-    return <String, Object?>{
-      'frontText': frontText,
-      'backText': backText,
-      'frontLangCode': frontLangCode,
-      'backLangCode': backLangCode,
-    };
-  }
+  factory CreateFlashcardRequest.fromJson(Map<String, dynamic> json) =>
+      _$CreateFlashcardRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreateFlashcardRequestToJson(this);
 }
 
-@immutable
+@JsonSerializable(includeIfNull: false)
 class UpdateFlashcardRequest {
   const UpdateFlashcardRequest({
     required this.frontText,
@@ -33,17 +33,15 @@ class UpdateFlashcardRequest {
     this.backLangCode,
   });
 
+  @JsonKey(name: 'term')
   final String frontText;
+  @JsonKey(name: 'meaning')
   final String backText;
   final String? frontLangCode;
   final String? backLangCode;
 
-  Map<String, Object?> toJson() {
-    return <String, Object?>{
-      'frontText': frontText,
-      'backText': backText,
-      'frontLangCode': frontLangCode,
-      'backLangCode': backLangCode,
-    };
-  }
+  factory UpdateFlashcardRequest.fromJson(Map<String, dynamic> json) =>
+      _$UpdateFlashcardRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UpdateFlashcardRequestToJson(this);
 }

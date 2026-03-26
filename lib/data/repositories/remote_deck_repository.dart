@@ -1,6 +1,7 @@
 import 'package:memora/core/enums/sort_direction.dart';
 import 'package:memora/data/datasources/deck_api.dart';
 import 'package:memora/data/mappers/deck_mapper.dart';
+import 'package:memora/data/models/deck_requests.dart';
 import 'package:memora/domain/entities/deck.dart';
 import 'package:memora/domain/repositories/deck_repository.dart';
 
@@ -15,10 +16,10 @@ class RemoteDeckRepository implements DeckRepository {
     required String name,
     String? description,
   }) async {
-    final deck = await _deckApi.createDeck(folderId, <String, Object?>{
-      'name': name,
-      'description': description,
-    });
+    final deck = await _deckApi.createDeck(
+      folderId,
+      CreateDeckRequest(name: name, description: description),
+    );
     return DeckMapper.toEntity(deck);
   }
 
@@ -60,10 +61,11 @@ class RemoteDeckRepository implements DeckRepository {
     required String name,
     String? description,
   }) async {
-    final deck = await _deckApi.updateDeck(folderId, deckId, <String, Object?>{
-      'name': name,
-      'description': description,
-    });
+    final deck = await _deckApi.updateDeck(
+      folderId,
+      deckId,
+      UpdateDeckRequest(name: name, description: description),
+    );
     return DeckMapper.toEntity(deck);
   }
 }

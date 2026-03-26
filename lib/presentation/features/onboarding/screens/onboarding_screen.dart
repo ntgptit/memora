@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:memora/app/app_routes.dart';
+import 'package:memora/app/app_route_data.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
 import 'package:memora/core/theme/tokens/tokens.dart';
 import 'package:memora/l10n/l10n.dart';
@@ -83,7 +82,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           text: state.currentPageIndex == pages.length - 1
               ? context.l10n.onboardingPermissionsAction
               : context.l10n.onboardingSkipAction,
-          onPressed: () => context.push(AppRoutes.onboardingPermissions),
+          onPressed: () => const OnboardingPermissionsRouteData().push(context),
         ),
         primaryAction: AppPrimaryButton(
           text: state.currentPageIndex == pages.length - 1
@@ -91,7 +90,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               : context.l10n.onboardingNextAction,
           onPressed: () async {
             if (state.currentPageIndex == pages.length - 1) {
-              await context.push(AppRoutes.onboardingPermissions);
+              await const OnboardingPermissionsRouteData().push(context);
               return;
             }
 

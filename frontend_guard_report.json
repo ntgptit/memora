@@ -1,6 +1,6 @@
 {
   "summary": {
-    "guards": 17,
+    "guards": 20,
     "total": 0,
     "errors": 0,
     "warnings": 0
@@ -90,6 +90,21 @@
       "id": "opacity-contract",
       "file": "tool/frontend_guard/guards/opacity_contract.py",
       "description": "Alpha values must flow through opacity tokens."
+    },
+    {
+      "id": "route-codegen",
+      "file": "tool/frontend_guard/guards/route_codegen.py",
+      "description": "GoRouter navigation must use generated typed route data instead of string-based locations."
+    },
+    {
+      "id": "serialization-codegen",
+      "file": "tool/frontend_guard/guards/serialization_codegen.py",
+      "description": "Data transport models and Retrofit bodies must use generated serialization."
+    },
+    {
+      "id": "transport-contract",
+      "file": "tool/frontend_guard/guards/transport_contract.py",
+      "description": "Transport parsers must bind a single canonical backend key per field."
     }
   ],
   "violations": []

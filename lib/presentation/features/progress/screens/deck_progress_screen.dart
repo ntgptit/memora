@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:memora/app/app_routes.dart';
+import 'package:memora/app/app_route_data.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
 import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/features/progress/providers/progress_filter_provider.dart';
@@ -43,7 +42,7 @@ class DeckProgressScreen extends ConsumerWidget {
             children: [
               AppTextButton(
                 text: context.l10n.progressCalendarActionLabel,
-                onPressed: () => context.push(AppRoutes.progressCalendar),
+                onPressed: () => const ProgressCalendarRouteData().push(context),
               ),
             ],
           ),

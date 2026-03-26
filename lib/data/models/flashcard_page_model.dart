@@ -1,7 +1,9 @@
-import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:memora/data/models/flashcard_model.dart';
 
-@immutable
+part 'flashcard_page_model.g.dart';
+
+@JsonSerializable(explicitToJson: true)
 class FlashcardPageModel {
   const FlashcardPageModel({
     required this.items,
@@ -21,57 +23,8 @@ class FlashcardPageModel {
   final bool hasNext;
   final bool hasPrevious;
 
-  factory FlashcardPageModel.fromJson(Map<String, Object?> json) {
-    return FlashcardPageModel(
-      items: _readItems(json['items'] ?? json['content'] ?? json['data']),
-      page: _readInt(json['page']),
-      size: _readInt(json['size']),
-      totalElements: _readInt(json['totalElements'] ?? json['total_elements']),
-      totalPages: _readInt(json['totalPages'] ?? json['total_pages']),
-      hasNext: _readBool(json['hasNext'] ?? json['has_next']),
-      hasPrevious: _readBool(json['hasPrevious'] ?? json['has_previous']),
-    );
-  }
+  factory FlashcardPageModel.fromJson(Map<String, dynamic> json) =>
+      _$FlashcardPageModelFromJson(json);
 
-  static List<FlashcardModel> _readItems(Object? value) {
-    if (value is! List) {
-      return const <FlashcardModel>[];
-    }
-
-    return value
-        .whereType<Map>()
-        .map(
-          (item) => FlashcardModel.fromJson(
-            Map<String, Object?>.from(item.cast<String, Object?>()),
-          ),
-        )
-        .toList(growable: false);
-  }
-
-  static int _readInt(Object? value, {int fallback = 0}) {
-    if (value is int) {
-      return value;
-    }
-    if (value is num) {
-      return value.toInt();
-    }
-    if (value is String) {
-      return int.tryParse(value) ?? fallback;
-    }
-    return fallback;
-  }
-
-  static bool _readBool(Object? value) {
-    if (value is bool) {
-      return value;
-    }
-    if (value is num) {
-      return value != 0;
-    }
-    if (value is String) {
-      final normalized = value.trim().toLowerCase();
-      return normalized == 'true' || normalized == '1';
-    }
-    return false;
-  }
+  Map<String, dynamic> toJson() => _$FlashcardPageModelToJson(this);
 }

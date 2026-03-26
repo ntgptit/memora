@@ -1,6 +1,8 @@
-import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-@immutable
+part 'audit_model.g.dart';
+
+@JsonSerializable(includeIfNull: false)
 class AuditModel {
   const AuditModel({
     this.createdAt,
@@ -14,33 +16,8 @@ class AuditModel {
   final DateTime? deletedAt;
   final int? version;
 
-  factory AuditModel.fromJson(Map<String, dynamic> json) {
-    return AuditModel(
-      createdAt: _readDateTime(json['createdAt']),
-      updatedAt: _readDateTime(json['updatedAt']),
-      deletedAt: _readDateTime(json['deletedAt']),
-      version: _readInt(json['version']),
-    );
-  }
+  factory AuditModel.fromJson(Map<String, dynamic> json) =>
+      _$AuditModelFromJson(json);
 
-  static DateTime? _readDateTime(Object? value) {
-    if (value is! String || value.trim().isEmpty) {
-      return null;
-    }
-
-    return DateTime.tryParse(value)?.toLocal();
-  }
-
-  static int? _readInt(Object? value) {
-    if (value is int) {
-      return value;
-    }
-    if (value is num) {
-      return value.toInt();
-    }
-    if (value is String) {
-      return int.tryParse(value);
-    }
-    return null;
-  }
+  Map<String, dynamic> toJson() => _$AuditModelToJson(this);
 }

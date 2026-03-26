@@ -68,7 +68,7 @@ void main() {
           data: <String, Object?>{
             'message': 'Invalid payload',
             'code': 'validation',
-            'errors': <String, Object?>{
+            'fieldErrors': <String, Object?>{
               'name': <String>['Required'],
               'size': 'Too large',
             },

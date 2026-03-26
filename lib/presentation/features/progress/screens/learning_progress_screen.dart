@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:memora/app/app_routes.dart';
+import 'package:memora/app/app_route_data.dart';
 import 'package:memora/core/theme/extensions/screen_context_ext.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
 import 'package:memora/l10n/l10n.dart';
@@ -54,9 +53,9 @@ class _ProgressOverviewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final deckProgressAction = state.recommendation == null
         ? null
-        : () => context.push(
-            AppRoutes.deckProgress(state.recommendation!.deckId),
-          );
+        : () => DeckProgressRouteData(
+            deckId: state.recommendation!.deckId,
+          ).push(context);
 
     if (context.screenClass.canUseSplitView) {
       return AppSplitViewLayout(
@@ -117,13 +116,15 @@ class _ProgressActionsRow extends StatelessWidget {
       children: [
         AppTextButton(
           text: context.l10n.progressCalendarActionLabel,
-          onPressed: () => context.push(AppRoutes.progressCalendar),
+          onPressed: () => const ProgressCalendarRouteData().push(context),
         ),
         if (recommendation != null)
           AppPrimaryButton(
             text: context.l10n.progressDeckProgressActionLabel,
             onPressed: () =>
-                context.push(AppRoutes.deckProgress(recommendation!.deckId)),
+                DeckProgressRouteData(deckId: recommendation!.deckId).push(
+                  context,
+                ),
           ),
       ],
     );

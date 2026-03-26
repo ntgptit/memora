@@ -12,13 +12,13 @@ public record CreateFlashcardRequest(
         max = ValidationSizeConstant.FLASHCARD_FRONT_TEXT_MAX_LENGTH,
         message = ApiValidationMessage.SIZE_MAX_300
     )
-    String frontText,
+    String term,
     @NotBlank(message = ApiValidationMessage.NOT_BLANK)
     @Size(
         max = ValidationSizeConstant.FLASHCARD_BACK_TEXT_MAX_LENGTH,
         message = ApiValidationMessage.SIZE_MAX_2000
     )
-    String backText,
+    String meaning,
     @Size(max = ValidationSizeConstant.LANGUAGE_CODE_MAX_LENGTH, message = ApiValidationMessage.SIZE_MAX_16)
     String frontLangCode,
     @Size(max = ValidationSizeConstant.LANGUAGE_CODE_MAX_LENGTH, message = ApiValidationMessage.SIZE_MAX_16)

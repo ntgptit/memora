@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:memora/app/app_routes.dart';
+import 'package:memora/app/app_route_data.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
 import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/features/progress/providers/progress_state.dart';
@@ -89,14 +88,10 @@ class DueFlashcardSection extends StatelessWidget {
             children: [
               AppPrimaryButton(
                 text: context.l10n.progressStudyNowActionLabel,
-                onPressed: () {
-                  context.go(
-                    AppRoutes.deckDetail(
-                      folderId: recommendation.folderId,
-                      deckId: recommendation.deckId,
-                    ),
-                  );
-                },
+                onPressed: () => DeckDetailRouteData(
+                  folderId: recommendation.folderId,
+                  deckId: recommendation.deckId,
+                ).go(context),
               ),
               AppOutlineButton(
                 text: context.l10n.progressViewDeckActionLabel,

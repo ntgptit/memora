@@ -1,6 +1,7 @@
 import 'package:memora/core/enums/sort_direction.dart';
 import 'package:memora/data/datasources/folder_api.dart';
 import 'package:memora/data/mappers/folder_mapper.dart';
+import 'package:memora/data/models/folder_requests.dart';
 import 'package:memora/domain/entities/folder.dart';
 import 'package:memora/domain/repositories/folder_repository.dart';
 
@@ -15,11 +16,13 @@ class RemoteFolderRepository implements FolderRepository {
     String? description,
     int? parentId,
   }) async {
-    final folder = await _folderApi.createFolder(<String, Object?>{
-      'name': name,
-      'description': description,
-      'parentId': parentId,
-    });
+    final folder = await _folderApi.createFolder(
+      CreateFolderRequest(
+        name: name,
+        description: description,
+        parentId: parentId,
+      ),
+    );
     return FolderMapper.toEntity(folder);
   }
 
@@ -59,9 +62,10 @@ class RemoteFolderRepository implements FolderRepository {
     required int folderId,
     required String name,
   }) async {
-    final folder = await _folderApi.renameFolder(folderId, <String, Object?>{
-      'name': name,
-    });
+    final folder = await _folderApi.renameFolder(
+      folderId,
+      RenameFolderRequest(name: name),
+    );
     return FolderMapper.toEntity(folder);
   }
 
@@ -72,11 +76,14 @@ class RemoteFolderRepository implements FolderRepository {
     String? description,
     int? parentId,
   }) async {
-    final folder = await _folderApi.updateFolder(folderId, <String, Object?>{
-      'name': name,
-      'description': description,
-      'parentId': parentId,
-    });
+    final folder = await _folderApi.updateFolder(
+      folderId,
+      UpdateFolderRequest(
+        name: name,
+        description: description,
+        parentId: parentId,
+      ),
+    );
     return FolderMapper.toEntity(folder);
   }
 }

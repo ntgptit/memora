@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:memora/app/app_routes.dart';
+import 'package:memora/app/app_route_data.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
 import 'package:memora/l10n/l10n.dart';
 import 'package:memora/presentation/features/onboarding/providers/onboarding_provider.dart';
@@ -62,7 +62,7 @@ class PermissionsIntroScreen extends ConsumerWidget {
         ),
         primaryAction: AppPrimaryButton(
           text: context.l10n.onboardingGoalSetupAction,
-          onPressed: () => context.push(AppRoutes.onboardingStudyGoal),
+          onPressed: () => const OnboardingStudyGoalRouteData().push(context),
         ),
       ),
     );

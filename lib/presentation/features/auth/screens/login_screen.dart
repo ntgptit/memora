@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:memora/app/app_routes.dart';
+import 'package:memora/app/app_route_data.dart';
 import 'package:memora/core/enums/snackbar_type.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
 import 'package:memora/l10n/l10n.dart';
@@ -101,7 +100,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           controller.setMode(mode);
                         },
                         onForgotPassword: () =>
-                            context.push(AppRoutes.forgotPassword),
+                            const ForgotPasswordRouteData().push(context),
                         onSubmit: () => _submit(state.activeMode),
                         footer: SocialLoginButtons(isBusy: state.isBusy),
                       ),

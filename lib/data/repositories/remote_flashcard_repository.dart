@@ -25,7 +25,7 @@ class RemoteFlashcardRepository implements FlashcardRepository {
         backText: backText,
         frontLangCode: frontLangCode,
         backLangCode: backLangCode,
-      ).toJson(),
+      ),
     );
     return FlashcardMapper.toEntity(flashcard);
   }
@@ -75,7 +75,7 @@ class RemoteFlashcardRepository implements FlashcardRepository {
         backText: backText,
         frontLangCode: frontLangCode,
         backLangCode: backLangCode,
-      ).toJson(),
+      ),
     );
     return FlashcardMapper.toEntity(flashcard);
   }

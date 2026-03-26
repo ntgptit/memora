@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:memora/app/app_routes.dart';
+import 'package:memora/app/app_route_data.dart';
 import 'package:memora/core/enums/snackbar_type.dart';
 import 'package:memora/core/theme/extensions/theme_context_ext.dart';
 import 'package:memora/domain/entities/deck.dart';
@@ -108,9 +107,10 @@ class DeckListView extends StatelessWidget {
                   final deck = state.decks[index];
                   return DeckCard(
                     deck: deck,
-                    onTap: () => context.go(
-                      AppRoutes.deckDetail(folderId: folderId, deckId: deck.id),
-                    ),
+                    onTap: () => DeckDetailRouteData(
+                      folderId: folderId,
+                      deckId: deck.id,
+                    ).go(context),
                     onEdit: () => onEditDeck(deck),
                     onDelete: () => onDeleteDeck(deck),
                   );

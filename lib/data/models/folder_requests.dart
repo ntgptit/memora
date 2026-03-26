@@ -1,6 +1,8 @@
-import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-@immutable
+part 'folder_requests.g.dart';
+
+@JsonSerializable(includeIfNull: false)
 class CreateFolderRequest {
   const CreateFolderRequest({
     required this.name,
@@ -12,16 +14,13 @@ class CreateFolderRequest {
   final String? description;
   final int? parentId;
 
-  Map<String, Object?> toJson() {
-    return <String, Object?>{
-      'name': name,
-      'description': description,
-      'parentId': parentId,
-    };
-  }
+  factory CreateFolderRequest.fromJson(Map<String, dynamic> json) =>
+      _$CreateFolderRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CreateFolderRequestToJson(this);
 }
 
-@immutable
+@JsonSerializable(includeIfNull: false)
 class UpdateFolderRequest {
   const UpdateFolderRequest({
     required this.name,
@@ -33,22 +32,20 @@ class UpdateFolderRequest {
   final String? description;
   final int? parentId;
 
-  Map<String, Object?> toJson() {
-    return <String, Object?>{
-      'name': name,
-      'description': description,
-      'parentId': parentId,
-    };
-  }
+  factory UpdateFolderRequest.fromJson(Map<String, dynamic> json) =>
+      _$UpdateFolderRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UpdateFolderRequestToJson(this);
 }
 
-@immutable
+@JsonSerializable(includeIfNull: false)
 class RenameFolderRequest {
   const RenameFolderRequest({required this.name});
 
   final String name;
 
-  Map<String, Object?> toJson() {
-    return <String, Object?>{'name': name};
-  }
+  factory RenameFolderRequest.fromJson(Map<String, dynamic> json) =>
+      _$RenameFolderRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RenameFolderRequestToJson(this);
 }
